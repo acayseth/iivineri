@@ -1,5 +1,5 @@
 export const environment = {
-  production: <true||false>,
+  production: true,
   analytics: {
     code: '<GOOGLE_ANALYTICS_CODE>'
   },
