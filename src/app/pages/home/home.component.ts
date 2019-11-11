@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   @ViewChild('countdown', {static: false}) private counter: CountdownComponent;
 
   private daysOfWeekEnum = DaysOfWeekEnum;
-  public ngxCountDownConfig: object;
+  public ngxCountDownConfig: any;
   public gif: GifInterface;
   public itGif = {isLoaded: false, loading: true};
 
