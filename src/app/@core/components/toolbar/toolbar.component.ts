@@ -1,19 +1,21 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 import {environment} from '../../../../environments/environment';
+import {googleAnalytics} from '../../../../assets/scripts/google-analytics';
 
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit {
-  public isProd = environment.production;
+export class ToolbarComponent {
 
   constructor() {
   }
 
-  ngOnInit() {
+  public goTo(link: string): void {
+    googleAnalytics(link);
+    window.open(link, '_blank');
   }
 
 }

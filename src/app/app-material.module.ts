@@ -2,17 +2,17 @@ import {NgModule} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {
   MatIconModule, MatButtonModule, MatToolbarModule, MatSidenavModule, MatCardModule, MatProgressSpinnerModule, MatIconRegistry,
-  MatSnackBarModule, MatListModule
+  MatSnackBarModule, MatListModule, MatMenuModule
 } from '@angular/material';
 
 @NgModule({
   imports: [
     MatIconModule, MatButtonModule, MatToolbarModule, MatSidenavModule, MatCardModule, MatProgressSpinnerModule, MatSnackBarModule,
-    MatListModule
+    MatListModule, MatMenuModule
   ],
   exports: [
     MatIconModule, MatButtonModule, MatToolbarModule, MatSidenavModule, MatCardModule, MatProgressSpinnerModule, MatSnackBarModule,
-    MatListModule
+    MatListModule, MatMenuModule
   ]
 })
 
