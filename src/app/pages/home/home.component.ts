@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
+import {Meta} from '@angular/platform-browser';
 import {PlatformLocation} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {CountdownComponent} from 'ngx-countdown';
@@ -28,10 +29,12 @@ export class HomeComponent implements OnInit {
   public itGif = {isLoaded: false, loading: true};
 
   constructor(
+    private meta: Meta,
     private giphyApiService: GiphyApiService,
     private snackBarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
     private platformLocation: PlatformLocation) {
+    this.meta.addTag({ name: 'author1', content: 'talkingdotnet' });
   }
 
   private static isoWeekDayFriday(itDayOfWeek: number): string {
@@ -77,7 +80,7 @@ export class HomeComponent implements OnInit {
   }
 
   public copyGifLinkToClipboard(id: string): void {
-    const selBox = document.createElement('textarea');
+    const selBox = document.createElement('input');
     selBox.value = `${(this.platformLocation as any).location.origin}/q/${id}`;
     document.body.appendChild(selBox);
     selBox.focus();

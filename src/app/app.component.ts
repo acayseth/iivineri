@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
+import {PlatformLocation} from '@angular/common';
+import {Meta} from '@angular/platform-browser';
 import {googleAnalytics} from '../assets/scripts/google-analytics';
 
 @Component({
@@ -9,7 +11,11 @@ import {googleAnalytics} from '../assets/scripts/google-analytics';
 })
 export class AppComponent {
 
-  constructor(private router: Router) {
+  constructor(
+    private meta: Meta,
+    private platformLocation: PlatformLocation,
+    private router: Router) {
+
     this.router.events.subscribe(e => {
       if (e instanceof NavigationStart) {
         const url = e.url;
@@ -18,5 +24,9 @@ export class AppComponent {
         }
       }
     });
+
+    this.meta.addTag({name: 'url', content: (platformLocation as any).location.origin});
+    this.meta.addTag({name: 'og:url', content: (platformLocation as any).location.origin});
+    this.meta.addTag({name: 'og:image', content: `${(platformLocation as any).location.origin}/assets/logo.png`});
   }
 }
