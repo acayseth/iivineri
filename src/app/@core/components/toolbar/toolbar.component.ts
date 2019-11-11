@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 
-import {environment} from '../../../../environments/environment';
 import {googleAnalytics} from '../../../../assets/scripts/google-analytics';
 
 @Component({
