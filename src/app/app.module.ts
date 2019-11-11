@@ -12,14 +12,12 @@ import {AppMaterialModule} from './app-material.module';
 
 import {AppComponent} from './app.component';
 import {HomeComponent} from './pages/home/home.component';
-import {FooterComponent} from './@core/components/footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    HomeComponent,
-    FooterComponent
+    HomeComponent
   ],
   imports: [
     BrowserModule,
