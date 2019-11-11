@@ -1,7 +1,5 @@
-$full-height: calc(100vh - 40px - 40px);
-
 mat-drawer-container {
-  height: $full-height;
+  height: calc(100vh - 40px - 40px);
 
   mat-drawer-content {
 

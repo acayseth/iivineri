@@ -79,12 +79,14 @@ export class HomeComponent implements OnInit {
 
   public copyGifLinkToClipboard(id: string): void {
     const selBox = document.createElement('input');
+    selBox.style.position = 'fixed';
+    selBox.style.visibility = 'hide';
     selBox.value = `${(this.platformLocation as any).location.origin}/q/${id}`;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();
     document.execCommand('copy');
-    document.body.removeChild(selBox);
+    selBox.remove();
   }
 
   public onGifLoad() {

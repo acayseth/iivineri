@@ -35,13 +35,11 @@
               "src/assets/stylesheets/styles-app-loading.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/stylesheets/material-theme.scss",
+              "src/assets/stylesheets/material.css",
+              "src/assets/stylesheets/typeface-roboto.css",
               "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/popper.js/dist/umd/popper.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {

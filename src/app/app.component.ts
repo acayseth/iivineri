@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
-import {PlatformLocation} from '@angular/common';
 import {googleAnalytics} from '../assets/scripts/google-analytics';
 
 @Component({
@@ -10,9 +9,7 @@ import {googleAnalytics} from '../assets/scripts/google-analytics';
 })
 export class AppComponent {
 
-  constructor(
-    private platformLocation: PlatformLocation,
-    private router: Router) {
+  constructor(private router: Router) {
 
     this.router.events.subscribe(e => {
       if (e instanceof NavigationStart) {
