@@ -25,8 +25,16 @@ export class AppComponent {
       }
     });
 
-    this.meta.addTag({name: 'url', content: (platformLocation as any).location.origin});
-    this.meta.addTag({name: 'og:url', content: (platformLocation as any).location.origin});
-    this.meta.addTag({name: 'og:image', content: `${(platformLocation as any).location.origin}/assets/logo.png`});
+    this.meta.addTag({name: 'og:site_name', content: 'iivineri'});
+    this.meta.addTag({name: 'title', content: 'iiVineri?'});
+    this.meta.addTag({name: 'description', content: 'Unde-i Vinerea?'});
+    this.meta.addTag({name: 'url', content: `${(platformLocation as any).location.origin}`});
+
+
+    this.meta.addTag({name: 'og:type', content: 'website'});
+    this.meta.addTag({name: 'og:title', content: 'iiVineri?'});
+    this.meta.addTag({name: 'og:description', content: 'Unde-i Vinerea'});
+    this.meta.addTag({name: 'og:url', content: `${(platformLocation as any).location.origin}`});
+    this.meta.addTag({name: 'og:image', content: `${(platformLocation as any).location.origin}/assets/images/logo.png`});
   }
 }

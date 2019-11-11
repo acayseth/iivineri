@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
     private snackBarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
     private platformLocation: PlatformLocation) {
-    this.meta.addTag({ name: 'author1', content: 'talkingdotnet' });
+
   }
 
   private static isoWeekDayFriday(itDayOfWeek: number): string {
@@ -72,6 +72,7 @@ export class HomeComponent implements OnInit {
       gif => {
         this.itGif = {isLoaded: false, loading: false};
         this.gif = gif;
+        this.meta.updateTag({name: 'og:image', content: gif.data.images.downsized.url}, `name='og:image'`);
       },
       err => {
         this.itGif = {isLoaded: false, loading: false};
