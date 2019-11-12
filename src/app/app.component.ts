@@ -20,4 +20,10 @@ export class AppComponent {
       }
     });
   }
+
+  public goTo(link: string): void {
+    googleAnalytics(link);
+    window.open(link, '_blank');
+  }
+
 }

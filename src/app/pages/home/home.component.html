@@ -8,8 +8,9 @@
   <mat-card class="col-sm-12 col-md-6 col-lg-4">
     <mat-card-header></mat-card-header>
     <div class="gif-zone" fxLayoutAlign="center center">
-      <img mat-card-image class="rounded-top text-center" alt="img"
+      <img mat-card-image class="rounded-top text-center clickable" alt="img"
            [src]="gif.data.images.downsized.url"
+           (click)="getGif()"
            *ngIf="!itGif.loading"
            (load)="onGifLoad()"
            (error)="onGifError()"/>

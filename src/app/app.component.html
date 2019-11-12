@@ -1,4 +1,33 @@
-<app-toolbar></app-toolbar>
+<mat-toolbar>
+  <mat-toolbar-row>
+    <div>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="goTo('https://radio.hellnet.eu')">
+          <mat-icon aria-hidden="false" aria-label="radio">radio</mat-icon>
+          <span>BlackJack and Hookers</span>
+        </button>
+        <button mat-menu-item (click)="goTo('http://sellyourpussyonline.herokuapp.com')">
+          <mat-icon aria-hidden="false" aria-label="radio">transfer_within_a_station</mat-icon>
+          <span>Zapreshionka</span>
+        </button>
+        <button mat-menu-item (click)="goTo('https://github.com/acayseth/iivineri')">
+          <mat-icon svgIcon="github" aria-hidden="false" aria-label="github" style="line-height:1;"></mat-icon>
+          <span>Source</span>
+        </button>
+      </mat-menu>
+    </div>
+
+    <span class="spacer-1-1"></span>
+    <div class="logo text-center">
+      <mat-icon svgIcon="iivineri" aria-hidden="false" aria-label="logo"></mat-icon>
+    </div>
+    <span class="spacer-1-1"></span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
 <mat-drawer-container>
   <mat-drawer-content class="container-fluid py-1 my-1">
     <router-outlet></router-outlet>

@@ -6,7 +6,7 @@ export const environment = {
   giphy: {
     apiKey: 'Z3p94SeDbOUPrywoq3NdL2CT4V6fEE16',
     tags: {
-      is: 'friday',
+      is: 'friday+alcohol fun+drink+smile+pussy',
       not: 'fuck'
     }
   }

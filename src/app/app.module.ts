@@ -5,8 +5,6 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {HttpClientModule} from '@angular/common/http';
 import {CountdownModule } from 'ngx-countdown';
 
-import {ToolbarComponent} from './@core/components/toolbar/toolbar.component';
-
 import {AppRoutingModule} from './app-routing.module';
 import {AppMaterialModule} from './app-material.module';
 
@@ -16,7 +14,6 @@ import {HomeComponent} from './pages/home/home.component';
 @NgModule({
   declarations: [
     AppComponent,
-    ToolbarComponent,
     HomeComponent
   ],
   imports: [
