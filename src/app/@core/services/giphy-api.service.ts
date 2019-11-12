@@ -26,6 +26,7 @@ export class GiphyApiService {
   }
 
   public getGif(id: string, tags?: string): Observable<GifInterface> {
+    console.log(tags, 'tags');
     if (id) {
       return this.httpClient.get<GifInterface>(`${this.api}/${id}?api_key=${this.key}`, this.httpOptions);
     } else {

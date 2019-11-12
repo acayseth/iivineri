@@ -64,8 +64,12 @@ export class HomeComponent implements OnInit {
   public getGif(id?: string): void {
     this.itGif = {isLoaded: false, loading: true};
 
+    const itDayOfWeek = HomeComponent.itDayOfWeek();
+
     this.giphyApiService.getGif(id,
-      HomeComponent.itDayOfWeek() === 5 ? environment.giphy.tags.is : environment.giphy.tags.not
+      itDayOfWeek === 5
+        ? environment.giphy.tags.is
+        : environment.giphy.tags.not + '+fucking ' + moment.weekdays(itDayOfWeek).toLowerCase()
     ).subscribe(
       gif => {
         this.itGif = {isLoaded: false, loading: false};
