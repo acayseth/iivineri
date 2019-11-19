@@ -5,11 +5,11 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {HttpClientModule} from '@angular/common/http';
 import {CountdownModule } from 'ngx-countdown';
 
-import {AppRoutingModule} from './app-routing.module';
-import {AppMaterialModule} from './app-material.module';
+import {RoutingModule} from './@core/modules/routing.module';
+import {MaterialModule} from './@core/modules/material.module';
 
 import {AppComponent} from './app.component';
-import {HomeComponent} from './pages/home/home.component';
+import {HomeComponent} from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -20,8 +20,8 @@ import {HomeComponent} from './pages/home/home.component';
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
-    AppRoutingModule,
-    AppMaterialModule,
+    RoutingModule,
+    MaterialModule,
     HttpClientModule,
     CountdownModule
   ],

@@ -16,7 +16,7 @@ import {
   ]
 })
 
-export class AppMaterialModule {
+export class MaterialModule {
 
   constructor(
     private matIconRegistry: MatIconRegistry,

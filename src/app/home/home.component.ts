@@ -3,13 +3,12 @@ import {PlatformLocation} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {CountdownComponent} from 'ngx-countdown';
 
-import {environment} from '../../../environments/environment';
+import {environment} from '../../environments/environment';
+import {DaysOfWeekEnum} from '../@core/enums/days-of-week';
+import {Gif} from '../@core/classes/gif';
 
-import {GiphyApiService} from '../../@core/services/giphy-api.service';
-import {SnackBarService} from '../../@core/services/snack-bar.service';
-
-import {DaysOfWeekEnum} from '../../@core/enums/days-of-week';
-import {GifInterface} from '../../@core/interfaces/gif-interface';
+import {GiphyService} from '../@core/services/giphy.service';
+import {SnackBarService} from '../@core/services/snack-bar.service';
 
 import * as moment from 'moment';
 
@@ -22,13 +21,13 @@ export class HomeComponent implements OnInit {
 
   @ViewChild('countdown', {static: false}) private counter: CountdownComponent;
 
+  public gif: Gif;
   private daysOfWeekEnum = DaysOfWeekEnum;
   public ngxCountDownConfig: any;
-  public gif: GifInterface;
   public itGif = {isLoaded: false, loading: true};
 
   constructor(
-    private giphyApiService: GiphyApiService,
+    private giphyApiService: GiphyService,
     private snackBarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
     private platformLocation: PlatformLocation) {
@@ -73,7 +72,12 @@ export class HomeComponent implements OnInit {
     ).subscribe(
       gif => {
         this.itGif = {isLoaded: false, loading: false};
-        this.gif = gif;
+        this.gif = new Gif();
+        this.gif.id = gif.data.id;
+        this.gif.url = gif.data.images.downsized_medium.url;
+        this.gif.width = gif.data.images.downsized_medium.width;
+        this.gif.height = gif.data.images.downsized_medium.height;
+        console.log(this.gif, 'this.gif');
       },
       err => {
         this.itGif = {isLoaded: false, loading: false};
@@ -98,7 +102,7 @@ export class HomeComponent implements OnInit {
   }
 
   public onGifError(img: string = '404.gif'): void {
-    this.gif.data.images.downsized.url = './assets/images/' + img;
+    // this.gif.url = './assets/images/' + img;
   }
 
   public setContentFriday(): void {

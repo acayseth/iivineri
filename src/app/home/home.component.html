@@ -8,10 +8,13 @@
   <mat-card class="col-sm-12 col-md-6 col-lg-4">
     <mat-card-header></mat-card-header>
     <div class="gif-zone" fxLayoutAlign="center center">
-      <img mat-card-image class="rounded-top text-center clickable" alt="img"
-           [src]="gif.data.images.downsized.url"
-           (click)="getGif()"
+      <!--  -->
+      <img mat-card-image class="rounded-top text-center clickable" alt="gif" fxLayoutAlign="center top"
+           [width]="gif.width"
+           [height]="gif.height"
            *ngIf="!itGif.loading"
+           [src]="gif.url"
+           (click)="getGif()"
            (load)="onGifLoad()"
            (error)="onGifError()"/>
       <div class="mat-card-spinner" fxLayout="column" fxLayoutAlign="center center" *ngIf="itGif.loading">
@@ -21,7 +24,7 @@
     <mat-card-actions fxLayout="row" fxLayoutAlign="space-evenly center">
       <button mat-raised-button aria-label="button"
               [disabled]="!itGif.isLoaded"
-              (click)="copyGifLinkToClipboard(gif.data.id)">
+              (click)="copyGifLinkToClipboard(gif.id)">
         <mat-icon class="mat-icon-d" aria-hidden="false" aria-label="material-icons">turned_in_not</mat-icon>
         Copy gif link
       </button>

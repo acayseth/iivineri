@@ -2,14 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
-import {GifInterface} from '../interfaces/gif-interface';
+import {GiphyInterface} from '../interfaces/giphy.interface';
 
 import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GiphyApiService {
+export class GiphyService {
   private readonly api: string;
   private readonly key: string;
   private readonly httpOptions: object;
@@ -25,11 +25,11 @@ export class GiphyApiService {
     this.key = environment.giphy.apiKey;
   }
 
-  public getGif(id: string, tags?: string): Observable<GifInterface> {
+  public getGif(id: string, tags?: string): Observable<GiphyInterface> {
     if (id) {
-      return this.httpClient.get<GifInterface>(`${this.api}/${id}?api_key=${this.key}`, this.httpOptions);
+      return this.httpClient.get<GiphyInterface>(`${this.api}/${id}?api_key=${this.key}`, this.httpOptions);
     } else {
-      return this.httpClient.get<GifInterface>(`${this.api}/random?api_key=${this.key}&tag=${tags}&rating=R`, this.httpOptions);
+      return this.httpClient.get<GiphyInterface>(`${this.api}/random?api_key=${this.key}&tag=${tags}&rating=R`, this.httpOptions);
     }
   }
 }
