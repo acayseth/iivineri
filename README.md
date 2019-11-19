@@ -5,34 +5,16 @@
 
 ## Install
  - `npm install -g @angular/cli`
- - `https://github.com/acayseth/iivineri`
+ - `git clone https://github.com/acayseth/iivineri`
  - `cd iivineri`
  - `npm install`
  
 ## Config
-**# develop**
 ```bash
-rename ./src/environments/environments.ts.example src/environments/environments.ts 
-...
-giphy: {
-    apiKey: 'GIPHY_API_KEY',
-    tags: {
-        is: '<GIPHY_TAGS_FRIDAY_DELIMITER>',   // ex a1+a2.1 a2.2+a3 
-        not: '<GIPHY_TAGS_OTHER_DELIMITER>'    // ex a1+a2.1 a2.2+a3
-    }
-}
-...
-```
-**# prod**
-```bash
-rename ./src/environments/environments.prod.ts.example src/environments/environments.prod.ts
+cat src/environments/environments.prod.ts
 ...
 giphy: {
     apiKey: '<GIPHY_API_KEY>',
-    tags: {
-        is: '<GIPHY_TAGS_FRIDAY_DELIMITER>',   // ex a1+a2.1 a2.2+a3 
-        not: '<GIPHY_TAGS_OTHER_DELIMITER>'    // ex a1+a2.1 a2.2+a3
-    }
 }
 ...
 ```
