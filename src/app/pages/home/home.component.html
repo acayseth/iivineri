@@ -1,0 +1,36 @@
+<div fxLayout="column" fxLayoutAlign="space-evenly center">
+  <p class="h4 text-center">{{ngxCountDownConfig.tplFriday}}</p>
+  <p class="h4 text-center">
+    <countdown class="mb-5 pb-4" #countdown
+               [config]="ngxCountDownConfig"
+               (finished)="setContentFriday()">$!d!z $!h!h : $!m!m : $!s!s</countdown>
+  </p>
+  <mat-card class="col-sm-12 col-md-6 col-lg-4">
+    <mat-card-header></mat-card-header>
+    <div class="gif-zone" fxLayoutAlign="center center">
+      <img mat-card-image class="rounded-top text-center clickable" alt="img"
+           [src]="gif.data.images.downsized.url"
+           (click)="getGif()"
+           *ngIf="!itGif.loading"
+           (load)="onGifLoad()"
+           (error)="onGifError()"/>
+      <div class="mat-card-spinner" fxLayout="column" fxLayoutAlign="center center" *ngIf="itGif.loading">
+        <mat-spinner [color]="'warn'" [diameter]="50"></mat-spinner>
+      </div>
+    </div>
+    <mat-card-actions fxLayout="row" fxLayoutAlign="space-evenly center">
+      <button mat-raised-button aria-label="button"
+              [disabled]="!itGif.isLoaded"
+              (click)="copyGifLinkToClipboard(gif.data.id)">
+        <mat-icon class="mat-icon-d" aria-hidden="false" aria-label="material-icons">turned_in_not</mat-icon>
+        Copy gif link
+      </button>
+      <button mat-raised-button aria-hidden="false" aria-label="next-gif"
+              [disabled]="!itGif.isLoaded"
+              (click)="getGif()">
+        <mat-icon class="mat-icon-d" aria-hidden="false" aria-label="material-icons">image</mat-icon>
+        Alta gif-ka
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

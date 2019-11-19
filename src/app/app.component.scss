@@ -1,0 +1,30 @@
+mat-toolbar {
+  min-height: 40px;
+
+  mat-toolbar-row {
+    height: 40px;
+
+    .mat-icon-d {
+      font-size: 24px
+    }
+
+    .logo {
+      ::ng-deep .mat-icon {
+        height: 50px;
+        width: 100px;
+      }
+    }
+
+    .spacer-1-1 {
+      flex: 1 1 auto;
+    }
+  }
+}
+
+mat-drawer-container {
+  height: calc(100vh - 40px);
+
+  mat-drawer-content {
+
+  }
+}
