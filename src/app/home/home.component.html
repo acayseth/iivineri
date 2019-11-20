@@ -5,22 +5,7 @@
                [config]="ngxCountDownConfig"
                (finished)="setContentFriday()">$!d!z $!h!h : $!m!m : $!s!s</countdown>
   </p>
-  <mat-card class="col-sm-12 col-md-6 col-lg-4">
-    <mat-card-header></mat-card-header>
-    <div class="gif-zone" fxLayoutAlign="center center">
-      <!--  -->
-      <img mat-card-image class="rounded-top text-center clickable" alt="gif" fxLayoutAlign="center top"
-           [width]="gif.width"
-           [height]="gif.height"
-           *ngIf="!itGif.loading"
-           [src]="gif.url"
-           (click)="getGif()"
-           (load)="onGifLoad()"
-           (error)="onGifError()"/>
-      <div class="mat-card-spinner" fxLayout="column" fxLayoutAlign="center center" *ngIf="itGif.loading">
-        <mat-spinner [color]="'warn'" [diameter]="50"></mat-spinner>
-      </div>
-    </div>
+  <mat-card class="col-sm-12 col-md-6 col-lg-3">
     <mat-card-actions fxLayout="row" fxLayoutAlign="space-evenly center">
       <button mat-raised-button aria-label="button"
               [disabled]="!itGif.isLoaded"
@@ -35,5 +20,16 @@
         Alta gif-ka
       </button>
     </mat-card-actions>
+    <div class="gif-zone" fxLayoutAlign="center top">
+      <img mat-card-image class="rounded text-center clickable" alt="gif"
+           *ngIf="!itGif.loading"
+           [src]="gif.url"
+           (click)="getGif()"
+           (load)="onGifLoad()"
+           (error)="onGifError()"/>
+      <div class="mat-card-spinner" fxLayout="column" fxLayoutAlign="center center" *ngIf="itGif.loading">
+        <mat-spinner [color]="'warn'" [diameter]="50"></mat-spinner>
+      </div>
+    </div>
   </mat-card>
 </div>
