@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
+import {Meta} from '@angular/platform-browser';
 import {PlatformLocation} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {CountdownComponent} from 'ngx-countdown';
@@ -27,6 +28,7 @@ export class HomeComponent implements OnInit {
   public itGif = {isLoaded: false, loading: true};
 
   constructor(
+    private meta: Meta,
     private giphyApiService: GiphyService,
     private snackBarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
@@ -77,6 +79,7 @@ export class HomeComponent implements OnInit {
         this.gif.url = gif.data.images.downsized_medium.url;
         this.gif.width = gif.data.images.downsized_medium.width;
         this.gif.height = gif.data.images.downsized_medium.height;
+        this.meta.updateTag({property: 'og:image', content: this.gif.url}, `property='og:image'`);
       },
       err => {
         this.itGif = {isLoaded: false, loading: false};
