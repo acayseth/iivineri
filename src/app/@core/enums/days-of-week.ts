@@ -1,9 +1,9 @@
 export enum DaysOfWeekEnum {
-  'ii Vineri? Nu, wăi îi Dominică.' = 0,
-  'ii Vineri? Nu, wăi îi Luni.' = 1,
-  'ii Vineri? Nu, wăi îi Marți.' = 2,
-  'ii Vineri? Nu, wăi îi Miercuri.' = 3,
-  'ii Vineri? Nu, wăi îi Joi.' = 4,
-  'ii Vineri? Da, wăi.' = 5,
-  'ii Vineri? Nu, wăi îi Sâmbătă.' = 6
+  'Nu, uăi! Îi duminică.' = 0,
+  'Nu, uăi! Îi luni.' = 1,
+  'Nu, uăi! Îi marți.' = 2,
+  'Nu, uăi! Îi miercuri.' = 3,
+  'Nu, uăi! Îi joi.' = 4,
+  'Da, uăi!!!' = 5,
+  'Nu, uăi! Îi sâmbătă.' = 6
 }
