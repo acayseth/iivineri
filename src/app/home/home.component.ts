@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit {
   }
 
   public onGifError(img: string = '404.gif'): void {
-    // this.gif.url = './assets/images/' + img;
+    this.gif.url = './assets/images/' + img;
   }
 
   public setContentFriday(): void {
