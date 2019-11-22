@@ -1,9 +1,9 @@
 <div fxLayout="column" fxLayoutAlign="space-evenly center">
   <p class="h4 text-center">{{ngxCountDownConfig.tplFriday}}</p>
-  <p class="h4 text-center">
+  <p class="h4 text-center">Până vineri:
     <countdown class="mb-5 pb-4" #countdown
                [config]="ngxCountDownConfig"
-               (finished)="setContentFriday()">$!d!z $!h!h : $!m!m : $!s!s</countdown>
+               (finished)="setContentFriday()">$!d! zile $!h! ore $!m! minute $!s! secunde</countdown>
   </p>
   <mat-card class="col-sm-12 col-md-6 col-lg-3">
     <mat-card-actions fxLayout="row" fxLayoutAlign="space-evenly center">
@@ -17,7 +17,7 @@
               [disabled]="!itGif.isLoaded"
               (click)="getGif()">
         <mat-icon class="mat-icon-d" aria-hidden="false" aria-label="material-icons">image</mat-icon>
-        Alta gif-ka
+        Altă gif-ka
       </button>
     </mat-card-actions>
     <div class="gif-zone" fxLayoutAlign="center top">

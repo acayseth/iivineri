@@ -80,7 +80,7 @@ export class HomeComponent implements OnInit {
       },
       err => {
         this.itGif = {isLoaded: false, loading: false};
-        this.snackBarService.openSnackBar('Oi, blăaa');
+        this.snackBarService.openSnackBar('Nui uăi');
       });
   }
 
