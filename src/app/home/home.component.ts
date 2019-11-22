@@ -77,7 +77,6 @@ export class HomeComponent implements OnInit {
         this.gif.url = gif.data.images.downsized_medium.url;
         this.gif.width = gif.data.images.downsized_medium.width;
         this.gif.height = gif.data.images.downsized_medium.height;
-        console.log(this.gif, 'this.gif');
       },
       err => {
         this.itGif = {isLoaded: false, loading: false};
