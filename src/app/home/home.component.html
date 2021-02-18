@@ -1,35 +1,28 @@
-<div fxLayout="column" fxLayoutAlign="space-evenly center">
-  <p class="h4 text-center">{{ngxCountDownConfig.tplFriday}}</p>
-  <p class="h4 text-center">Până vineri:
-    <countdown class="mb-5 pb-4" #countdown
-               [config]="ngxCountDownConfig"
-               (finished)="setContentFriday()">$!d! zile $!h! ore $!m! minute $!s! secunde</countdown>
-  </p>
-  <mat-card class="col-sm-12 col-md-6 col-lg-3">
+<div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10">
+  <mat-card>
     <mat-card-actions fxLayout="row" fxLayoutAlign="space-evenly center">
       <button mat-raised-button aria-label="button"
-              [disabled]="!itGif.isLoaded"
-              (click)="copyGifLinkToClipboard(gif.id)">
+        (click)="copyGifLinkToClip(gif.id)">
         <mat-icon class="mat-icon-d" aria-hidden="false" aria-label="material-icons">turned_in_not</mat-icon>
         Copy gif link
       </button>
       <button mat-raised-button aria-hidden="false" aria-label="next-gif"
-              [disabled]="!itGif.isLoaded"
-              (click)="getGif()">
+              (click)="getGifRandom()">
         <mat-icon class="mat-icon-d" aria-hidden="false" aria-label="material-icons">image</mat-icon>
         Altă gif-ka
       </button>
     </mat-card-actions>
     <div class="gif-zone" fxLayoutAlign="center top">
       <img mat-card-image class="rounded text-center clickable" alt="gif"
-           *ngIf="!itGif.loading"
+           *ngIf="!loading"
            [src]="gif.url"
-           (click)="getGif()"
+           (click)="getGifRandom()"
            (load)="onGifLoad()"
            (error)="onGifError()"/>
-      <div class="mat-card-spinner" fxLayout="column" fxLayoutAlign="center center" *ngIf="itGif.loading">
-        <mat-spinner [color]="'warn'" [diameter]="50"></mat-spinner>
+      <div class="mat-card-spinner" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading">
+        <mat-spinner color="warn" diameter="100" strokeWidth="5"></mat-spinner>
       </div>
     </div>
   </mat-card>
+
 </div>

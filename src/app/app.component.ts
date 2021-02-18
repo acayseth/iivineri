@@ -1,29 +1,20 @@
-import {Component} from '@angular/core';
-import {NavigationStart, Router} from '@angular/router';
-import {googleAnalytics} from '../assets/scripts/google-analytics';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `
+    <app-toolbar></app-toolbar>
+    <app-countdown></app-countdown>
+    <mat-drawer-container>
+      <mat-drawer-content>
+        <router-outlet></router-outlet>
+      </mat-drawer-content>
+    </mat-drawer-container>
+  `,
+  styles: [
+    'mat-drawer-container {height: calc(100vh - 136px - 40px)}',
+    'app-countdown {padding: 0 1px;}'
+  ]
 })
 export class AppComponent {
-
-  constructor(private router: Router) {
-
-    this.router.events.subscribe(e => {
-      if (e instanceof NavigationStart) {
-        const url = e.url;
-        if (url !== null && url !== undefined && url !== '' && url.indexOf('null') < 0) {
-          googleAnalytics(url);
-        }
-      }
-    });
-  }
-
-  public goTo(link: string): void {
-    googleAnalytics(link);
-    window.open(link, '_blank');
-  }
-
 }
