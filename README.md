@@ -9,6 +9,10 @@
  - `cd iivineri`
  - `npm install`
  
+ ## Commands
+  - Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`.
+  - Run `npm run build` to build the project. The build artifacts will be stored in the `dist/iivineri` directory.
+ 
 # Requirement
 
 ```bash
@@ -43,9 +47,3 @@ rxjs                            6.6.3
 typescript                      4.0.7
 
 ```
-
-
-## Commands
- - Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`.
- - Run `npm run build:dev` to build the project. The build artifacts will be stored in the `dist/` directory.
- - Run `npm run build:prod` to build the project. The build artifacts will be stored in the `dist/` directory.
