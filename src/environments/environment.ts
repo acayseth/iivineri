@@ -7,11 +7,17 @@ export const environment = {
   analytics: {
     code: null
   },
+  countdown: {
+    constant: 'Până vineri:',
+    day: 'zile',
+    format: '{dd} zile {hh} ore {mm} minute {ss} secunde'
+  },
   giphy: {
+    url: 'https://api.giphy.com/v1/gifs',
     apiKey: 'Z3p94SeDbOUPrywoq3NdL2CT4V6fEE16',
     tags: {
-      is: 'friday',
-      not: 'fuck'
+      is: 'bubies+sexy+flirting+isfriday+girlskiss+cats',
+      not: 'boring+wait+loading+horror+work'
     }
   }
 };

@@ -1,17 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Meta} from '@angular/platform-browser';
-import {PlatformLocation} from '@angular/common';
-import {ActivatedRoute} from '@angular/router';
-import {CountdownComponent} from 'ngx-countdown';
-
-import {environment} from '../../environments/environment';
-import {DaysOfWeekEnum} from '../@core/enums/days-of-week';
-import {Gif} from '../@core/classes/gif';
-
-import {GiphyService} from '../@core/services/giphy.service';
-import {SnackBarService} from '../@core/services/snack-bar.service';
-
-import * as moment from 'moment';
+import { PlatformLocation } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../environments/environment';
+import { FridayService } from '../_core/services/friday.service';
+import { GiphyService } from '../_core/services/giphy.service';
+import { IGif, IGiphy } from '../_core/interfaces/gif';
+import { SnackService } from '../_core/services/snack.service';
 
 @Component({
   selector: 'app-home',
@@ -20,74 +14,68 @@ import * as moment from 'moment';
 })
 export class HomeComponent implements OnInit {
 
-  @ViewChild('countdown', {static: false}) private counter: CountdownComponent;
-
-  public gif: Gif;
-  private daysOfWeekEnum = DaysOfWeekEnum;
-  public ngxCountDownConfig: any;
-  public itGif = {isLoaded: false, loading: true};
+  public gif: IGif = {
+    id: '', url: '', width: '', height: '',
+  };
+  public loading = false;
+  public gifLoad = false;
 
   constructor(
-    private meta: Meta,
-    private giphyApiService: GiphyService,
-    private snackBarService: SnackBarService,
+    private fridayService: FridayService,
+    private giphyService: GiphyService,
     private activatedRoute: ActivatedRoute,
-    private platformLocation: PlatformLocation) {
+    private snack: SnackService,
+    private platformLocation: PlatformLocation
+  ) {
 
-  }
-
-  private static isoWeekDayFriday(itDayOfWeek: number): string {
-    const format = 'YYYY-MM-DD 00:00:00';
-    if (itDayOfWeek !== 0 && itDayOfWeek < 5) {
-      return moment().isoWeekday(5).format(format);
-    } else {
-      return moment().add(1, 'weeks').isoWeekday(5).format(format);
-    }
-  }
-
-  private static itDayOfWeek(): DaysOfWeekEnum {
-    return moment().day();
-  }
-
-  private static diffDateSecond(itDayOfWeek: number): number {
-    const format = 'YYYY-MM-DD HH:mm:ss';
-    return Math.abs(
-      moment(HomeComponent.isoWeekDayFriday(itDayOfWeek), format)
-        .diff(moment(moment().format(format), format), 'seconds', true)
-    );
   }
 
   ngOnInit(): void {
-    this.getGif(this.activatedRoute.snapshot.params.id ? this.activatedRoute.snapshot.params.id : null);
-    this.setContentFriday();
+    this.activatedRoute.snapshot.params.id
+      ? this.getGifById(this.activatedRoute.snapshot.params.id)
+      : this.getGifRandom();
   }
 
-  public getGif(id?: string): void {
-    this.itGif = {isLoaded: false, loading: true};
-
-    const itDayOfWeek = HomeComponent.itDayOfWeek();
-
-    this.giphyApiService.getGif(id,
-      itDayOfWeek === 5
-        ? environment.giphy.tags.is
-        : environment.giphy.tags.not + '+fucking ' + moment.weekdays(itDayOfWeek).toLowerCase()
-    ).subscribe(
-      gif => {
-        this.itGif = {isLoaded: false, loading: false};
-        this.gif = new Gif();
-        this.gif.id = gif.data.id;
-        this.gif.url = gif.data.images.downsized_medium.url;
-        this.gif.width = gif.data.images.downsized_medium.width;
-        this.gif.height = gif.data.images.downsized_medium.height;
-        this.meta.updateTag({property: 'og:image', content: this.gif.url}, `property='og:image'`);
-      },
-      err => {
-        this.itGif = {isLoaded: false, loading: false};
-        this.snackBarService.openSnackBar('Nui uăi');
-      });
+  public getGifById(id?: string): void {
+    this.loading = true;
+    this.giphyService.getById(id).subscribe(
+      gif => this.gif = this.generatorOrNext(gif),
+      () => this.snack.open('Oppssss', 'Închide')
+    );
   }
 
-  public copyGifLinkToClipboard(id: string): void {
+  public getGifRandom(): void {
+    this.loading = true;
+    const tags = this.fridayService.isFriday()
+      ? environment.giphy.tags.is
+      : environment.giphy.tags.not;
+    this.giphyService.getRandom(tags).subscribe(
+      gif => this.gif = this.generatorOrNext(gif),
+      () => this.snack.open('Oppssss', 'Închide')
+    );
+  }
+
+  private generatorOrNext(gif: IGiphy): IGif {
+    this.loading = false;
+    this.gifLoad = false;
+    return {
+      id: gif.data.id,
+      url: gif.data.images.downsized_medium.url,
+      width: gif.data.images.downsized_medium.width,
+      height: gif.data.images.downsized_medium.height
+    };
+  }
+
+  public onGifLoad(): void {
+    this.gifLoad = true;
+  }
+
+  public onGifError(): void {
+    this.gifLoad = false;
+    this.loading = true;
+  }
+
+  public copyGifLinkToClip(id: string): void {
     const selBox = document.createElement('input');
     selBox.style.position = 'fixed';
     selBox.style.visibility = 'hide';
@@ -99,20 +87,4 @@ export class HomeComponent implements OnInit {
     selBox.remove();
   }
 
-  public onGifLoad() {
-    this.itGif.isLoaded = true;
-  }
-
-  public onGifError(img: string = '404.gif'): void {
-    this.gif.url = './assets/images/' + img;
-  }
-
-  public setContentFriday(): void {
-    const itDayOfWeek = HomeComponent.itDayOfWeek();
-    this.ngxCountDownConfig = {
-      tplFriday: this.daysOfWeekEnum[itDayOfWeek],
-      leftTime: HomeComponent.diffDateSecond(itDayOfWeek),
-      demand: false
-    };
-  }
 }

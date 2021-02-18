@@ -1,34 +1,38 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {FlexLayoutModule} from '@angular/flex-layout';
-import {HttpClientModule} from '@angular/common/http';
-import {CountdownModule } from 'ngx-countdown';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule } from '@angular/common/http';
 
-import {RoutingModule} from './@core/modules/routing.module';
-import {MaterialModule} from './@core/modules/material.module';
+import { AppRoutingModule } from './app-routing.module';
+import { AppMaterialModule } from './app-material.module';
 
-import {AppComponent} from './app.component';
-import {HomeComponent} from './home/home.component';
+import { ToolbarComponent } from './_core/components/toolbar/toolbar.component';
+import { CountdownComponent } from './_core/components/countdown/countdown.component';
+
+import { CountdownDirective } from './_core/components/countdown/countdown.directive';
+
+import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ToolbarComponent,
+    CountdownComponent,
+    CountdownDirective,
     HomeComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
-    RoutingModule,
-    MaterialModule,
+    AppRoutingModule,
     HttpClientModule,
-    CountdownModule
+    AppMaterialModule,
+    FlexLayoutModule
   ],
   providers: [],
-  bootstrap: [
-    AppComponent
-  ]
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

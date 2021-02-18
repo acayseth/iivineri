@@ -7,7 +7,29 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true
+        },
+        "@schematics/angular:module": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
         }
       },
       "root": "",
@@ -22,21 +44,14 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "src/favicon.ico",
-              {
-                "glob": "**/*",
-                "input": "src/assets/images",
-                "output": "assets/images"
-              }
+              "src/assets/images"
             ],
             "styles": [
-              "src/assets/stylesheets/styles-app-loading.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/assets/stylesheets/material-theme.scss",
-              "src/assets/stylesheets/material.css",
-              "src/assets/stylesheets/typeface-roboto.css",
+              "src/assets/stylesheets/theme.scss",
+              "src/assets/stylesheets/app-loading.scss",
               "src/styles.scss"
             ],
             "scripts": []
@@ -52,9 +67,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -133,6 +146,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "iivineri"
 }
