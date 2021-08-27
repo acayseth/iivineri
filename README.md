@@ -1,6 +1,13 @@
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/16132740/68576250-6f689b80-0476-11ea-9d09-c2fe7b00f149.png" width="188" alt="logo">
-    0.2.1
+  <img src="https://user-images.githubusercontent.com/16132740/68576250-6f689b80-0476-11ea-9d09-c2fe7b00f149.png" width="188" alt="logo">
+  0.2.1
+  <br>
+  <br>
+  <br>
+  <img src="https://img.shields.io/badge/node-14.17.2-blue" alt="node">
+  <img src="https://img.shields.io/badge/angular-12.1.5-blue" alt="node">
+  <img src="https://img.shields.io/badge/build-0.2.1--beta-blue" alt="build">
+  <img src="https://img.shields.io/badge/License-%20GPL--3.0-blue" alt="license">
 </p>
 
 ## Install
