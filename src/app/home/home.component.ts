@@ -1,11 +1,11 @@
-import { PlatformLocation } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { PlatformLocation } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { environment } from '../../environments/environment';
-import { FridayService } from '../_core/services/friday.service';
-import { GiphyService } from '../_core/services/giphy.service';
-import { IGif, IGiphy } from '../_core/interfaces/gif';
-import { SnackService } from '../_core/services/snack.service';
+
+import { GiphyService } from '../@core/services/giphy.service';
+import { MetaService } from '../@core/services/meta.service';
+
+import { IGiphy } from 'src/app/@core/interface/giphy';
 
 @Component({
   selector: 'app-home',
@@ -14,72 +14,42 @@ import { SnackService } from '../_core/services/snack.service';
 })
 export class HomeComponent implements OnInit {
 
-  public gif: IGif = {
-    id: '', url: '', width: '', height: '',
-  };
-  public loading = false;
-  public gifLoad = false;
+  private _loading: boolean = false;
+  public giphy: IGiphy | undefined;
 
   constructor(
-    private fridayService: FridayService,
-    private giphyService: GiphyService,
-    private activatedRoute: ActivatedRoute,
-    private snack: SnackService,
-    private platformLocation: PlatformLocation
-  ) {
+    private activatedRoute: ActivatedRoute, private giphyService: GiphyService,
+    private metaService: MetaService, private platformLocation: PlatformLocation) {
 
+  }
+
+  public get loading(): boolean {
+    return this._loading;
+  }
+
+  public set loading(value: boolean) {
+    this._loading = value;
   }
 
   ngOnInit(): void {
-    this.activatedRoute.snapshot.params.id
-      ? this.getGifById(this.activatedRoute.snapshot.params.id)
-      : this.getGifRandom();
+    this.nextGiphy(this.activatedRoute.snapshot.params.id || '');
   }
 
-  public getGifById(id?: string): void {
+  public nextGiphy(id: string = ''): void {
     this.loading = true;
-    this.giphyService.getById(id).subscribe(
-      gif => this.gif = this.generatorOrNext(gif),
-      () => this.snack.open('Oppssss', 'Închide')
-    );
+    this.giphyService.getGiphy(id).subscribe((giphy: IGiphy) => {
+      this.giphy = giphy;
+      this.metaService.setMeta(giphy);
+      this.loading = false;
+    })
   }
 
-  public getGifRandom(): void {
-    this.loading = true;
-    const tags = this.fridayService.isFriday()
-      ? environment.giphy.tags.is
-      : environment.giphy.tags.not;
-    this.giphyService.getRandom(tags).subscribe(
-      gif => this.gif = this.generatorOrNext(gif),
-      () => this.snack.open('Oppssss', 'Închide')
-    );
-  }
-
-  private generatorOrNext(gif: IGiphy): IGif {
-    this.loading = false;
-    this.gifLoad = false;
-    return {
-      id: gif.data.id,
-      url: gif.data.images.downsized_medium.url,
-      width: gif.data.images.downsized_medium.width,
-      height: gif.data.images.downsized_medium.height
-    };
-  }
-
-  public onGifLoad(): void {
-    this.gifLoad = true;
-  }
-
-  public onGifError(): void {
-    this.gifLoad = false;
-    this.loading = true;
-  }
-
-  public copyGifLinkToClip(id: string): void {
+  public clipLink(): void {
     const selBox = document.createElement('input');
     selBox.style.position = 'fixed';
     selBox.style.visibility = 'hide';
-    selBox.value = `${(this.platformLocation as any).location.origin}/q/${id}`;
+
+    selBox.value = `${(this.platformLocation as any).location.origin}/_/${this.giphy?.data.id}`;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();

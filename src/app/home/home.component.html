@@ -1,28 +1,26 @@
-<div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10">
+<div fxFlexFill fxLayout="column" fxLayoutAlign="top center" fxLayoutGap="10" class="giphy-zone">
+  <app-countdown></app-countdown>
   <mat-card>
     <mat-card-actions fxLayout="row" fxLayoutAlign="space-evenly center">
-      <button mat-raised-button aria-label="button"
-        (click)="copyGifLinkToClip(gif.id)">
+      <button mat-raised-button aria-label="button" (click)="clipLink()" [disabled]="loading">
         <mat-icon class="mat-icon-d" aria-hidden="false" aria-label="material-icons">turned_in_not</mat-icon>
         Copy gif link
       </button>
-      <button mat-raised-button aria-hidden="false" aria-label="next-gif"
-              (click)="getGifRandom()">
+      <button mat-raised-button aria-hidden="false" aria-label="next-gif" (click)="nextGiphy()" [disabled]="loading">
         <mat-icon class="mat-icon-d" aria-hidden="false" aria-label="material-icons">image</mat-icon>
         Altă gif-ka
       </button>
     </mat-card-actions>
     <div class="gif-zone" fxLayoutAlign="center top">
-      <img mat-card-image class="rounded text-center clickable" alt="gif"
+      <img mat-card-image class="clickable"
            *ngIf="!loading"
-           [src]="gif.url"
-           (click)="getGifRandom()"
-           (load)="onGifLoad()"
-           (error)="onGifError()"/>
+           (click)="nextGiphy()"
+           loading="lazy"
+           [src]="giphy?.data?.images?.downsized_medium?.url"/>
       <div class="mat-card-spinner" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading">
         <mat-spinner color="warn" diameter="100" strokeWidth="5"></mat-spinner>
+        <p style="position:absolute;">Amuș...</p>
       </div>
     </div>
   </mat-card>
-
 </div>

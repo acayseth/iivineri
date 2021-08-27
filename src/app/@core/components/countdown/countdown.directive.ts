@@ -1,6 +1,6 @@
 import { Directive, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs';
-import { switchMap, take, tap } from 'rxjs/operators';
+import { count, switchMap, take, tap } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 
@@ -13,7 +13,7 @@ export class CountdownDirective implements OnChanges, OnDestroy {
   private subscription = Subscription.EMPTY;
 
   @Input()
-  public counter: number;
+  public counter: number = 0;
 
   @Output()
   value = new EventEmitter<string>();
@@ -53,7 +53,11 @@ export class CountdownDirective implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(): void {
-    this.counterSource$.next({count: this.counter, interval: 1000});
+    if (this.counter >= 0) {
+      this.counterSource$.next({count: this.counter, interval: 1000});
+    } else {
+      this.subscription.unsubscribe();
+    }
   }
 
   ngOnDestroy(): void {

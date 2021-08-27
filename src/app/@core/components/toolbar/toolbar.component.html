@@ -1,12 +1,15 @@
-<mat-toolbar color="accent" class="mat-elevation-z8">
+<mat-toolbar color="primary" class="mat-elevation-z1">
   <mat-toolbar-row>
     <span class="spacer"></span>
     <div class="logo text-center">
-      <mat-icon svgIcon="iivineri"></mat-icon>
+      <mat-icon [ngClass]="{'animation': isFriday === true}" svgIcon="iivineri"></mat-icon>
     </div>
     <span class="spacer"></span>
     <button mat-icon-button (click)="goTo('https://github.com/acayseth/iivineri')">
       <mat-icon svgIcon="github" style="line-height:1;"></mat-icon>
+    </button>
+    <button mat-icon-button (click)="toggleDarkMode()">
+      <mat-icon>palette</mat-icon>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>
