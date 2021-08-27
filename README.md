@@ -1,6 +1,6 @@
 <p align="center">
     <img src="https://user-images.githubusercontent.com/16132740/68576250-6f689b80-0476-11ea-9d09-c2fe7b00f149.png" width="188" alt="logo">
-    2.0
+    0.2.1
 </p>
 
 ## Install
