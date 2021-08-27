@@ -2,96 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>iivineri?</title>
+  <title>Iivineri</title>
+  <meta name="robots" content="follow"/>
+  <meta http-equiv="cache-control" content="no-cache"/>
+  <meta http-equiv="expires" content="0"/>
   <base href="/">
-  <meta http-equiv="Expires" content="0">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Cache-Control" content="no-cache">
-
-  <meta name="robots" content="index,follow"/>
-  <meta name="revisit-after" content="2 minutes">
-  <meta itemprop="name" content="iivineri?">
-  <meta itemprop="description" content="Unde-i vinerea?">
-  <meta name="keywords" content="where is friday,isfriday,iivineri,vineri,vinerea,friday,gif"/>
-  <meta name="title" content="iiVineri?"/>
-  <meta name="description" content="Unde-i Vinerea?"/>
-  <meta name="url" content="https://iivineri.org"/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://iivineri.org"/>
-  <meta property="og:title" content="iiVineri?"/>
-  <meta property="og:description" content="Unde-i Vinerea?"/>
-  <meta property="og:image" content=""/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <style type="text/css">
-    body, html {
-      background-color: #303030;
-    }
-
-    .app-loading {
-      position: fixed;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      width: 100%;
-    }
-
-    .app-loading .spinner {
-      height: 300px;
-      width: 300px;
-      animation: rotate 2s linear infinite;
-      transform-origin: center center;
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
-    }
-
-    .app-loading .spinner .path {
-      stroke-dasharray: 1, 200;
-      stroke-dashoffset: 0;
-      animation: dash 1.5s ease-in-out infinite;
-      stroke-linecap: round;
-      stroke: #ddd;
-    }
-
-    @keyframes rotate {
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    @keyframes dash {
-      0% {
-        stroke-dasharray: 1, 200;
-        stroke-dashoffset: 0;
-      }
-      50% {
-        stroke-dasharray: 89, 200;
-        stroke-dashoffset: -35px;
-      }
-      100% {
-        stroke-dasharray: 89, 200;
-        stroke-dashoffset: -124px;
-      }
-    }
-  </style>
+  <meta property="og:title" content="iivineri.org">
+  <meta property="og:site_name" content="iivineri">
+  <meta name="al:android:package" content="com.iivineri.android">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta name="content_filter" content="global">
+  <meta name="fb:app_id" content="175407152526434">
+  <meta name="twitter:card" content="player">
+  <meta name="twitter:player:height" content="960">
+  <meta name="twitter:player:width" content="1178">
+  <meta name="twitter:site" content="@iivineri">
+  <meta name="twitter:app:name:iphone" content="iivineri">
+  <meta name="twitter:app:name:ipad" content="iivineri">
+  <meta name="twitter:app:name:googleplay" content="iivineri">
+  <meta name="twitter:app:id:googleplay" content="com.iivineri.android">
+  <meta property="og:image:width" content="589">
+  <meta property="og:image:height" content="480">
+  <meta property="og:video:width" content="1178">
+  <meta property="og:video:height" content="960">
+  <meta property="og:video:type" content="text/html">
+  <meta property="og:type" content="video.other">
+  <meta property="al:ios:app_name" content="iivineri">
+  <meta property="al:android:package" content="com.iivineri.android">
+  <meta property="al:android:app_name" content="iivineri">
+  <meta content="iivineri" name="application-name">
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 </head>
 <body class="mat-app-background mat-typography">
-<app-root>
-  <div class="app-loading">
-    <div class="logo"></div>
-    <svg class="spinner" viewBox="25 25 50 50">
-      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="1" stroke-miterlimit="10"/>
-    </svg>
-  </div>
-</app-root>
+  <app-root></app-root>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151517869-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+  </script>
 </body>
 </html>
