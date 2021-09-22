@@ -7,7 +7,7 @@ export const environment = {
   },
   giphy: {
     tags: {
-      is: 'nsfw+ass+muligambia+chisinau+ahegao+moldova+md+ro+romania+camasutra+striptease+bdsm+anime+hentay+bubies+tits+twerk+sexy+flirting+friday+party+girls+cats+meme',
+      is: 'sexy-leather+nsfw+ass+muligambia+chisinau+ahegao+moldova+md+ro+romania+camasutra+striptease+bdsm+anime+hentay+bubies+tits+twerk+sexy+flirting+friday+party+girls+cats+meme',
       not: 'boring+wait+loading+horror+work+fuck+meme'
     }
   }
