@@ -41,8 +41,12 @@ export default function NavbarComponent() {
           </Link>
         </div>
         <div className="flex-1 flex justify-center ml-auto">
-          <Link href="https://github.com/acayseth/iivineri" replace={true} className="mx-2">
+          <Link href="https://github.com/acayseth/iivineri" replace={true} className="px-2">
             <Image className="bg-gray-50 rounded-full -mt-2 p-0.5" src={githubLogo} width={24} height={24} alt="github" />
+          </Link>
+          
+          <Link href="https://radio.hellnet.eu" replace={true} className="px-2">
+            <Image className="bg-gray-50 rounded-full -mt-2 p-0.5" src="https://radio.hellnet.eu/static/radio.hellnet.png" alt="radio.hellnet.eu" width={24} height={24} />
           </Link>
         </div>
       </nav>

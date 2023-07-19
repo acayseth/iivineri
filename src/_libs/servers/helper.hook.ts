@@ -25,10 +25,10 @@ export function userHelperHook() {
       creator: 'MD Prodașăn',
       robots: { follow: true, index: true },
       openGraph: {
-        images: [giphy?.downsized_large?.url || logo.src],
+        images: [giphy?.data?.images?.downsized_large?.url || logo.src],
       },
       twitter: {
-        images: [giphy?.downsized_large?.url || logo.src],
+        images: [giphy?.data?.images?.downsized_large?.url || logo.src],
       },
     };
   };
