@@ -1,65 +1,34 @@
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/16132740/68576250-6f689b80-0476-11ea-9d09-c2fe7b00f149.png" width="188" alt="logo">
-  0.2.1
-  <br>
-  <br>
-  <br>
-  <img src="https://img.shields.io/badge/node-14.17.2-blue" alt="node">
-  <img src="https://img.shields.io/badge/angular-12.1.5-blue" alt="node">
-  <img src="https://img.shields.io/badge/build-0.2.1--beta-blue" alt="build">
-  <img src="https://img.shields.io/badge/License-%20GPL--3.0-blue" alt="license">
-</p>
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Install
- - `npm install -g @angular/cli`
- - `git clone https://github.com/acayseth/iivineri`
- - `cd iivineri`
- - `npm install`
- - npm run build
+## Getting Started
 
-## Commands
-  - Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`.
-  - Run `npm run build` to build the project. The build artifacts will be stored in the `dist/iivineri` directory.
+First, run the development server:
 
 ```bash
-
-     _                      _                 ____ _     ___
-    / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
-   / △ \ | '_ \ / _` | | | | |/ _` | '__|   | |   | |    | |
-  / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
- /_/   \_\_| |_|\__, |\__,_|_|\__,_|_|       \____|_____|___|
-                |___/
-    
-
-Angular CLI: 12.1.4
-Node: 14.17.2
-Package Manager: npm 6.14.13
-OS: win32 x64
-
-Angular: 12.1.5
-... animations, common, compiler, compiler-cli, core, forms
-... platform-browser, platform-browser-dynamic, router
-
-Package                         Version
----------------------------------------------------------
-@angular-devkit/architect       0.1201.4
-@angular-devkit/build-angular   12.1.4
-@angular-devkit/core            12.1.4
-@angular-devkit/schematics      12.1.4
-@angular/cdk                    12.2.3
-@angular/cli                    12.1.4
-@angular/flex-layout            12.0.0-beta.34
-@angular/material               12.2.3
-@schematics/angular             12.1.4
-rxjs                            6.6.7
-typescript                      4.3.5
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
 ```
 
-## changelog
- - upgrade @angular/@angular-material/@flex-layout 
- - add dark theme
- - add/update html/head/meta
- - fix countdown negative counter
- - animate logo if is friday
- - change toolbar primary color
- 
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
