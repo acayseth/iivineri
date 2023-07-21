@@ -23,7 +23,7 @@ jobs:
           echo NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID >> .env &&
           echo GIPHY_API_KEY=$GIPHY_API_KEY >> .env &&
           echo GIPHY_RATING=$GIPHY_RATING >> .env &&
-          echo GIPHY_TAG_IS_FRIDAY=&GIPHY_TAG_IS_FRIDAY >> .env &&
+          echo GIPHY_TAG_IS_FRIDAY=$GIPHY_TAG_IS_FRIDAY >> .env &&
           echo GIPHY_TAG_IS_NOT_FRIDAY=$GIPHY_TAG_IS_NOT_FRIDAY >> .env &&
           docker build . --file Dockerfile --tag ghcr.io/acayseth/iivineri:latest
     - name: Push the Docker image
