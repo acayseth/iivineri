@@ -11,6 +11,8 @@
   <img src="https://img.shields.io/badge/License-%20GPL--3.0-blue" alt="license">
 </p>
 
+[![Docker Image CI](https://github.com/acayseth/iivineri/actions/workflows/docker-image.yml/badge.svg)](https://github.com/acayseth/iivineri/actions/workflows/docker-image.yml)
+
 ## Environment
 ```bash
 # .env
