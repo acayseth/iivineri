@@ -9,9 +9,9 @@
   <img src="https://img.shields.io/badge/tailwindcss-3.3.2-blue" alt="tailwindcss">
   <img src="https://img.shields.io/badge/build-2.0-blue" alt="build">
   <img src="https://img.shields.io/badge/License-%20GPL--3.0-blue" alt="license">
+  <img src="https://github.com/acayseth/iivineri/actions/workflows/docker-image.yml/badge.svg" alt="license">
 </p>
 
-[![Docker Image CI](https://github.com/acayseth/iivineri/actions/workflows/docker-image.yml/badge.svg)](https://github.com/acayseth/iivineri/actions/workflows/docker-image.yml)
 
 ## Environment
 ```bash
