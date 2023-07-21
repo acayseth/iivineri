@@ -18,7 +18,7 @@ jobs:
         GIPHY_TAG_IS_FRIDAY: ${{ vars.GIPHY_TAG_IS_FRIDAY }}
         GIPHY_TAG_IS_NOT_FRIDAY: ${{ vars.GIPHY_TAG_IS_NOT_FRIDAY }}
       run: |
-          echo "NEXT_PUBLIC_PROJECT_URL=${{ vars.NEXT_PUBLIC_PROJECT_URL }} >> .env" 
+          echo "NEXT_PUBLIC_PROJECT_URL=${{ vars.NEXT_PUBLIC_PROJECT_URL }}" >> .env
           echo NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID >> .env &&
           echo GIPHY_API_KEY=$GIPHY_API_KEY >> .env &&
           echo GIPHY_RATING=$GIPHY_RATING >> .env &&
