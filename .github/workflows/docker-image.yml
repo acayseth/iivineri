@@ -18,7 +18,14 @@ jobs:
         GIPHY_TAG_IS_FRIDAY: ${{ vars.GIPHY_TAG_IS_FRIDAY }}
         GIPHY_TAG_IS_NOT_FRIDAY: ${{ vars.GIPHY_TAG_IS_NOT_FRIDAY }}
         ENVS: ${{ secrets.ENV }}
-      run: echo $ENVS >> .env && docker build . --file Dockerfile --tag ghcr.io/acayseth/iivineri:latest
+      run: |
+          echo NEXT_PUBLIC_PROJECT_URL=$NEXT_PUBLIC_PROJECT_URL >> .env &&
+          echo NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID >> .env &&
+          echo GIPHY_API_KEY=$GIPHY_API_KEY >> .env &&
+          echo GIPHY_RATING=$GIPHY_RATING >> .env &&
+          echo GIPHY_TAG_IS_FRIDAY=&GIPHY_TAG_IS_FRIDAY >> .env &&
+          echo GIPHY_TAG_IS_NOT_FRIDAY=$GIPHY_TAG_IS_NOT_FRIDAY >> .env &&
+          docker build . --file Dockerfile --tag ghcr.io/acayseth/iivineri:latest
     - name: Push the Docker image
       run: docker login ghcr.io -u acayseth -p ${{ secrets.TOKEN }} && docker push ghcr.io/acayseth/iivineri:latest
 
