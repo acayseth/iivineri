@@ -12,7 +12,7 @@ export default function HomeComponent({ giphy }: IProps) {
   
   return (
     <section>
-        <div className="relative -pt-6 flex flex-col rounded-xl bg-neutral-800/90 bg-clip-border text-gray-700 shadow-md">
+        <div className="relative flex flex-col rounded-xl bg-neutral-800/90 bg-clip-border text-gray-700 shadow-md">
           <div className="relative mx-4 -mt-6 h-[600px] overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
             <img
               className="absolute z-10 object-cover w-full h-full"
