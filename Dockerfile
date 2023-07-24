@@ -6,7 +6,7 @@ RUN yarn && yarn build
 FROM node:18-alpine
 WORKDIR /opt/
 COPY --from=build /opt/.next/ /opt/.next/
-RUN cp -r .next/static .next/standalone/.next/
+COPY --from=build /opt/.next/static .next/standalone/.next/
 
 EXPOSE 80
 ENV PORT 80
