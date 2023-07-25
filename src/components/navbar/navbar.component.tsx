@@ -53,7 +53,7 @@ export default function NavbarComponent() {
       <header className="px-6 mx-auto max-w-screen-lg pt-16 pb-6 lg:pb-7 2xl:pb-8">
         <div className="mx-auto max-w-7xl text-center px-4 py-6 sm:px-6 lg:px-8 relative">
           <h1 className="text-3xl font-bold tracking-tight text-white mb-8">{daysOfWeek}</h1>
-          {(!loading && !isFriday) && <Countdown
+          {(!loading && leftTime > 0) && <Countdown
               now={Date.now}
               date={Date.now() + (leftTime * 1000)}
               renderer={rendererCountDown}
