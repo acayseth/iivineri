@@ -32,27 +32,27 @@ export default function NavbarComponent() {
         <div className="flex-1 flex justify-center mr-auto">
         {/* left side */}
         </div>
-        <div className="mx-12">
-          <Link href="/" className="relative">
+        <div className="mx-12 px-12 relative">
+          <Link href="/" className="">
             <Image src={logo} width={95} height={24} alt="iivineri" />
-            <span
-              className="inline-flex absolute top-1 right-1 items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium font-bold text-gray-600/40 ring-1 ring-inset ring-gray-500/10"
-            >2.0</span>
+            <span className="absolute -top-2 right-11 flex h-5 w-5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            </span>
           </Link>
         </div>
         <div className="flex-1 flex justify-center ml-auto">
           <Link href="https://github.com/acayseth/iivineri" target="_blank" className="px-2">
-            <Image className="bg-gray-50 rounded-full -mt-2 p-0.5" src={githubLogo} width={24} height={24} alt="github" />
+            <Image className="bg-gray-50 rounded-full p-0.5" src={githubLogo} width={30} height={30} alt="github" />
           </Link>
           
           <Link href="https://radio.hellnet.eu" target="_blank" className="px-2">
-            <Image className="bg-gray-50 rounded-full -mt-2 p-0.5" src="https://radio.hellnet.eu/static/radio.hellnet.png" alt="radio.hellnet.eu" width={24} height={24} />
+            <Image className="bg-gray-50 rounded-full p-0.5" src="https://radio.hellnet.eu/static/radio.hellnet.png" alt="radio.hellnet.eu" width={30} height={30} />
           </Link>
         </div>
       </nav>
       <header className="px-6 mx-auto max-w-screen-lg pt-16 pb-6 lg:pb-7 2xl:pb-8">
         <div className="mx-auto max-w-7xl text-center px-4 py-6 sm:px-6 lg:px-8 relative">
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-8">{daysOfWeek}</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-white mb-14 md:mb-5">{daysOfWeek}</h1>
           {(!loading && leftTime > 0) && <Countdown
               now={Date.now}
               date={Date.now() + (leftTime * 1000)}
