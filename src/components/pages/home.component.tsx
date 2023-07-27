@@ -19,6 +19,7 @@ export default function HomeComponent({ giphy }: IProps) {
           src={giphy?.data?.images?.downsized_large.url}
           width={1024}
           onLoadStart={() => 'loading..'}
+          loading="lazy"
           alt=""
         />
         <div className="w-full z-0 h-full absolute flex flex-col justify-center items-center text-black">
