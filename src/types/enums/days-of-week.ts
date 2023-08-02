@@ -1,9 +1,10 @@
 export enum EDaysOfWeek {
-  'Nu, wăi! Îi duminică.',
-  'Nu, wăi! Îi luni.',
-  'Nu, wăi! Îi marți.',
-  'Nu, wăi! Îi miercuri.',
-  'Nu, wăi! Îi joi.',
-  'Da, wăi!!!',
-  'Nu, wăi! Îi sâmbătă.'
+  'Nu, uăi! Îi duminică.',
+  'Nu, uăi! Îi luni.',
+  'Nu, uăi! Îi marți.',
+  'Nu, uăi! Îi miercuri.',
+  'Nu, uăi! Îi jioi.',
+  'Da, uăi!!!',
+  'Nu, uăi! Îi sâmbătă.'
 }
+

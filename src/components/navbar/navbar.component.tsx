@@ -34,7 +34,7 @@ export default function NavbarComponent() {
         </div>
         <div className="mx-12 px-12 relative">
           <Link href="/" className="">
-            <Image src={logo} width={95} height={24} alt="iivineri" />
+            <Image src={logo} width={95} height={24} alt="Îi vineri?" />
             <span className="absolute -top-2 right-11 flex h-5 w-5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
             </span>
