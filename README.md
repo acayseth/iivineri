@@ -12,7 +12,6 @@
   <img src="https://github.com/acayseth/iivineri/actions/workflows/docker-image.yml/badge.svg" alt="license">
 </p>
 
-
 ## Environment
 ```bash
 # .env
@@ -23,10 +22,7 @@ GIPHY_API_KEY=
 GIPHY_RATING=
 GIPHY_TAG_IS_FRIDAY=
 GIPHY_TAG_IS_NOT_FRIDAY=
-
 ```
-
-
 
 ## Example
 <p align="center">
