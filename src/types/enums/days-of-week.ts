@@ -4,7 +4,7 @@ export enum EDaysOfWeek {
   'Nu, uăi! Îi marți.',
   'Nu, uăi! Îi miercuri.',
   'Nu, uăi! Îi jioi.',
-  'Da, uăi!!!',
+  'Da, uăi !!!',
   'Nu, uăi! Îi sâmbătă.'
 }
 

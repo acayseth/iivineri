@@ -18,7 +18,7 @@ export default function RootLayout({ children }: IRootLayout) {
       <body className={clsx(inter.className, 'bg-neutral-900')}>
         <NavbarComponent />
         <Suspense>
-          <main className="px-6 mx-auto max-w-screen-lg lg:pt-7 2xl:pt-8 pb-6 lg:pb-7 2xl:pb-8">
+          <main className="px-6 mx-auto max-w-screen-md lg:pt-7 2xl:pt-8 pb-6 lg:pb-7 2xl:pb-8">
             {children}
           </main>
         </Suspense>
