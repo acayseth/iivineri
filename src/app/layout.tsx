@@ -1,16 +1,23 @@
 import 'server-only';
-import Ga4Component from '@/components/ga4/ga4.component';
 
 import clsx from 'clsx';
+import { Metadata } from 'next';
 import React, { Suspense } from 'react';
 import { Inter } from 'next/font/google';
 
+import Ga4Component from '@/components/ga4/ga4.component';
 import NavbarComponent from '@/components/navbar/navbar.component';
+import { userHelperHook } from '@/_libs/servers/helper.hook';
 import type { IRootLayout } from '@/types/interfaces/root-layout';
 
 import '@/app/globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
+
+export function generateMetadata(): Promise<Metadata> {
+  const { metadata } = userHelperHook();
+  return metadata();
+}
 
 export default function RootLayout({ children }: IRootLayout) {
   return (

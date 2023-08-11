@@ -18,6 +18,7 @@ export function userHelperHook() {
   const metadata = async (id?: string): Promise<Metadata> => {
     const giphy = await fetchGiphy(id);
     const description = 'Vinerea este în mod tradițional a cincea zi a săptămânii (pentru țările în care săptămâna începe lunea), care cade între zilele de joi și sâmbătă. Etimologie: Veneris dies (l.lat.) = Ziua zeiței Venus.';
+    
     return {
       title: 'Îi vineri?',
       description: EDaysOfWeek[moment().day()],
@@ -26,6 +27,7 @@ export function userHelperHook() {
       colorScheme: 'dark',
       creator: 'MD Prodacșăn',
       robots: { follow: true, index: true },
+      icons: logo,
       openGraph: {
         images: [giphy?.data?.images?.downsized_large?.url || logo.src],
         description,
@@ -34,6 +36,9 @@ export function userHelperHook() {
         images: [giphy?.data?.images?.downsized_large?.url || logo.src],
         description,
       },
+      keywords: [
+        'ii vineri', 'iivineri', 'vineri', 'iivineri gif',
+      ],
     };
   };
   
