@@ -5,7 +5,7 @@ import { useHelperHook } from '@/_libs/clients/helper.hook';
 import RendererCountDown from '@/components/count-down/count-down.component';
 import { IGiphy } from '@/types/interfaces/giphy';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Countdown from 'react-countdown';
 
 interface IProps {
@@ -38,10 +38,16 @@ export default function HomeComponent({ giphy }: IProps) {
               className="absolute z-10 object-contain w-full h-full cursor-pointer"
               width={giphy?.data?.images?.original_mp4.width}
               height={giphy?.data?.images?.original_mp4.height}
-              autoPlay loop
-              onClick={refreshPage}
+              controls={false}
+              loop={true}
+              playsInline={true}
+              muted={true}
+              autoPlay={true}
+              disablePictureInPicture={true}
+              disableRemotePlayback={true}
             >
               <source src={giphy?.data?.images?.original_mp4.mp4} type="video/mp4" />
+              Your browser does not support the video tag
             </video>
             <div className="w-full z-0 h-full absolute flex flex-col justify-center items-center">
               <svg className="animate-spin -ml-1 mr-3 h-20 w-20 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
