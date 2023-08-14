@@ -22,6 +22,7 @@ jobs:
     - name: Push the Docker image
       run: docker login ghcr.io -u acayseth -p ${{ secrets.TOKEN }} && docker push ghcr.io/acayseth/iivineri:latest
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
