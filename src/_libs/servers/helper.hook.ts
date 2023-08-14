@@ -3,7 +3,7 @@ import { EDaysOfWeek } from '@/types/enums/days-of-week';
 
 import type { Metadata } from 'next';
 import moment from 'moment/moment';
-import logo from '@/app/logo.svg';
+import logo from '@/../public/icons/logo.svg';
 
 export function userHelperHook() {
   

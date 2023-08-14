@@ -1,18 +1,37 @@
 'use client';
 
+import { useFriday } from '@/_libs/clients/friday.hook';
 import { useHelperHook } from '@/_libs/clients/helper.hook';
+import RendererCountDown from '@/components/count-down/count-down.component';
 import { IGiphy } from '@/types/interfaces/giphy';
 import clsx from 'clsx';
+import React from 'react';
+import Countdown from 'react-countdown';
 
 interface IProps {
   giphy: IGiphy;
 }
 
 export default function HomeComponent({ giphy }: IProps) {
+  const { leftTime, loading, daysOfWeek, isFriday } = useFriday();
   const { copy2Clipboard, refreshPage } = useHelperHook();
   return (
-    <section>
-      <div className="relative flex flex-col rounded-xl transition-all shadown-sm shadow-gray-400/10 bg-neutral-800/90 bg-clip-border text-gray-700 shadow-md">
+    <>
+      <header className="text-center relative pt-2.5 pb-16">
+        <h1
+          className={
+            clsx(
+              'text-5xl font-bold tracking-tight text-white',
+              { 'animate-pulse': isFriday },
+            )}
+        >{daysOfWeek}</h1>
+        {(!loading && leftTime > 0) && <Countdown
+            now={Date.now}
+            date={Date.now() + (leftTime * 1000)}
+            renderer={RendererCountDown}
+        />}
+      </header>
+      <section className="relative flex flex-col rounded-xl transition-all shadown-sm shadow-gray-400/10 bg-neutral-800/90 bg-clip-border text-gray-700 shadow-md">
         <div className="relative m-4 h-[300px] md:h-[400px] object-scale-down overflow-hidden rounded-xl">
           <div>
             <video
@@ -22,7 +41,7 @@ export default function HomeComponent({ giphy }: IProps) {
               autoPlay loop autoFocus
               onClick={refreshPage}
             >
-              <source src={giphy?.data?.images?.original_mp4.mp4} type="video/mp4"/>
+              <source src={giphy?.data?.images?.original_mp4.mp4} type="video/mp4" />
             </video>
             <div className="w-full z-0 h-full absolute flex flex-col justify-center items-center">
               <svg className="animate-spin -ml-1 mr-3 h-20 w-20 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -58,7 +77,7 @@ export default function HomeComponent({ giphy }: IProps) {
             Altă gif-că
           </button>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

@@ -1,50 +1,19 @@
 'use client';
 
-import { useFriday } from '@/_libs/clients/friday.hook';
-import clsx from 'clsx';
 import Image from 'next/image';
-import logo from '@/app/logo.svg';
-import githubLogo from '@/app/github.svg';
+import logo from '@/../public/icons/logo.svg';
+import githubLogo from '@/../public/icons/github.svg';
 import Link from 'next/link';
 import React from 'react';
-import Countdown from 'react-countdown';
-
-const rendererCountDown = ({ days, hours, minutes, seconds }: any) => {
-  return (
-    <>
-      <p className="font-serif font-bold text-white text-xl">
-        <span className="text-2xl">Până vineri:</span>
-        <span className="underline decoration-1">
-          {days !== 0 && (days === 1
-            ? <span className="px-0.5">O zi,</span>
-            : <span className="px-0.5">{days} zile,</span>)}
-          
-          {(hours !== 0) && (hours === 1
-              ? <span className="px-0.5">O oră,</span>
-              : <span className="px-0.5">{hours} ore,</span>
-          
-          )}
-          
-          {minutes !== 0 && (minutes === 1
-              ? <span className="px-0.5">o minută</span>
-              : <span className="px-0.5">{minutes} minute</span>
-          )}
-          
-          <span className="px-0.5">și {seconds} secunde</span>
-        </span>
-      </p>
-    </>
-  );
-};
 
 export default function NavbarComponent() {
-  const { leftTime, loading, daysOfWeek, isFriday } = useFriday();
-  
   return (
     <>
       <nav className="flex items-center justify-between fixed w-screen bg-black shadow-2xl h-16 z-40">
         <div className="flex-1 flex justify-center mr-auto">
-        {/* left side */}
+          <Link href={'upload'} className="px-2 font-semibold hover:underline hover:decoration-1">
+            Upload
+          </Link>
         </div>
         <div className="mx-12 px-12 relative">
           <Link href="/" className="">
@@ -63,23 +32,15 @@ export default function NavbarComponent() {
           </Link>
         </div>
       </nav>
-      <header className="px-6 mx-auto max-w-screen-lg pt-16 pb-6 lg:pb-7 2xl:pb-8">
-        <div className="mx-auto max-w-7xl text-center px-4 py-6 sm:px-6 lg:px-8 relative">
-          <h1
-            className={clsx(
-              'text-5xl font-bold tracking-tight text-white mb-16 md:mb-5',
-              { 'animate-pulse': isFriday },
-            )}>
-            {daysOfWeek}
-          </h1>
-          {(!loading && leftTime > 0) && <Countdown
-              className="absolute left-0 right-0 bottom-0 -mt-14 mb-5"
-              now={Date.now}
-              date={Date.now() + (leftTime * 1000)}
-              renderer={rendererCountDown}
-          />}
+      <div className="flex flex-1 flex-col fixed top-16 left-0 right-0 bg-black shadow-gray-600 shadow z-40">
+        <div className="relative">
+          <div className="w-full border-t-8 border-t-yellow-500/80"></div>
+          <div className="w-full border-t-8 border-t-blue-500/80"></div>
         </div>
-      </header>
+        <div className="absolute top-0 bottom-0 left-0 right-0">
+          <p className="font-semibold text-center text-xs text-white opacity-100">#StandWithUkraine</p>
+        </div>
+      </div>
     </>
   );
 }

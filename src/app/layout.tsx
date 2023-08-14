@@ -14,18 +14,13 @@ import '@/app/globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export function generateMetadata(): Promise<Metadata> {
-  const { metadata } = userHelperHook();
-  return metadata();
-}
-
 export default function RootLayout({ children }: IRootLayout) {
   return (
     <html lang="ro">
       <body className={clsx(inter.className, 'bg-neutral-900')}>
         <NavbarComponent />
         <Suspense>
-          <main className="px-6 mx-auto max-w-screen-md lg:pt-7 2xl:pt-8 pb-6 lg:pb-7 2xl:pb-8">
+          <main className="px-6 mx-auto max-w-screen-md pt-24">
             {children}
           </main>
         </Suspense>
