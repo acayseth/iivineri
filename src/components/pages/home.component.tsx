@@ -38,7 +38,7 @@ export default function HomeComponent({ giphy }: IProps) {
               className="absolute z-10 object-contain w-full h-full cursor-pointer"
               width={giphy?.data?.images?.original_mp4.width}
               height={giphy?.data?.images?.original_mp4.height}
-              autoPlay loop autoFocus
+              autoPlay loop
               onClick={refreshPage}
             >
               <source src={giphy?.data?.images?.original_mp4.mp4} type="video/mp4" />
