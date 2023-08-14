@@ -16,21 +16,21 @@ const rendererCountDown = ({ days, hours, minutes, seconds }: any) => {
         <span className="text-2xl">Până vineri:</span>
         <span className="underline decoration-1">
           {days !== 0 && (days === 1
-            ? <span className="px-1.5">O zi,</span>
-            : <span className="px-1.5">{days} zile,</span>)}
+            ? <span className="px-0.5">O zi,</span>
+            : <span className="px-0.5">{days} zile,</span>)}
           
           {(hours !== 0) && (hours === 1
-              ? <span className="px-1.5">O oră,</span>
-              : <span className="px-1.5">{hours} ore,</span>
+              ? <span className="px-0.5">O oră,</span>
+              : <span className="px-0.5">{hours} ore,</span>
           
           )}
           
           {minutes !== 0 && (minutes === 1
-              ? <span className="px-1.5">o minută,</span>
-              : <span className="px-1.5">{minutes} minute,</span>
+              ? <span className="px-0.5">o minută</span>
+              : <span className="px-0.5">{minutes} minute</span>
           )}
           
-          <span className="px-1.5">și {seconds} secunde</span>
+          <span className="px-0.5">și {seconds} secunde</span>
         </span>
       </p>
     </>
