@@ -21,3 +21,10 @@ jobs:
           curl -XPOST 'https://webhook.hellnet.eu/restart-pod?namespace=default&pod_name_pattern=iivineri' --header 'Authorization: Bearer ${{ secrets.WEBHOOK_TOKEN }}'
     - name: Push the Docker image
       run: docker login ghcr.io -u acayseth -p ${{ secrets.TOKEN }} && docker push ghcr.io/acayseth/iivineri:latest
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Trigger Webhook
+      run: |
+          curl -XPOST 'https://webhook.hellnet.eu/restart-pod?namespace=default&pod_name_pattern=iivineri' --header 'Authorization: Bearer ${{ secrets.WEBHOOK_TOKEN }}'
