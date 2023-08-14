@@ -11,9 +11,9 @@ export default function NavbarComponent() {
     <>
       <nav className="flex items-center justify-between fixed w-screen bg-black shadow-2xl h-16 z-40">
         <div className="flex-1 flex justify-center mr-auto">
-          <Link href={'upload'} className="px-2 font-semibold hover:underline hover:decoration-1">
-            Upload
-          </Link>
+          {/* <Link href={'upload'} className="px-2 font-semibold hover:underline hover:decoration-1"> */}
+          {/*   Upload */}
+          {/* </Link> */}
         </div>
         <div className="mx-12 px-12 relative">
           <Link href="/" className="">
