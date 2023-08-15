@@ -1,9 +1,11 @@
 import 'server-only';
 import { EDaysOfWeek } from '@/types/enums/days-of-week';
+import { IGiphy } from '@/types/interfaces/giphy';
 
 import type { Metadata } from 'next';
 import moment from 'moment/moment';
 import logo from '@/../public/icons/logo.svg';
+import { type } from 'os';
 
 export function userHelperHook() {
   
@@ -16,8 +18,13 @@ export function userHelperHook() {
   };
   
   const metadata = async (id?: string): Promise<Metadata> => {
-    const giphy = await fetchGiphy(id);
+    let giphy: IGiphy | undefined = undefined;
+    if (typeof id !== 'undefined') {
+      giphy = await fetchGiphy(id);
+    }
     const description = 'Vinerea este în mod tradițional a cincea zi a săptămânii (pentru țările în care săptămâna începe lunea), care cade între zilele de joi și sâmbătă. Etimologie: Veneris dies (l.lat.) = Ziua zeiței Venus.';
+    
+    console.log(giphy);
     
     return {
       title: 'Îi vineri?',
@@ -30,6 +37,7 @@ export function userHelperHook() {
       icons: logo,
       openGraph: {
         images: [giphy?.data?.images?.downsized_large?.url || logo.src],
+        url: giphy?.data?.images?.downsized_large?.url || logo.src,
         description,
       },
       twitter: {
