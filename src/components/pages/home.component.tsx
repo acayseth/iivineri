@@ -84,6 +84,65 @@ export default function HomeComponent({ giphy }: IProps) {
           </button>
         </div>
       </section>
+      
+      <section className="relative flex flex-col rounded-xl transition-all shadown-sm shadow-gray-400/10 bg-neutral-800/90 bg-clip-border text-gray-700 shadow-md my-2.5">
+        <div className="relative m-4 object-scale-down overflow-hidden rounded-xl">
+          <ol className="border-l border-neutral-300 dark:border-neutral-500">
+            <li>
+              <div className="flex-start flex items-center pt-0.5">
+                <div className="-ml-[5px] mr-3 h-[9px] w-[9px] rounded-full bg-white"></div>
+                <p className="text-sm text-neutral-500 dark:text-neutral-300">
+                  21.06.2012
+                </p>
+              </div>
+              <div className="mb-3 ml-4 mt-1">
+                <p className="mb-0.5 text-neutral-500 dark:text-neutral-300">
+                  Realizat cu ajutorul tehnologiilor extraordinar de avansate: Spring, Hibernate, HTML5, JMS, EhCache.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div className="flex-start flex items-center pt-0.5">
+                <div className="-ml-[5px] mr-3 h-[9px] w-[9px] rounded-full bg-white"></div>
+                <p className="text-sm text-neutral-500 dark:text-neutral-300">
+                  29.06.2017
+                </p>
+              </div>
+              <div className="mb-3 ml-4 mt-1">
+                <p className="mb-0.5 text-neutral-500 dark:text-neutral-300">
+                  Realizat cu ajutorul tehnologiilor extraordinar de avansate: js, js, js, js, nodejs
+                </p>
+              </div>
+            </li>
+            <li>
+              <div className="flex-start flex items-center pt-0.5">
+                <div className="-ml-[5px] mr-3 h-[9px] w-[9px] rounded-full bg-white"></div>
+                <p className="text-sm text-neutral-500 dark:text-neutral-300">
+                  27.06.2020
+                </p>
+              </div>
+              <div className="mb-3 ml-4 mt-1">
+                <p className="mb-0.5 text-neutral-500 dark:text-neutral-300">
+                  Realizat cu ajutorul tehnologiilor extraordinar de avansate: angular, angular-material
+                </p>
+              </div>
+            </li>
+            <li>
+              <div className="flex-start flex items-center pt-0.5">
+                <div className="-ml-[5px] mr-3 h-[9px] w-[9px] rounded-full bg-white"></div>
+                <p className="text-sm text-neutral-500 dark:text-neutral-300">
+                  15.08.2023
+                </p>
+              </div>
+              <div className="mb-3 ml-4 mt-1">
+                <p className="mb-0.5 text-neutral-500 dark:text-neutral-300">
+                  Realizat cu ajutorul tehnologiilor extraordinar de avansate: nodejs, typescript, nextjs, tailwindcss, docker image CI/CD, git, pipelines
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
     </>
   );
 }

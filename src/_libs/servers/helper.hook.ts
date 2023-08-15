@@ -1,9 +1,11 @@
 import 'server-only';
 import { EDaysOfWeek } from '@/types/enums/days-of-week';
+import { IGiphy } from '@/types/interfaces/giphy';
 
 import type { Metadata } from 'next';
 import moment from 'moment/moment';
 import logo from '@/../public/icons/logo.svg';
+import { type } from 'os';
 
 export function userHelperHook() {
   
@@ -16,7 +18,19 @@ export function userHelperHook() {
   };
   
   const metadata = async (id?: string): Promise<Metadata> => {
-    const giphy = await fetchGiphy(id);
+    let giphy: IGiphy | undefined = undefined;
+    let videos: any | null = null;
+    if (typeof id !== 'undefined') {
+      giphy = await fetchGiphy(id);
+      videos = [
+        {
+          url: giphy?.data?.images?.original_mp4.mp4,
+          type: 'video/mp4',
+          width: giphy?.data?.images?.original_mp4.width,
+          height: giphy?.data?.images?.original_mp4.height,
+        },
+      ];
+    }
     const description = 'Vinerea este în mod tradițional a cincea zi a săptămânii (pentru țările în care săptămâna începe lunea), care cade între zilele de joi și sâmbătă. Etimologie: Veneris dies (l.lat.) = Ziua zeiței Venus.';
     
     return {
@@ -29,11 +43,13 @@ export function userHelperHook() {
       robots: { follow: true, index: true },
       icons: logo,
       openGraph: {
-        images: [giphy?.data?.images?.downsized_large?.url || logo.src],
+        images: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${logo.src}`,
+        url: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${logo.src}`,
+        videos,
         description,
       },
       twitter: {
-        images: [giphy?.data?.images?.downsized_large?.url || logo.src],
+        images: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${logo.src}`,
         description,
       },
       keywords: [
