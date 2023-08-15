@@ -43,13 +43,13 @@ export function userHelperHook() {
       robots: { follow: true, index: true },
       icons: logo,
       openGraph: {
-        images: giphy?.data?.images?.downsized_large?.url || logo.src,
-        url: giphy?.data?.images?.downsized_large?.url || logo.src,
+        images: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${logo.src}`,
+        url: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${logo.src}`,
         videos,
         description,
       },
       twitter: {
-        images: giphy?.data?.images?.downsized_large?.url || logo.src,
+        images: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${logo.src}`,
         description,
       },
       keywords: [
