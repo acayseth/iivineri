@@ -17,7 +17,7 @@ jobs:
           echo "GIPHY_RATING=${{ secrets.GIPHY_RATING }}" >> .env 
           echo "GIPHY_TAG_IS_FRIDAY=${{ secrets.GIPHY_TAG_IS_FRIDAY }}" >> .env
           echo "GIPHY_TAG_IS_NOT_FRIDAY=${{ secrets.GIPHY_TAG_IS_NOT_FRIDAY }}" >> .env 
-          docker build . --file Dockerfile --tag ghcr.io/acayseth/iivineri:latest
+          docker build . --file Dockerfile --tag ghcr.io/acayseth/iivineri:develop
     - name: Push the Docker image
       run: docker login ghcr.io -u acayseth -p ${{ secrets.TOKEN }} && docker push ghcr.io/acayseth/iivineri:develop
   deploy:
