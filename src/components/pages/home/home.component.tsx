@@ -14,10 +14,10 @@ interface IProps {
 }
 
 const timelines = [
-  { date: '21.06.2012', message: 'Realizat cu ajutorul tehnologiilor extraordinar de avansate: Spring, Hibernate, HTML5, JMS, EhCache.' },
-  { date: '29.06.2017', message: 'Realizat cu ajutorul tehnologiilor extraordinar de avansate: js, js, js, js, nodejs' },
-  { date: '27.06.2020', message: 'Realizat cu ajutorul tehnologiilor extraordinar de avansate: angular, angular-material' },
-  { date: '15.08.2023', message: 'Realizat cu ajutorul tehnologiilor extraordinar de avansate: nodejs, typescript, nextjs, tailwindcss, docker image CI/CD, git, pipelines' },
+  { date: '2023', message: 'Realizat cu ajutorul tehnologiilor extraordinar de avansate: nodejs, typescript, nextjs, tailwindcss, git, docker, CI/CD' },
+  { date: '2020', message: 'Realizat cu ajutorul tehnologiilor extraordinar de avansate: angular, angular-material' },
+  { date: '2017', message: 'Realizat cu ajutorul tehnologiilor extraordinar de avansate: js, js, js, js, nodejs' },
+  { date: '2012', message: 'Realizat cu ajutorul tehnologiilor extraordinar de avansate: Spring, Hibernate, HTML5, JMS, EhCache.' }
 ];
 
 export default function HomeComponent({ giphy }: IProps) {
