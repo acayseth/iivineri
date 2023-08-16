@@ -1,8 +1,10 @@
 import 'server-only';
 
+import React from 'react';
+import type { Metadata } from 'next';
+
+import HomeComponent from '@/components/pages/home/home.component';
 import { userHelperHook } from '@/_libs/servers/helper.hook';
-import HomeComponent from '@/components/pages/home.component';
-import { Metadata } from 'next';
 
 interface IProps {
   params: {
@@ -12,12 +14,13 @@ interface IProps {
 
 export function generateMetadata({ params: { id } }: IProps): Promise<Metadata> {
   const { metadata } = userHelperHook();
-  return metadata(id);
+  
+  return metadata({ id, robots: false });
 }
 
 export default async function ({ params: { id } }: IProps) {
   const { fetchGiphy } = userHelperHook();
-  const giphy = await fetchGiphy(id);
+  const giphy = await fetchGiphy({ id });
   
   return <HomeComponent giphy={giphy} />;
 }

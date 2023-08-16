@@ -1,17 +1,19 @@
 import 'server-only';
 
-import HomeComponent from '@/components/pages/home.component';
+import type { Metadata } from 'next';
+
 import { userHelperHook } from '@/_libs/servers/helper.hook';
-import { Metadata } from 'next';
+import HomeComponent from '@/components/pages/home/home.component';
 
 export function generateMetadata(): Promise<Metadata> {
   const { metadata } = userHelperHook();
-  return metadata();
+  
+  return metadata({ robots: true });
 }
 
 export default async function () {
   const { fetchGiphy } = userHelperHook();
-  const giphy = await fetchGiphy();
+  const giphy = await fetchGiphy({});
   
   return <HomeComponent giphy={giphy} />;
 }
