@@ -29,4 +29,3 @@ GIPHY_TAG_IS_NOT_FRIDAY=
 <p align="center">
     <img src="https://github.com/acayseth/iivineri/assets/16132740/f0a35179-a583-48af-8c81-4a581872a8da"/>
 </p>
-
