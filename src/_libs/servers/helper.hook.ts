@@ -3,7 +3,7 @@ import 'server-only';
 import type { Metadata } from 'next';
 import moment from 'moment/moment';
 
-import logo from '@/../public/icons/logo.svg';
+import iiVineriLogo from '@/../public/icons/iivineri.png';
 
 import { EDaysOfWeek } from '@/types/enums/days-of-week';
 import type { IGiphy } from '@/types/interfaces/giphy';
@@ -53,15 +53,15 @@ export function userHelperHook() {
       colorScheme: 'dark',
       creator: 'MD Prodacșăn',
       robots: { follow: robots, index: robots },
-      icons: logo,
+      icons: iiVineriLogo.src,
       openGraph: {
-        images: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${logo.src}`,
-        url: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${logo.src}`,
+        images: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${iiVineriLogo.src}`,
+        url: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${iiVineriLogo.src}`,
         videos,
         description,
       },
       twitter: {
-        images: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${logo.src}`,
+        images: giphy?.data?.images?.downsized_large?.url || `${process.env.NEXT_PUBLIC_PROJECT_URL}${iiVineriLogo.src}`,
         description,
       },
       keywords: [
