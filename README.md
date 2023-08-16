@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/reactjs-18.2.0-blue" alt="node">
   <img src="https://img.shields.io/badge/tailwindcss-3.3.2-blue" alt="tailwindcss">
   <img src="https://img.shields.io/badge/build-2.0-blue" alt="build">
-  <img src="https://img.shields.io/badge/License-%20GPL--3.0-blue" alt="license">
+  <img src="https://img.shields.io/badge/License-%20GNU--3.0-blue" alt="license">
   <img src="https://github.com/acayseth/iivineri/actions/workflows/docker-image.yml/badge.svg" alt="license">
 </p>
 
