@@ -6,10 +6,10 @@ import Countdown from 'react-countdown';
 import { useTimeLeft } from '@/_libs/clients/friday.hook';
 
 export default function CountDownComponent() {
-  const { leftTime, loading } = useTimeLeft();
+  const { leftTime } = useTimeLeft();
   return (
     <section className="h-12 py-0.5 my-2">
-      {(!loading && leftTime > 0) && <Countdown
+      {(leftTime > 0) && <Countdown
           now={Date.now}
           date={Date.now() + (leftTime * 1000)}
           renderer={RendererCountDown}
