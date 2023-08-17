@@ -22,12 +22,9 @@ export default function RootLayout({ children }: IRootLayout) {
       <body className={clsx(inter.className, 'bg-neutral-900')}>
         <NavbarComponent />
         <StandWithUkraineComponent />
-        <Suspense>
-          <main className="px-6 mx-auto max-w-screen-md pt-24">
-            {children}
-          </main>
-        </Suspense>
-        {process.env.NEXT_PUBLIC_GA_ID && <Ga4Component GA4_ID={process.env.NEXT_PUBLIC_GA_ID as string} />}
+        <main className="px-6 mx-auto max-w-screen-md pt-24">
+          {children}
+        </main>
       </body>
     </html>
   );

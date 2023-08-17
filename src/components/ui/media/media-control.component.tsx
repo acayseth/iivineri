@@ -32,7 +32,7 @@ export default function MediaControlComponent({ giphyId }: IProps) {
           'select-none rounded-md bg-white hover:bg-gray-100/80 w-1/2 py-3 px-6 text-center align-middle font-sans text-md font-bold text-black transition-all',
           'focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none',
         )}
-        onClick={refreshPage}
+        onClick={() => refreshPage(giphyId)}
       >Altă gif-că</button>
     </>
   );

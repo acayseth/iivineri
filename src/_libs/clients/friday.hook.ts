@@ -4,11 +4,8 @@ import { EDaysOfWeek } from '@/types/enums/days-of-week';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 
-export function useFriday() {
+export function useTimeLeft() {
   const [leftTime, setLeftTime] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [isFriday] = useState<boolean>(moment().day() === 5);
-  const [daysOfWeek] = useState<string>(EDaysOfWeek[moment().day()]);
   
   useEffect(() => {
     setLeftTime(
@@ -18,8 +15,15 @@ export function useFriday() {
         ),
       ),
     );
-    setLoading(false);
-  });
+  }, []);
   
-  return { loading, leftTime, daysOfWeek, isFriday };
+  return { leftTime };
+}
+
+export function useFriday() {
+  const [isFriday] = useState<boolean>(moment().day() === 5);
+  const [daysOfWeek] = useState<string>(EDaysOfWeek[moment().day()]);
+  const [daysOfWeekNum] = useState<number>(moment().day());
+  
+  return { daysOfWeek, isFriday, daysOfWeekNum };
 }
