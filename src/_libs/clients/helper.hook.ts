@@ -1,6 +1,7 @@
 'use client';
 
 import copy from 'copy-to-clipboard';
+import { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
 import { useRouter } from 'next/navigation';
 
 export function useHelperHook() {
@@ -10,8 +11,8 @@ export function useHelperHook() {
   const copy2Clipboard = (id: string) => copy(`${process.env.NEXT_PUBLIC_PROJECT_URL}/${id}`, {
     debug: false,
   });
-  const refreshPage = () => {
-    location.replace('/')
+  const refreshPage = (previewId: string) => {
+    location.replace(`/`);
   };
   
   return { pasteTheUrl, copy2Clipboard, refreshPage };
