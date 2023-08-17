@@ -17,7 +17,7 @@ const timelines = [
 export default function TimelineComponent() {
   return (
     <section className="flex flex-col rounded-xl transition-all shadown-sm shadow-gray-400/10 bg-neutral-800/90 bg-clip-border text-gray-700 shadow-md my-2 py-2">
-      <div className="relative m-4 object-scale-down overflow-hidden rounded-xl">
+      <div className="relative m-2 object-scale-down overflow-hidden rounded-xl">
         <ol className="border-l border-neutral-300 dark:border-neutral-500">
           {timelines.map((timeline, index) => (
             <TimeLap key={index} date={timeline.date} message={timeline.message} />
@@ -36,7 +36,7 @@ function TimeLap({ date, message }: IProps) {
         <p className="text-sm text-neutral-500 dark:text-neutral-300">{date}</p>
       </div>
       <div className="mb-3 ml-4 mt-1">
-        <p className="mb-0.5 text-neutral-500 dark:text-neutral-300">{message}</p>
+        <p className="mb-0 text-neutral-500 dark:text-neutral-300">{message}</p>
       </div>
     </li>
   );
