@@ -8,7 +8,6 @@ import '@/app/globals.css';
 
 import NavbarComponent from '@/components/ui/navbar/navbar.component';
 import StandWithUkraineComponent from '@/components/ui/stand-with-ukraine/stand-with-ukraine.component';
-import Ga4Component from '@/components/ui/ga4/ga4.component';
 
 const inter = Inter({ subsets: ['latin'] });
 

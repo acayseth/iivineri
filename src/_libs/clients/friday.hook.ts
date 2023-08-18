@@ -1,8 +1,9 @@
 'use client';
 
-import { EDaysOfWeek } from '@/types/enums/days-of-week';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+
+import { EDaysOfWeek } from '@/types/enums/days-of-week';
 
 export function useTimeLeft() {
   const [leftTime, setLeftTime] = useState<number>(0);
