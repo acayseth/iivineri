@@ -9,7 +9,7 @@ import githubLogo from '@/../public/icons/github.svg';
 
 export default function NavbarComponent() {
   return (
-    <nav className="flex items-center justify-between fixed w-screen bg-black shadow-2xl h-16 z-40">
+    <nav className="flex items-center justify-between fixed w-screen bg-black h-16 z-40">
       <div className="flex-1 flex justify-center mr-auto"> </div>
       <div className="mx-12 px-12 relative">
         <Link href="/" className="">
