@@ -1,8 +1,9 @@
 'use client';
 
-import { useFriday } from '@/_libs/clients/friday.hook';
 import clsx from 'clsx';
 import React, { Fragment } from 'react';
+
+import { useFriday } from '@/_libs/clients/friday.hook';
 
 export default function DayOfWeeksComponent() {
   const { daysOfWeekNum } = useFriday();
@@ -18,7 +19,7 @@ export default function DayOfWeeksComponent() {
   
   return (
     <section className="flex justify-center align-middle items-center py-0.5 my-2">
-      <div className="w-1/2 px-5">
+      <div className="w-2/4 px-5">
         <div className="grid grid-rows-7 grid-flow-col gap-4">
           {dayOfWeeks.map((v) => (
             <Fragment key={v.id}>

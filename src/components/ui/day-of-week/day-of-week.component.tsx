@@ -1,8 +1,9 @@
 'use client';
 
-import { useFriday } from '@/_libs/clients/friday.hook';
 import clsx from 'clsx';
 import React from 'react';
+
+import { useFriday } from '@/_libs/clients/friday.hook';
 
 export default function DayOfWeekComponent() {
   const { daysOfWeek, isFriday } = useFriday();
