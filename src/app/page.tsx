@@ -8,7 +8,7 @@ import HomeComponent from '@/components/pages/home/home.component';
 
 export function generateMetadata(): Promise<Metadata> {
   const { metadata } = userHelperHook();
-  
+
   return metadata({ robots: true });
 }
 
@@ -16,11 +16,13 @@ export default async function () {
   const { fetchGiphy } = userHelperHook();
   const giphy = await fetchGiphy({});
 
+  console.log(giphy, 'gp')
+
   const jsonLd: WithContext<Product> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: 'random gif',
-    image: giphy.data.images.downsized_large.mp4,
+    image: giphy?.data?.images?.original_mp4.mp4,
     description: 'random gif',
   }
 
