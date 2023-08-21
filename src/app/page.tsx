@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { Product, WithContext } from 'schema-dts'
 import type { Metadata } from 'next';
 
 import { userHelperHook } from '@/_libs/servers/helper.hook';
@@ -14,6 +15,19 @@ export function generateMetadata(): Promise<Metadata> {
 export default async function () {
   const { fetchGiphy } = userHelperHook();
   const giphy = await fetchGiphy({});
-  
-  return <HomeComponent giphy={giphy} />;
+
+  const jsonLd: WithContext<Product> = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'random gif',
+    image: giphy.data.images.downsized_large.mp4,
+    description: 'random gif',
+  }
+
+  return (
+    <>
+      <HomeComponent giphy={giphy} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}/>
+    </>
+  );
 }
