@@ -6,7 +6,7 @@ import React from 'react';
 import DayOfWeekComponent from '@/components/ui/day-of-week/day-of-week.component';
 import DayOfWeeksComponent from '@/components/ui/day-of-week/day-of-weeks.component';
 import CountDownComponent from '@/components/ui/count-down/count-down.component';
-import TimelineComponent from '@/components/ui/timeline/timeline.component';
+import TimelineListComponent from '@/components/ui/timeline/timeline-list.component';
 
 import type { IGiphy } from '@/types/interfaces/giphy';
 
@@ -21,7 +21,7 @@ export default function HomeComponent({ giphy }: IProps) {
       <DayOfWeekComponent />
       <CountDownComponent />
       <GiphyComponent giphy={giphy} />
-      <TimelineComponent />
+      <TimelineListComponent />
     </>
   );
 }

@@ -18,8 +18,8 @@ interface IFetchGiphyProps {
 }
 
 export function userHelperHook() {
-  
-  const fetchGiphy = async ({ id = 'random' }: IFetchGiphyProps) => {
+
+  const fetchGiphy = async ({ id = 'random' }: IFetchGiphyProps): Promise<IGiphy> => {
     const r = await fetch(`https://api.giphy.com/v1/gifs/${id}?${decodeURIComponent(new URLSearchParams({
       api_key: process.env.GIPHY_API_KEY as string,
       rating: process.env.GIPHY_RATING as string,
@@ -27,12 +27,12 @@ export function userHelperHook() {
     }).toString())}`, { cache: 'no-store' });
     return await r.json();
   };
-  
+
   const metadata = async ({ id, robots }: IMetadataProps): Promise<Metadata> => {
     const description: string = 'Vinerea este în mod tradițional a cincea zi a săptămânii (pentru țările în care săptămâna începe lunea), care cade între zilele de joi și sâmbătă. Etimologie: Veneris dies (l.lat.) = Ziua zeiței Venus.';
     let giphy: IGiphy | undefined = undefined;
     let videos: any | null = null;
-    
+
     if (id) {
       giphy = await fetchGiphy({ id });
       videos = [
@@ -44,7 +44,7 @@ export function userHelperHook() {
         },
       ];
     }
-    
+
     return {
       title: 'Îi vineri?',
       description: EDaysOfWeek[moment().day()],
@@ -69,7 +69,7 @@ export function userHelperHook() {
       ],
     };
   };
-  
+
   return {
     metadata,
     fetchGiphy,

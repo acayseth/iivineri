@@ -3,11 +3,11 @@ import { NextResponse } from 'next/server';
 
 export const config = {
   matcher: [
-    '/((?!api|_next|icons|favicon.ico|manifest.json).*)',
+    '/((?!api|_next|icons|favicon.ico|sw.js|manifest.json).*)',
   ],
 };
 
-export default function middleware(req: NextRequest, res: NextResponse) {
+export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl.clone();
   console.log('middleware =>', pathname);
   

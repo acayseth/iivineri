@@ -11,8 +11,7 @@ jobs:
         token: ${{ secrets.TOKEN }}
     - name: Build the Docker image
       run: |
-          echo "NEXT_PUBLIC_PROJECT_URL=${{ secrets.NEXT_PUBLIC_PROJECT_URL }}" >> .env 
-          echo "NEXT_PUBLIC_GA_ID=${{ secrets.NEXT_PUBLIC_GA_ID }}" >> .env 
+          echo "NEXT_PUBLIC_PROJECT_URL=${{ secrets.NEXT_PUBLIC_PROJECT_URL }}" >> .env  
           echo "GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }}" >> .env 
           echo "GIPHY_RATING=${{ secrets.GIPHY_RATING }}" >> .env 
           echo "GIPHY_TAG_IS_FRIDAY=${{ secrets.GIPHY_TAG_IS_FRIDAY }}" >> .env
