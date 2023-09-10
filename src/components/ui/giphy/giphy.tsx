@@ -16,7 +16,7 @@ export default function GiphyComponent({ giphy }: IProps) {
       <div className="relative m-4 h-[300px] md:h-[400px] object-scale-down overflow-hidden rounded-xl">
         <MediaContentComponent giphy={giphy} type={'mp4'} />
       </div>
-      <div className="px-4 pb-4 flex flex-row justify-between items-center">
+      <div className="px-2 pb-2 flex flex-row justify-between items-center">
         <MediaControlComponent giphyId={giphy.data.id} />
       </div>
     </section>
