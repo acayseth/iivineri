@@ -1,29 +1,22 @@
-import 'server-only';
+import "server-only";
+import "@/app/globals.css";
 
-import clsx from 'clsx';
-import React, { ReactNode, Suspense } from 'react';
-import { Inter } from 'next/font/google';
+import clsx from "clsx";
+import React, { ReactNode, Suspense } from "react";
+import { Inter } from "next/font/google";
+import MainLayout from "@/components/layouts/main.layout";
 
-import '@/app/globals.css';
+const inter = Inter({ subsets: ["latin"] });
 
-import NavbarComponent from '@/components/ui/navbar/navbar.component';
-import StandWithUkraineComponent from '@/components/ui/stand-with-ukraine/stand-with-ukraine.component';
-
-const inter = Inter({ subsets: ['latin'] });
-
-interface IRootLayout {
+interface IProps {
   children: ReactNode;
 }
 
-export default function RootLayout({ children }: IRootLayout) {
+export default function RootLayout({ children }: IProps) {
   return (
     <html lang="ro">
-      <body className={clsx(inter.className, 'bg-neutral-900')}>
-        <NavbarComponent />
-        <StandWithUkraineComponent />
-        <main className="px-6 mx-auto max-w-screen-md pt-24">
-          {children}
-        </main>
+      <body className={clsx(inter.className, "bg-neutral-900")}>
+        <MainLayout>{children}</MainLayout>
       </body>
     </html>
   );

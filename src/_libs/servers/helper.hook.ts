@@ -20,12 +20,8 @@ interface IFetchGiphyProps {
 export function userHelperHook() {
 
   const fetchGiphy = async ({ id = 'random' }: IFetchGiphyProps): Promise<IGiphy> => {
-    const r = await fetch(`https://api.giphy.com/v1/gifs/${id}?${decodeURIComponent(new URLSearchParams({
-      api_key: process.env.GIPHY_API_KEY as string,
-      rating: process.env.GIPHY_RATING as string,
-      tag: (moment().day() === 5 ? process.env.GIPHY_TAG_IS_FRIDAY as string : process.env.GIPHY_TAG_IS_NOT_FRIDAY as string),
-    }).toString())}`, { cache: 'no-store' });
-    return await r.json();
+    const url = `${process.env.NEXT_PUBLIC_PROJECT_URL}?${decodeURIComponent(new URLSearchParams({ id }).toString())}`;
+    return await fetch(url, { cache: 'no-store' }).then(r => r.json());
   };
 
   const metadata = async ({ id, robots }: IMetadataProps): Promise<Metadata> => {
@@ -49,8 +45,6 @@ export function userHelperHook() {
       title: 'Îi vineri?',
       description: EDaysOfWeek[moment().day()],
       applicationName: 'Îi vineri?',
-      themeColor: 'black',
-      colorScheme: 'dark',
       creator: 'MD Prodacșăn',
       robots: { follow: robots, index: robots },
       icons: iiVineriLogo.src,

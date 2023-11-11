@@ -10,29 +10,29 @@
     "clean": "rimraf .next node_modules && yarn cache clean && yarn install"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.17",
-    "axios": "^1.4.0",
-    "clsx": "^1.2.1",
-    "copy-to-clipboard": "^3.3.3",
-    "moment": "^2.29.4",
-    "next": "13.4.9",
-    "react": "18.2.0",
-    "react-countdown": "^2.3.5",
-    "react-dom": "18.2.0",
-    "react-icons": "^4.10.1",
-    "schema-dts": "^1.1.2",
-    "server-only": "^0.0.1"
+    "@headlessui/react": "^1",
+    "axios": "^1",
+    "clsx": "^2",
+    "copy-to-clipboard": "^3",
+    "moment": "^2",
+    "next": "^14",
+    "react": "^18",
+    "react-countdown": "^2",
+    "react-dom": "^18",
+    "react-icons": "^4",
+    "schema-dts": "^1",
+    "server-only": "^0"
   },
   "devDependencies": {
-    "@types/node": "20.4.2",
-    "@types/react": "18.2.14",
-    "@types/react-dom": "18.2.7",
-    "autoprefixer": "10.4.14",
-    "postcss": "8.4.25",
-    "rimraf": "^5.0.1",
-    "sharp": "^0.32.4",
-    "tailwindcss": "3.3.2",
-    "typescript": "5.1.6"
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10",
+    "postcss": "^8",
+    "rimraf": "^5",
+    "sharp": "^0",
+    "tailwindcss": "^3",
+    "typescript": "^5"
   },
   "packageManager": "^yarn@1.22.19"
 }
