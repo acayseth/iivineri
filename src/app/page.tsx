@@ -14,14 +14,14 @@ export function generateMetadata(): Promise<Metadata> {
 
 export default async function () {
   const { fetchGiphy } = userHelperHook();
-  const giphy = await fetchGiphy({});
+  let giphy = await fetchGiphy({});
 
   const jsonLd: WithContext<Product> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: 'random gif',
-    image: giphy?.data?.images?.original_mp4.mp4,
-    description: 'random gif',
+    image: giphy?.data?.images?.original_mp4?.mp4,
+    description: 'queue gif',
   }
 
   return (

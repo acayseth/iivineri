@@ -7,7 +7,7 @@ import { HiMiniArrowUturnRight } from 'react-icons/hi2';
 import { useHelperHook } from '@/_libs/clients/helper.hook';
 
 interface IProps {
-  giphyId: string;
+  giphyId?: string;
 }
 
 export default function MediaControlComponent({ giphyId }: IProps) {

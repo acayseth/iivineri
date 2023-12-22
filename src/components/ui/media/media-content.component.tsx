@@ -13,14 +13,14 @@ export default function MediaContentComponent({ giphy, type }: IProps) {
   if (type === 'image') {
     return (<></>);
   }
-  
+
   if (type === 'mp4') {
     return (
       <div>
       <video
         className="absolute z-10 object-contain w-full h-full cursor-pointer"
-        width={giphy?.data?.images?.original_mp4.width}
-        height={giphy?.data?.images?.original_mp4.height}
+        width={giphy?.data?.images?.original_mp4?.width || giphy?.data?.images?.original.width}
+        height={giphy?.data?.images?.original_mp4?.height || giphy?.data?.images?.original.height}
         controls={false}
         loop={true}
         playsInline={true}
@@ -29,7 +29,7 @@ export default function MediaContentComponent({ giphy, type }: IProps) {
         disablePictureInPicture={true}
         disableRemotePlayback={true}
       >
-        <source src={giphy?.data?.images?.original_mp4.mp4} type="video/mp4" />
+        <source src={giphy?.data?.images?.original_mp4?.mp4 || giphy?.data?.images?.original.mp4} type="video/mp4" />
         Your browser does not support the video tag
       </video>
       <div className="w-full z-0 h-full absolute flex flex-col justify-center items-center">
