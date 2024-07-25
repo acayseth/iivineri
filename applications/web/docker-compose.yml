@@ -1,0 +1,39 @@
+volumes:
+  pgsql: {}
+  redis: {}
+
+services:
+  thumbor:
+    image: ghcr.io/minimalcompact/thumbor:7.7.1
+    ports:
+      - 8880:80
+    environment:
+      - MAX_WIDTH=0
+      - MAX_HEIGHT=0
+      - SECURITY_KEY=MY_SECURE_KEY
+      - UPLOAD_ENABLED=True
+      - ALLOW_UNSAFE_URL=False
+      - UPLOAD_MAX_SIZE=0
+      - STORAGE_EXPIRATION_SECONDS=3155760000
+    volumes:
+      - '$PWD/storage/thumbor:/data'
+    command: ['thumbor']
+
+  pgsql:
+    image: postgres:16-alpine
+    ports:
+      - ${DB_PORT:-5432}:5432
+    environment:
+      PGPASSWORD: '${DB_PASSWORD:-secret}'
+      POSTGRES_DB: '${DB_DATABASE}'
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+    volumes:
+      - pgsql:/var/lib/postgresql/data:delegated
+
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - ${REDIS_PORT:-6379}:6379
+    volumes:
+      - 'redis:/data'
