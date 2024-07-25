@@ -1,38 +1,29 @@
 {
   "name": "iivineri",
-  "version": "2.0.0",
+  "version": "3.1.5",
   "private": true,
+  "license": "MIT",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "clean": "rimraf .next node_modules && yarn cache clean && yarn install"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "clean": "rimraf -g **/.turbo **/.next **/dist **/build **/node_modules"
   },
-  "dependencies": {
-    "@headlessui/react": "^1.7.17",
-    "axios": "^1.4.0",
-    "clsx": "^1.2.1",
-    "copy-to-clipboard": "^3.3.3",
-    "moment": "^2.29.4",
-    "next": "13.4.9",
-    "react": "18.2.0",
-    "react-countdown": "^2.3.5",
-    "react-dom": "18.2.0",
-    "react-icons": "^4.10.1",
-    "schema-dts": "^1.1.2",
-    "server-only": "^0.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/node": "20.4.2",
-    "@types/react": "18.2.14",
-    "@types/react-dom": "18.2.7",
-    "autoprefixer": "10.4.14",
-    "postcss": "8.4.25",
-    "rimraf": "^5.0.1",
-    "sharp": "^0.32.4",
-    "tailwindcss": "3.3.2",
-    "typescript": "5.1.6"
+    "prettier": "^3",
+    "rimraf": "latest",
+    "turbo": "latest",
+    "i18nexus-cli": "^3",
+    "sharp": "^0"
   },
-  "packageManager": "^yarn@1.22.19"
+  "workspaces": [
+    "applications/*",
+    "packages/*"
+  ],
+  "engines": {
+    "npm": ">=10.6.0",
+    "node": ">=20.12.2"
+  },
+  "packageManager": "yarn@1.22.19"
 }

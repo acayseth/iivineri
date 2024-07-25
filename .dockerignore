@@ -7,7 +7,6 @@
 
 # deps
 **/node_models
-/node_models
 **/.pnp
 **/.pnp.js
 **/.yarn/install-state.gz
