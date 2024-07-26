@@ -12,7 +12,7 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file .docker/nest/Dockerfile --tag ghcr.io/acayseth/iivineri:web-develop --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }}
       - name: Push the Docker image
-        run: docker login ghcr.io -u acayseth -p ${{ secrets.TOKEN }} && docker push ghcr.io/acayseth/iivineri:api-develop
+        run: docker login ghcr.io -u acayseth -p ${{ secrets.TOKEN }} && docker push ghcr.io/acayseth/iivineri:web-develop
   deploy:
     needs: build
     runs-on: ubuntu-latest
