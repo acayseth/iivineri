@@ -33,6 +33,7 @@ COPY --from=builder /app/out/full/ .
 RUN yarn turbo run build --scope=web --include-dependencies --no-deps
 
 FROM base AS runner
+ENV PORT=3000
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
@@ -46,5 +47,4 @@ COPY --from=sourcer --chown=nextjs:nodejs /app/applications/web/.next/standalone
 COPY --from=sourcer --chown=nextjs:nodejs /app/applications/web/.next/static ./.next/static
 USER nextjs
 EXPOSE 3000
-ENV PORT 3000
 CMD ["node", "server.js"]
