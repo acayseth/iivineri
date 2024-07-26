@@ -10,7 +10,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
 WORKDIR /app
 COPY . .
-RUN turbo prune web --docker
+RUN npx turbo prune web --docker
 
 FROM base AS installer
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -33,7 +33,7 @@ ENV NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN}
 WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=builder /app/out/full/ .
-RUN turbo run build --filter=web
+RUN npx turbo run build --filter=web
 
 FROM base AS runner
 ENV PORT=80
