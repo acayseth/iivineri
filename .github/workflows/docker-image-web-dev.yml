@@ -16,8 +16,6 @@ jobs:
           --file .docker/next/Dockerfile \
           --tag ghcr.io/acayseth/iivineri:api-develop \
           --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }} \
-          --cache-from type=local,src=/tmp/.buildx-cache \
-          --cache-to type=local,dest=/tmp/.buildx-cache-new \
           --push
   deploy:
     needs: build
