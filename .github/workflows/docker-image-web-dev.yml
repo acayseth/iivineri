@@ -1,4 +1,4 @@
-name: Docker Image CI / CD
+name: [develop][web] Docker Image CI / CD
 on:
   push:
     branches: [ "develop" ]
@@ -16,7 +16,7 @@ jobs:
 #          echo "GIPHY_RATING=${{ secrets.GIPHY_RATING }}" >> .env
 #          echo "GIPHY_TAG_IS_FRIDAY=${{ secrets.GIPHY_TAG_IS_FRIDAY }}" >> .env
 #          echo "GIPHY_TAG_IS_NOT_FRIDAY=${{ secrets.GIPHY_TAG_IS_NOT_FRIDAY }}" >> .env
-          docker build . --file .docker/next/Dockerfile --tag ghcr.io/acayseth/iivineri:api-develop --build-arg NEXT_PUBLIC_DOMAIN=${secrets.NEXT_PUBLIC_PROJECT_URL}
+          docker build . --file .docker/next/Dockerfile --tag ghcr.io/acayseth/iivineri:api-develop --build-arg NEXT_PUBLIC_DOMAIN=$secrets.NEXT_PUBLIC_DOMAIN
     - name: Push the Docker image
       run: docker login ghcr.io -u acayseth -p ${{ secrets.TOKEN }} && docker push ghcr.io/acayseth/iivineri:web-develop
   deploy:
