@@ -10,7 +10,7 @@ ENV TURBO_TELEMETRY_DISABLED=1
 WORKDIR /app
 COPY . .
 RUN yarn global add turbo@latest
-RUN npx turbo prune web --docker
+RUN turbo prune web --docker
 
 FROM base AS installer
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -35,7 +35,7 @@ WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=builder /app/out/full/ .
 RUN yarn global add turbo@latest
-RUN npx turbo run build --filter=web
+RUN turbo run build --filter=web
 
 FROM base AS runner
 ENV PORT=80
