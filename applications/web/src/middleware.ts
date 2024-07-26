@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse, userAgent } from 'next/server'
-import createIntlMiddleware from 'next-intl/middleware'
-import i18nJson from '@/../i18n.json'
 
 export default async function middleware(request: NextRequest) {
   const { isBot } = userAgent(request)
@@ -17,15 +15,7 @@ export default async function middleware(request: NextRequest) {
     }),
   )
 
-  const handleI18nRouting = createIntlMiddleware({
-    locales: i18nJson.locales,
-    defaultLocale: i18nJson.defaultLocale,
-    localePrefix: 'as-needed',
-  })
-
-  const response = handleI18nRouting(request)
-
-  return response
+  return NextResponse.next()
 }
 
 export const config = {

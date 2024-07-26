@@ -1,15 +1,12 @@
 import type { Config } from 'tailwindcss'
-import { cyan, teal, black, white, gray, amber, rose } from 'tailwindcss/colors'
 import { nextui } from '@nextui-org/theme'
-
-const fnColors = (themeColor: string) => ({})
 
 const config: Config = {
   media: 'class',
   darkMode: 'class',
   content: [
     './src/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    "../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   plugins: [
     require('autoprefixer'),

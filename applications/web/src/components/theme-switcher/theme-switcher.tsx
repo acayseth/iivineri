@@ -1,18 +1,17 @@
 'use client'
 
-import React, { type FC, useEffect, useState } from 'react'
-import { useTheme } from 'next-themes'
+import React, { type FC } from 'react'
 import { FaMoon, FaSun } from 'react-icons/fa6'
 
 import { cn } from '@/libs/cn/cn.lib'
 import { Switch } from '@/components/next-ui/switch/switch'
 import { Skeleton } from '@/components/next-ui/skeleton/skeleton'
-import { useThemeSwithcerHook } from '@/hooks/theme-switcher/theme-switcher.hook'
+import { useThemeSwitcherHook } from '@/components/theme-switcher/theme-switcher.hook'
 
 interface IProps {}
 
 const ThemeSwitcher: FC<Readonly<IProps>> = () => {
-  const { mounted, theme, toggleTheme } = useThemeSwithcerHook()
+  const { mounted, theme, toggleTheme } = useThemeSwitcherHook()
 
   if (!mounted) {
     return (

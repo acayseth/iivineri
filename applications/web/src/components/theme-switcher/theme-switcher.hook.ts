@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
 
-const useThemeSwithcerHook = () => {
+const useThemeSwitcherHook = () => {
   const [mounted, setMounted] = useState<boolean>(false)
   const { theme, setTheme } = useTheme()
 
@@ -24,4 +24,4 @@ const useThemeSwithcerHook = () => {
   }
 }
 
-export { useThemeSwithcerHook }
+export { useThemeSwitcherHook }

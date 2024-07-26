@@ -3,8 +3,9 @@
 import { createContext } from 'react'
 import type { IProps as IProviderProps } from '@/providers/app/app.provider'
 
-interface IProps extends Omit<IProviderProps, 'children'> {
-  locale: string
+interface ICreateContext extends Omit<IProviderProps, 'children'> {
+  currentWeekDay: number
+  leftTimeToWednesday: number
   isFriday: boolean
   todayMessage: string
   dayOfWeeks: string[]
@@ -20,8 +21,7 @@ const _MESSAGES_ = [
   'Nu, uăi! Îi sâmbătă.',
 ]
 
-const AppContext = createContext<IProps>({
-  locale: '',
+const AppContext = createContext<ICreateContext>({
   currentWeekDay: 0,
   leftTimeToWednesday: 0,
   isFriday: false,

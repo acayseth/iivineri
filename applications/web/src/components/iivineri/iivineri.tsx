@@ -1,20 +1,25 @@
 'use client'
 
-import React, { type FC, useContext } from 'react'
+import React, { type FC } from 'react'
 
-import { cn } from '@/libs/cn/cn.lib'
 import { DaysOfWeek } from '@/components/iivineri/days-of-week/days-of-week'
-import { TimeLeftUntilFriday } from '@/components/iivineri/time-left-until-friday/time-left-until-friday'
 import { Today } from '@/components/iivineri/today/today'
+import dynamic from 'next/dynamic'
 
-interface IProps {}
+const TimeLeftUntilFriday = dynamic(() => import('@/components/iivineri/time-left-until-friday/time-left-until-friday').then(m => m.TimeLeftUntilFriday), {
+  loading: () => <p className="font-serif font-bold text-center text-default text-xl">Loading...</p>,
+  ssr: false,
+})
 
-const IiVineri: FC<Readonly<IProps>> = () => {
+
+const IiVineri: FC<Readonly<{}>> = () => {
   return (
-    <main className='py-6'>
+    <main className="py-6">
       <DaysOfWeek />
       <Today />
-      <TimeLeftUntilFriday />
+      <div className="py-3 h-20">
+        <TimeLeftUntilFriday />
+      </div>
     </main>
   )
 }

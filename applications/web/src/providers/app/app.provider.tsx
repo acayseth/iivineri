@@ -1,33 +1,39 @@
-'use client';
+'use client'
 
-import React, { FC, type ReactNode } from 'react';
-import { AppContext, _MESSAGES_ } from '@/providers/app/app.context';
+import React, { FC, type ReactNode } from 'react'
+import { AppContext, _MESSAGES_ } from '@/providers/app/app.context'
+import moment from 'moment'
 
 export interface IProps {
   children: ReactNode;
-  currentWeekDay: number;
-  leftTimeToWednesday: number;
-  locale: string;
 }
 
-const AppProvider: FC<Readonly<IProps>> = ({ children, currentWeekDay, leftTimeToWednesday, locale }) => {
+const AppProvider: FC<Readonly<IProps>> = ({ children }) => {
   const getTodayMessage = (currentWeekDay: number) => {
-    return _MESSAGES_[currentWeekDay]!;
-  };
+    return _MESSAGES_[currentWeekDay]!
+  }
+
+  const currentWeekDay = moment().day()
+  const leftTimeToWednesday = Math.round(
+    moment(moment().isoWeekday(5).format('YYYY-MM-DD 00:00:00')).diff(
+      moment(moment(), 'YYYY-MM-DD HH:MM:SS'),
+      'seconds',
+      true,
+    ),
+  )
 
   return (
     <AppContext.Provider
       value={{
-        locale,
         currentWeekDay,
         leftTimeToWednesday,
         isFriday: currentWeekDay === 5,
         todayMessage: getTodayMessage(currentWeekDay),
-        dayOfWeeks: ['Lu', 'Ma', 'Mi', 'Jo', 'Vi', 'Sî', 'Du'],
+        dayOfWeeks: ['Lu', 'Ma', 'Mi', 'Jo', 'Vi', 'Sî', 'Du']
       }}>
       {children}
     </AppContext.Provider>
-  );
-};
+  )
+}
 
-export { AppProvider };
+export { AppProvider }
