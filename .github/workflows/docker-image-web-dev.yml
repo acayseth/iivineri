@@ -1,4 +1,4 @@
-name: [develop][web] Docker Image CI / CD
+name: WebDev Docker Image CI / CD
 on:
   push:
     branches: [ "develop" ]
@@ -6,34 +6,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: '${{ runner.os }}-buildx-${{ github.sha }}'
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Build the Docker image
-        run: |
-          docker buildx create --use
-          docker buildx build . \
-            --file .docker/next/Dockerfile \
-            --tag ghcr.io/acayseth/iivineri:api-develop \
-            --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }} \
-            --cache-from type=local,src=/tmp/.buildx-cache \
-            --cache-to type=local,dest=/tmp/.buildx-cache-new \
-            --push
-
-      - name: Move new cache to old cache
-        run: mv /tmp/.buildx-cache-new/* /tmp/.buildx-cache/
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.TOKEN }}
+    - name: Push the Docker image
+#      run: docker login ghcr.io -u acayseth -p ${{ secrets.TOKEN }} && docker push ghcr.io/acayseth/iivineri:web-develop
+      run: |
+        docker buildx build . \
+          --file .docker/next/Dockerfile \
+          --tag ghcr.io/acayseth/iivineri:api-develop \
+          --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }} \
+          --cache-from type=local,src=/tmp/.buildx-cache \
+          --cache-to type=local,dest=/tmp/.buildx-cache-new \
+          --push
   deploy:
     needs: build
     runs-on: ubuntu-latest
