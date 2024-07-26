@@ -10,10 +10,11 @@
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10",
+    "@nextui-org/avatar": "^2",
+    "@nextui-org/dropdown": "^2",
     "@nextui-org/button": "^2",
     "@nextui-org/card": "^2",
     "@nextui-org/chip": "^2",
-    "@nextui-org/dropdown": "^2",
     "@nextui-org/image": "^2",
     "@nextui-org/input": "^2",
     "@nextui-org/link": "^2",
