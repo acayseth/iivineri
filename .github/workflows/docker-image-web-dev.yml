@@ -11,12 +11,7 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
       - name: Build the Docker image
-        run: |
-          docker buildx create --use
-          docker buildx build . \
-          --file .docker/next/Dockerfile \
-          --tag ghcr.io/acayseth/iivineri:api-develop \
-          --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }}
+        run: docker build . --file .docker/nest/Dockerfile --tag ghcr.io/acayseth/iivineri:api-develop --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }}
       - name: Push the Docker image
         run: docker login ghcr.io -u acayseth -p ${{ secrets.TOKEN }} && docker push ghcr.io/acayseth/iivineri:api-develop
   deploy:
