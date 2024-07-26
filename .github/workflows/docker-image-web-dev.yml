@@ -35,6 +35,8 @@ jobs:
             --tag ghcr.io/acayseth/iivineri:web-develop \
             --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }} \
             --push \
+            --cache-from=type=local,src=/tmp/.buildx-cache \
+            --cache-to=type=local,dest=/tmp/.buildx-cache \
             .
 
   deploy:
