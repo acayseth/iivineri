@@ -11,12 +11,12 @@ jobs:
         token: ${{ secrets.TOKEN }}
     - name: Build the Docker image
       run: |
-          echo "NEXT_PUBLIC_PROJECT_URL=${{ secrets.NEXT_PUBLIC_PROJECT_URL }}" >> .env  
-          echo "GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }}" >> .env 
-          echo "GIPHY_RATING=${{ secrets.GIPHY_RATING }}" >> .env 
-          echo "GIPHY_TAG_IS_FRIDAY=${{ secrets.GIPHY_TAG_IS_FRIDAY }}" >> .env
-          echo "GIPHY_TAG_IS_NOT_FRIDAY=${{ secrets.GIPHY_TAG_IS_NOT_FRIDAY }}" >> .env 
-          docker build . --file .docker/next/Dockerfile --tag ghcr.io/acayseth/iivineri:api-develop
+#          echo "NEXT_PUBLIC_PROJECT_URL=${{ secrets.NEXT_PUBLIC_PROJECT_URL }}" >> .env
+#          echo "GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }}" >> .env
+#          echo "GIPHY_RATING=${{ secrets.GIPHY_RATING }}" >> .env
+#          echo "GIPHY_TAG_IS_FRIDAY=${{ secrets.GIPHY_TAG_IS_FRIDAY }}" >> .env
+#          echo "GIPHY_TAG_IS_NOT_FRIDAY=${{ secrets.GIPHY_TAG_IS_NOT_FRIDAY }}" >> .env
+          docker build . --file .docker/next/Dockerfile --tag ghcr.io/acayseth/iivineri:api-develop --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_PROJECT_URL }}
     - name: Push the Docker image
       run: docker login ghcr.io -u acayseth -p ${{ secrets.TOKEN }} && docker push ghcr.io/acayseth/iivineri:web-develop
   deploy:

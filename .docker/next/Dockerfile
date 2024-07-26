@@ -1,14 +1,16 @@
+ARG NEXT_PUBLIC_DOMAIN
+
 FROM node:20-alpine AS base
 RUN apk update
 RUN apk add --no-cache libc6-compat
+RUN yarn global add turbo@latest
 
 FROM base AS builder
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
 WORKDIR /app
-RUN yarn global add turbo@1.13.4
 COPY . .
-RUN turbo prune --scope=web --docker
+RUN turbo prune web --docker
 
 FROM base AS installer
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -27,16 +29,18 @@ FROM base AS sourcer
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN}
 WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=builder /app/out/full/ .
-RUN yarn turbo run build --scope=web --include-dependencies --no-deps
+RUN turbo run build --filter=web
 
 FROM base AS runner
-ENV PORT=3000
+ENV PORT=80
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN}
 WORKDIR /app
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
@@ -46,5 +50,5 @@ COPY --from=sourcer --chown=nextjs:nodejs /app/applications/web/.next/standalone
 COPY --from=sourcer --chown=nextjs:nodejs /app/applications/web/.next/standalone/applications/web/server.js ./server.js
 COPY --from=sourcer --chown=nextjs:nodejs /app/applications/web/.next/static ./.next/static
 USER nextjs
-EXPOSE 3000
+EXPOSE 80
 CMD ["node", "server.js"]
