@@ -3,13 +3,13 @@ ARG NEXT_PUBLIC_DOMAIN
 FROM node:20-alpine AS base
 RUN apk update
 RUN apk add --no-cache libc6-compat
+RUN yarn global add turbo@2.0.9
 
 FROM base AS builder
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
 WORKDIR /app
 COPY . .
-RUN yarn global add turbo@latest
 RUN turbo prune web --docker
 
 FROM base AS installer
@@ -18,7 +18,6 @@ ENV TURBO_TELEMETRY_DISABLED=1
 WORKDIR /app
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/yarn.lock ./yarn.lock
-RUN yarn global add turbo@latest
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
@@ -34,7 +33,6 @@ ENV NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN}
 WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=builder /app/out/full/ .
-RUN yarn global add turbo@latest
 RUN turbo run build --filter=web
 
 FROM base AS runner
