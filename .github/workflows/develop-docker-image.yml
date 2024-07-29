@@ -1,18 +1,61 @@
-name: Docker Image CI
-
+name: Develop Docker Image CI / CD
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
+    branches: ["develop"]
 jobs:
-
-  build:
-
+  build-api:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 5
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - uses: actions/checkout@v3
+      - name: Trigger Webhook
+        run: echo 'build-api-ok'
+
+  deploy-api:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Trigger Webhook
+        run: echo 'deploy-api-ok'
+
+  build-web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: "${{ runner.os }}-web-buildx-${{ github.sha }}"
+          restore-keys: ${{ runner.os }}-web-buildx-
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: acayseth
+          password: ${{ secrets.TOKEN }}
+      - name: Build and push Docker image
+        run: |
+          docker buildx build \
+            --file .docker/nest/Dockerfile \
+            --tag ghcr.io/acayseth/iivineri:web-develop \
+            --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }} \
+            --push \
+            --cache-from=type=local,src=/tmp/.buildx-cache \
+            --cache-to=type=local,dest=/tmp/.buildx-cache \
+            .
+  deploy-web:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Trigger Webhook
+        run: |
+          curl -XPOST 'https://webhook.hellnet.eu/restart-pod?namespace=default&pod_name_pattern=iivineri-dev' --header 'Authorization: Bearer ${{ secrets.WEBHOOK_TOKEN }}'
