@@ -29,12 +29,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: "${{ runner.os }}-web-buildx-${{ github.sha }}"
-          restore-keys: ${{ runner.os }}-web-buildx-
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -43,13 +37,11 @@ jobs:
           password: ${{ secrets.TOKEN }}
       - name: Build and push Docker image
         run: |
-          docker buildx build \
+          docker build \
             --file .docker/nest/Dockerfile \
             --tag ghcr.io/acayseth/iivineri:web-develop \
             --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }} \
             --push \
-            --cache-from=type=local,src=/tmp/.buildx-cache \
-            --cache-to=type=local,dest=/tmp/.buildx-cache \
             .
   deploy-web:
     needs: build-web
