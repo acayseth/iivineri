@@ -21,6 +21,7 @@ jobs:
         run: echo 'deploy-api-ok'
 
   build-web:
+    needs: deploy-api
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
