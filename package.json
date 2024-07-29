@@ -2,18 +2,18 @@
   "name": "iivineri",
   "version": "3.1.5",
   "private": true,
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "clean": "rimraf -g **/.turbo **/.next **/dist **/build **/node_modules"
+    "clean": "rimraf -g **/.turbo **/.next **/dist **/build **/node_modules && yarn cache clean && yarn install"
   },
   "dependencies": {},
   "devDependencies": {
     "prettier": "^3",
-    "rimraf": "latest",
-    "turbo": "latest",
+    "rimraf": "^6",
+    "turbo": "^2",
     "i18nexus-cli": "^3",
     "sharp": "^0"
   },

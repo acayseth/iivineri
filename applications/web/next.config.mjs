@@ -8,7 +8,6 @@ const withNextPwa = createPWA({
   cacheStartUrl: false,
 })
 
-
 const fn = async (_, { defaultConfig }) => {
   /** @type {import('next').NextConfig} */
   const nextConfig = {
@@ -33,10 +32,10 @@ const fn = async (_, { defaultConfig }) => {
       process.env.NODE_ENV === 'development'
         ? undefined
         : {
-          removeConsole: {
-            exclude: ['error'],
+            removeConsole: {
+              exclude: ['error'],
+            },
           },
-        },
   }
 
   return withNextPwa(nextConfig)
