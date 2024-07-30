@@ -6,7 +6,8 @@
 **/.turbo
 
 # deps
-**/node_models
+**/node_modules
+**/test
 **/.pnp
 **/.pnp.js
 **/.yarn/install-state.gz
@@ -31,7 +32,6 @@
 
 # build
 **/.next
-**/dist
 **/build
 
 # env

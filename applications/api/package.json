@@ -4,7 +4,7 @@
   "private": true,
   "license": "GPL-3.0-only",
   "scripts": {
-    "x:build": "nest build",
+    "build": "nest build",
     "x:format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "x:start": "nest start",
     "dev": "nest start --tsc --watch",

@@ -7,15 +7,15 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "clean": "rimraf -g **/.turbo **/.next **/dist **/build **/node_modules && yarn cache clean && yarn install"
+    "clean": "rimraf -g **/.turbo **/.next **/dist **/build **/node_modules && yarn cache clean"
   },
   "dependencies": {},
   "devDependencies": {
+    "i18nexus-cli": "^3.5.0",
     "prettier": "^3",
     "rimraf": "^6",
-    "turbo": "^2",
-    "i18nexus-cli": "^3",
-    "sharp": "^0"
+    "sharp": "^0",
+    "turbo": "^2.0.9"
   },
   "workspaces": [
     "applications/*"

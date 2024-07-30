@@ -21,11 +21,12 @@ import configuration from "@/config";
       envFilePath: [".env", ".env.local"],
       isGlobal: true,
       validationSchema: Joi.object({
+        PORT: Joi.number(),
         NODE_ENV: Joi.string()
           .valid("development", "production")
           .default("development"),
-        THUMBOR_HOST: Joi.required(),
-        THUMBOR_TOKEN: Joi.required(),
+        // THUMBOR_HOST: Joi.required(),
+        // THUMBOR_TOKEN: Joi.required(),
       }),
     }),
     ThumborModule,
@@ -33,4 +34,4 @@ import configuration from "@/config";
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
