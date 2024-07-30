@@ -26,7 +26,8 @@ RUN \
     else echo "Lockfile not found." && exit 1; \
     fi
 COPY --from=builder /app/out/full/ .
-RUN yarn turbo run build --filter=web
+RUN yarn global add turbo@^2
+RUN turbo run build --filter=web
 
 FROM base AS runner
 ENV PORT=3000

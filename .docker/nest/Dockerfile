@@ -23,7 +23,8 @@ RUN \
     fi
 RUN yarn upgrade
 COPY --from=builder /app/out/full/ .
-RUN yarn turbo run build --filter=api
+RUN yarn global add turbo@^2
+RUN turbo run build --filter=api
 
 FROM base AS runner
 ENV PORT=3000
