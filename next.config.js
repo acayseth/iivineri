@@ -1,15 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  generateEtags: true,
-  swcMinify: true,
-  poweredByHeader: false,
-  output: "standalone",
-  images: {
-    remotePatterns: [{
-      protocol: 'https',
-      hostname: 'radio.hellnet.eu'
-    }],
-  },
-};
+    experimental: {
+        appDir: true
+    },
+    generateEtags: true,
+    swcMinify: true,
+    poweredByHeader: false,
+    output: 'standalone',
+    images: {
+        domains: ['radio.hellnet.eu']
+    }
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

@@ -16,6 +16,8 @@ export default async function () {
   const { fetchGiphy } = userHelperHook();
   const giphy = await fetchGiphy({});
 
+  console.log(giphy, 'gp')
+
   const jsonLd: WithContext<Product> = {
     '@context': 'https://schema.org',
     '@type': 'Product',

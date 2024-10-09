@@ -14,9 +14,9 @@ export default function DayOfWeeksComponent() {
     { id: 4, name: 'Jo' },
     { id: 5, name: 'Vi' },
     { id: 6, name: 'Sî' },
-    { id: 0, name: 'Du' },
+    { id: 7, name: 'Du' },
   ];
-
+  
   return (
     <section className="flex justify-center align-middle items-center py-0.5 my-2">
       <div className="px-5">
