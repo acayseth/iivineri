@@ -12,8 +12,6 @@
   <img src="https://img.shields.io/badge/Argon2-2-6C3483?style=plastic" alt="argon2">
   <img src="https://img.shields.io/badge/Lucide_Icons-0.460-F56565?style=plastic" alt="lucide">
   <img src="https://img.shields.io/badge/Simple_Icons-14-111111?style=plastic&logo=simpleicons" alt="simple-icons">
-  <img src="https://img.shields.io/badge/Font-Onest-444?style=plastic&logo=googlefonts" alt="onest">
-  <img src="https://img.shields.io/badge/Font-Lobster_Two-444?style=plastic&logo=googlefonts" alt="lobster-two">
   <img src="https://img.shields.io/badge/License-%20GNU--3.0-blue" alt="license">
 </p>
 
