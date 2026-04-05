@@ -10,6 +10,10 @@
   <img src="https://img.shields.io/badge/SQLite-3-003B57?style=plastic&logo=sqlite" alt="sqlite">
   <img src="https://img.shields.io/badge/Thumbor-7.7-000000?style=plastic" alt="thumbor">
   <img src="https://img.shields.io/badge/Argon2-2-6C3483?style=plastic" alt="argon2">
+  <img src="https://img.shields.io/badge/Lucide_Icons-0.460-F56565?style=plastic" alt="lucide">
+  <img src="https://img.shields.io/badge/Simple_Icons-14-111111?style=plastic&logo=simpleicons" alt="simple-icons">
+  <img src="https://img.shields.io/badge/Font-Onest-444?style=plastic&logo=googlefonts" alt="onest">
+  <img src="https://img.shields.io/badge/Font-Lobster_Two-444?style=plastic&logo=googlefonts" alt="lobster-two">
   <img src="https://img.shields.io/badge/License-%20GNU--3.0-blue" alt="license">
 </p>
 
@@ -33,6 +37,9 @@ Pentru ca vinerea nu se deploy.
 | [Drizzle ORM](https://orm.drizzle.team) | ORM pentru baza de date |
 | [SQLite](https://www.sqlite.org) (via better-sqlite3) | Baza de date |
 | [Argon2](https://github.com/nicolo-ribaudo/node-argon2) (@node-rs/argon2) | Hash parole cu pepper (APP_SECRET) |
+| [Astro Icon](https://github.com/natemoo-re/astro-icon) + [Lucide](https://lucide.dev) / [Simple Icons](https://simpleicons.org) | Iconite (sun, moon, log-in, github) |
+| [Onest](https://onest.md/en) | Font principal (sans-serif) |
+| [Lobster Two](https://fonts.google.com/specimen/Lobster+Two) | Font decorativ (logo, titluri) |
 | [Thumbor](https://www.thumbor.org) | Stocare, resize, blur, smart crop, conversie WebP |
 | [Redis](https://redis.io) | Cache (Thumbor) |
 | [Docker](https://www.docker.com) | Containerizare servicii (Thumbor, Redis) |
@@ -98,9 +105,8 @@ Ai o idee? Te provocam la un PR.
 
 ### Planuri de viitor
 
-- Suport pentru incarcarea fisierelor video (MP4).
-- Moderare si filtrare de continut pentru a mentine calitatea si siguranta resursei.
-- Extinderea contributiilor: pe langa PR-uri, comunitatea va putea participa si prin continut vizual si multimedia.
+- [ ] Suport pentru incarcarea fisierelor video (MP4).
+- [ ] Moderare si filtrare de continut pentru a mentine calitatea si siguranta resursei.
 
 ## Filosofie
 
