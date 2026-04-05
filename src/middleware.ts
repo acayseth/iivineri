@@ -1,15 +1,26 @@
-import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
+import { defineMiddleware } from "astro:middleware";
 
-export const config = {
-  matcher: [
-    '/((?!api|_next|icons|favicon.ico|sw.js|manifest.json).*)',
-  ],
-};
+const authPages = ["/sign-in", "/sign-up", "/forgot-password", "/reset-password"];
 
-export default function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl.clone();
-  console.log('middleware =>', pathname);
-  
-  return NextResponse.next();
-}
+export const onRequest = defineMiddleware(async (ctx, next) => {
+  const userId = await ctx.session?.get("userId");
+
+  if (userId) {
+    ctx.locals.userId = userId;
+
+    const path = ctx.url.pathname.replace(/\/+$/, "") || "/";
+    if (authPages.includes(path)) {
+      return ctx.redirect("/");
+    }
+  }
+
+  const response = await next();
+
+  // Security headers
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-XSS-Protection", "1; mode=block");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+
+  return response;
+});

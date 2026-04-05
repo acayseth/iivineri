@@ -1,0 +1,12 @@
+node_modules
+dist
+.astro
+.env*
+.claude
+.playwright-mcp
+.vscode
+.development
+*.png
+*.jpg
+*.jpeg
+img_*

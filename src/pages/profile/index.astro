@@ -1,0 +1,160 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { actions, isInputError } from "astro:actions";
+import { db, User, eq, and, isNull } from "astro:db";
+
+const userId = await Astro.session?.get("userId");
+if (!userId) {
+  return Astro.redirect("/sign-in");
+}
+
+const user = await db
+  .select({ nickname: User.nickname, email: User.email, createdAt: User.createdAt })
+  .from(User)
+  .where(and(eq(User.id, userId), isNull(User.deletedAt)))
+  .get();
+
+if (!user) {
+  Astro.session?.destroy();
+  return Astro.redirect("/sign-in");
+}
+
+const initials = user.nickname.slice(0, 2).toUpperCase();
+
+const changeResult = Astro.getActionResult(actions.changePassword);
+const changeFieldErrors = isInputError(changeResult?.error) ? changeResult.error.fields : {};
+const changeServerError = changeResult?.error && !isInputError(changeResult.error) ? changeResult.error.message : null;
+const changeSuccess = changeResult?.data?.success;
+
+const deleteResult = Astro.getActionResult(actions.deleteAccount);
+const deleteServerError = deleteResult?.error && !isInputError(deleteResult.error) ? deleteResult.error.message : null;
+
+if (deleteResult?.data?.success) {
+  return Astro.redirect("/");
+}
+---
+
+<Layout title="Profil">
+  <main class="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4 py-8">
+    <div class="w-full max-w-sm space-y-6">
+
+      <!-- Profil -->
+      <div class="card bg-base-200 p-8 shadow-lg">
+        <div class="flex flex-col items-center gap-4">
+          <div class="avatar placeholder">
+            <div class="bg-primary text-primary-content w-20 rounded-full flex items-center justify-center">
+              <span class="text-2xl font-bold">{initials}</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <h1 class="text-xl font-bold">{user.nickname}</h1>
+            <p class="text-base-content/60 text-sm">{user.email}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schimba parola -->
+      <div class="card bg-base-200 p-8 shadow-lg">
+        <h2 class="text-lg font-bold mb-4">Schimba parola</h2>
+
+        {changeServerError && (
+          <div class="alert alert-error mb-4 text-sm">{changeServerError}</div>
+        )}
+
+        {changeSuccess && (
+          <div class="alert alert-success mb-4 text-sm">Parola a fost schimbata cu succes.</div>
+        )}
+
+        <form method="POST" action={actions.changePassword}>
+          <label class="label" for="currentPassword">Parola curenta</label>
+          <input
+            id="currentPassword"
+            type="password"
+            name="currentPassword"
+            required
+            autocomplete="current-password"
+            placeholder="••••••••"
+            class:list={["input input-bordered w-full", changeFieldErrors.currentPassword && "input-error"]}
+          />
+          {changeFieldErrors.currentPassword && (
+            <p class="text-error text-xs mt-1">{changeFieldErrors.currentPassword.join(", ")}</p>
+          )}
+
+          <label class="label mt-4" for="password">Parola noua</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            required
+            minlength="8"
+            autocomplete="new-password"
+            placeholder="••••••••"
+            class:list={["input input-bordered w-full", changeFieldErrors.password && "input-error"]}
+          />
+          <p class="text-base-content/50 text-xs mt-1">Minim 8 caractere, 2 litere mari, 2 cifre, 2 simboluri</p>
+          {changeFieldErrors.password && (
+            <p class="text-error text-xs mt-1">{changeFieldErrors.password.join(", ")}</p>
+          )}
+
+          <label class="label mt-4" for="confirmPassword">Confirma parola noua</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            name="confirmPassword"
+            required
+            minlength="8"
+            autocomplete="new-password"
+            placeholder="••••••••"
+            class:list={["input input-bordered w-full", changeFieldErrors.confirmPassword && "input-error"]}
+          />
+          {changeFieldErrors.confirmPassword && (
+            <p class="text-error text-xs mt-1">{changeFieldErrors.confirmPassword.join(", ")}</p>
+          )}
+
+          <button type="submit" class="btn btn-primary w-full mt-6">Schimba parola</button>
+        </form>
+      </div>
+
+      <!-- Sterge cont -->
+      <div class="card bg-base-200 p-8 shadow-lg border border-error/20">
+        <h2 class="text-lg font-bold text-error mb-2">Zona periculoasa</h2>
+        <p class="text-base-content/60 text-sm mb-4">Stergerea contului este permanenta si nu poate fi anulata.</p>
+
+        {deleteServerError && (
+          <div class="alert alert-error mb-4 text-sm">{deleteServerError}</div>
+        )}
+
+        <button class="btn btn-error btn-outline w-full" onclick="delete_modal.showModal()">Sterge contul</button>
+      </div>
+
+    </div>
+  </main>
+
+  <dialog id="delete_modal" class="modal">
+    <div class="modal-box">
+      <h3 class="text-lg font-bold text-error">Esti sigur?</h3>
+      <p class="py-4">Contul tau va fi sters permanent. Aceasta actiune nu poate fi anulata.</p>
+
+      <form method="POST" action={actions.deleteAccount}>
+        <label class="label" for="deletePassword">Confirma cu parola</label>
+        <input
+          id="deletePassword"
+          type="password"
+          name="currentPassword"
+          required
+          autocomplete="current-password"
+          placeholder="••••••••"
+          class="input input-bordered w-full"
+        />
+
+        <div class="modal-action">
+          <button type="button" class="btn" onclick="delete_modal.close()">Anuleaza</button>
+          <button type="submit" class="btn btn-error">Sterge contul definitiv</button>
+        </div>
+      </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
+</Layout>

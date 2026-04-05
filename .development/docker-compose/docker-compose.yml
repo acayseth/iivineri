@@ -1,0 +1,45 @@
+volumes:
+  volume_pgsql: {}
+  volume_redis: {}
+  volume_thumbor: {}
+  volume_astro_data: {}
+
+networks:
+  iivineri_network:
+    driver: bridge
+
+services:
+  redis:
+    image: redis:8-alpine
+    networks:
+      - iivineri_network
+    ports:
+      - ${VIRTUAL_IP}:6379:6379
+    volumes:
+      - "volume_redis:/data"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
+
+  thumbor:
+    image: ghcr.io/minimalcompact/thumbor:7.7.4
+    ports:
+      - ${VIRTUAL_IP}:8000:80
+    environment:
+      MAX_WIDTH: 0
+      MAX_HEIGHT: 0
+      UPLOAD_MAX_SIZE: 0
+      SECURITY_KEY: "THUMBOR_SECURE_KEY_4ERT"
+      UPLOAD_ENABLED: "True"
+      ALLOW_UNSAFE_URL: "False"
+      LOADER: "thumbor.loaders.file_loader"
+      FILE_LOADER_ROOT_PATH: "/data/storage"
+      STORAGE_EXPIRATION_SECONDS: 3155760000
+      UPLOAD_DEFAULT_FILENAME: "image"
+    networks:
+      - iivineri_network
+    volumes:
+      - volume_thumbor:/app/thumbor:/data
+    command: ["thumbor"]

@@ -1,0 +1,20 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ImageUploader from "@/components/ImageUploader";
+
+const userId = await Astro.session?.get("userId");
+if (!userId) {
+  return Astro.redirect("/sign-in");
+}
+---
+
+<Layout title="Incarca imagini">
+  <main class="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4 py-8">
+    <div class="w-full max-w-lg">
+      <div class="card bg-base-200 p-8 shadow-lg">
+        <h1 class="text-2xl font-bold mb-6">Incarca imagini</h1>
+        <ImageUploader client:load />
+      </div>
+    </div>
+  </main>
+</Layout>

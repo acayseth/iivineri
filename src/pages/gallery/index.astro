@@ -1,0 +1,173 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { db, Image, User, eq, and, isNull, isNotNull, count, desc } from "astro:db";
+import { thumborBlurred, thumborClean } from "@/utils/thumbor.util";
+
+const userId = await Astro.session?.get("userId");
+if (!userId) {
+  return Astro.redirect("/sign-in");
+}
+
+const user = await db
+  .select({ nickname: User.nickname })
+  .from(User)
+  .where(and(eq(User.id, userId), isNull(User.deletedAt)))
+  .get();
+
+if (!user) {
+  return Astro.redirect("/sign-in");
+}
+
+function imageUrl(imageId: string, approved: boolean): string {
+  return approved ? thumborClean(imageId, user!.nickname) : thumborBlurred(imageId, user!.nickname);
+}
+
+const DAYS_FULL = ["Duminica", "Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata"];
+const PER_PAGE = 12;
+
+// Query params
+const validFilters = ["all", "approved", "pending"];
+const filter = validFilters.includes(Astro.url.searchParams.get("filter") || "")
+  ? Astro.url.searchParams.get("filter")!
+  : "all";
+const rawPage = Math.max(1, Math.min(1000, Number(Astro.url.searchParams.get("page")) || 1));
+const page = rawPage;
+const offset = (page - 1) * PER_PAGE;
+
+// Build where conditions
+const baseWhere = eq(Image.ownerId, userId);
+const filterWhere = filter === "approved"
+  ? and(baseWhere, isNotNull(Image.approvedId))
+  : filter === "pending"
+    ? and(baseWhere, isNull(Image.approvedId))
+    : baseWhere;
+
+// Count totals for tabs
+const [totalAll, totalApproved, totalPending] = await Promise.all([
+  db.select({ n: count() }).from(Image).where(baseWhere).get(),
+  db.select({ n: count() }).from(Image).where(and(baseWhere, isNotNull(Image.approvedId))).get(),
+  db.select({ n: count() }).from(Image).where(and(baseWhere, isNull(Image.approvedId))).get(),
+]);
+
+const total = filter === "approved" ? totalApproved!.n : filter === "pending" ? totalPending!.n : totalAll!.n;
+const totalPages = Math.ceil(total / PER_PAGE) || 1;
+
+// Redirect dacă pagina depășește totalul
+if (page > totalPages) {
+  const params = new URLSearchParams();
+  if (filter !== "all") params.set("filter", filter);
+  if (totalPages > 1) params.set("page", String(totalPages));
+  const qs = params.toString();
+  return Astro.redirect(qs ? `/gallery?${qs}` : "/gallery");
+}
+
+// Fetch images
+const images = await db
+  .select({
+    id: Image.id,
+    dayOfWeek: Image.dayOfWeek,
+    createdAt: Image.createdAt,
+    approvedId: Image.approvedId,
+  })
+  .from(Image)
+  .where(filterWhere)
+  .orderBy(desc(Image.createdAt))
+  .limit(PER_PAGE)
+  .offset(offset)
+  .all();
+
+function tabUrl(f: string) {
+  return f === "all" ? "/gallery" : `/gallery?filter=${f}`;
+}
+
+function pageUrl(p: number) {
+  const params = new URLSearchParams();
+  if (filter !== "all") params.set("filter", filter);
+  if (p > 1) params.set("page", String(p));
+  const qs = params.toString();
+  return qs ? `/gallery?${qs}` : "/gallery";
+}
+---
+
+<Layout title="Galerie">
+  <main class="min-h-[calc(100vh-8rem)] px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">Imaginile mele</h1>
+        <a href="/upload" class="btn btn-primary btn-sm">Incarca imagini</a>
+      </div>
+
+      <!-- Tabs -->
+      <div role="tablist" class="tabs tabs-bordered mb-6">
+        <a role="tab" href={tabUrl("all")} class:list={["tab", filter === "all" && "tab-active"]}>
+          Toate <span class="badge badge-sm ml-1">{totalAll!.n}</span>
+        </a>
+        <a role="tab" href={tabUrl("approved")} class:list={["tab", filter === "approved" && "tab-active"]}>
+          Aprobate <span class="badge badge-success badge-sm ml-1">{totalApproved!.n}</span>
+        </a>
+        <a role="tab" href={tabUrl("pending")} class:list={["tab", filter === "pending" && "tab-active"]}>
+          In asteptare <span class="badge badge-warning badge-sm ml-1">{totalPending!.n}</span>
+        </a>
+      </div>
+
+      {images.length === 0 ? (
+        <div class="card bg-base-200 p-12 text-center">
+          <p class="text-base-content/60 mb-4">
+            {filter === "approved" ? "Nu ai imagini aprobate." : filter === "pending" ? "Nu ai imagini in asteptare." : "Nu ai incarcat nicio imagine."}
+          </p>
+          <a href="/upload" class="btn btn-primary">Incarca imagini</a>
+        </div>
+      ) : (
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {images.map((img) => (
+            <div class="card bg-base-200 shadow-sm overflow-hidden group">
+              <figure>
+                <img
+                  src={imageUrl(img.id, !!img.approvedId)}
+                  alt={`Imagine ${DAYS_FULL[Number(img.dayOfWeek)]}`}
+                  class="w-full aspect-square object-cover"
+                  loading="lazy"
+                />
+              </figure>
+              <div class="p-3">
+                <div class="flex items-center justify-between">
+                  <span class="badge badge-outline badge-sm">{DAYS_FULL[Number(img.dayOfWeek)]}</span>
+                  {img.approvedId ? (
+                    <span class="badge badge-success badge-sm">Aprobat</span>
+                  ) : (
+                    <span class="badge badge-warning badge-sm">In asteptare</span>
+                  )}
+                </div>
+                <p class="text-base-content/40 text-xs mt-1">
+                  {new Date(img.createdAt).toLocaleDateString("ro-RO")}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Paginare */}
+      {totalPages > 1 && (
+        <div class="flex justify-center mt-8">
+          <div class="join">
+            {page > 1 && (
+              <a href={pageUrl(page - 1)} class="join-item btn btn-sm">&laquo;</a>
+            )}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <a
+                href={pageUrl(p)}
+                class:list={["join-item btn btn-sm", p === page && "btn-active"]}
+              >
+                {p}
+              </a>
+            ))}
+            {page < totalPages && (
+              <a href={pageUrl(page + 1)} class="join-item btn btn-sm">&raquo;</a>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  </main>
+</Layout>

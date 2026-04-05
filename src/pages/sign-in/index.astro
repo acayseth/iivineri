@@ -1,0 +1,65 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { actions, isInputError } from "astro:actions";
+
+const result = Astro.getActionResult(actions.signIn);
+const fieldErrors = isInputError(result?.error) ? result.error.fields : {};
+const serverError = result?.error && !isInputError(result.error) ? result.error.message : null;
+
+if (result?.data?.success) {
+  return Astro.redirect("/");
+}
+---
+
+<Layout title="Conecteaza-te">
+  <main class="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4">
+    <div class="card bg-base-200 w-full max-w-sm p-8 shadow-lg">
+      <h1 class="text-2xl font-bold text-center mb-6">Conecteaza-te</h1>
+
+      {serverError && (
+        <div class="alert alert-error mb-4 text-sm">{serverError}</div>
+      )}
+
+      <form method="POST" action={actions.signIn}>
+        <label class="label" for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          required
+          autocomplete="email"
+          placeholder="email@exemplu.ro"
+          class:list={["input input-bordered w-full", fieldErrors.email && "input-error"]}
+        />
+        {fieldErrors.email && (
+          <p class="text-error text-xs mt-1">{fieldErrors.email.join(", ")}</p>
+        )}
+
+        <label class="label mt-4" for="password">Parola</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          required
+          autocomplete="current-password"
+          placeholder="••••••••"
+          class:list={["input input-bordered w-full", fieldErrors.password && "input-error"]}
+        />
+        {fieldErrors.password && (
+          <p class="text-error text-xs mt-1">{fieldErrors.password.join(", ")}</p>
+        )}
+
+        <div class="text-right mt-2">
+          <a href="/forgot-password" class="link link-hover text-sm">Am uitat parola</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full mt-6">Intra</button>
+      </form>
+
+      <p class="text-center text-sm mt-6">
+        Nu ai cont?
+        <a href="/sign-up" class="link link-primary font-semibold">Creeaza cont</a>
+      </p>
+    </div>
+  </main>
+</Layout>

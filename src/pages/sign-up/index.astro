@@ -1,0 +1,100 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { actions, isInputError } from "astro:actions";
+
+const result = Astro.getActionResult(actions.signUp);
+const fieldErrors = isInputError(result?.error) ? result.error.fields : {};
+const serverError = result?.error && !isInputError(result.error) ? result.error.message : null;
+
+if (result?.data?.success) {
+  return Astro.redirect("/");
+}
+---
+
+<Layout title="Creeaza cont">
+  <main class="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4">
+    <div class="card bg-base-200 w-full max-w-sm p-8 shadow-lg">
+      <h1 class="text-2xl font-bold text-center mb-6">Creeaza cont</h1>
+
+      {serverError && (
+        <div class="alert alert-error mb-4 text-sm">{serverError}</div>
+      )}
+
+      <form method="POST" action={actions.signUp}>
+        <label class="label" for="nickname">Nume de utilizator</label>
+        <input
+          id="nickname"
+          type="text"
+          name="nickname"
+          required
+          minlength="4"
+          maxlength="16"
+          autocomplete="username"
+          placeholder="nume.utilizator"
+          class:list={["input input-bordered w-full", fieldErrors.nickname && "input-error"]}
+        />
+        <ul class="text-base-content/50 text-xs mt-1 list-disc list-inside space-y-0.5">
+          <li>4-16 caractere</li>
+          <li>Doar litere latine, cifre si punct (.)</li>
+          <li>Punctul nu poate fi la inceput, sfarsit sau consecutiv</li>
+          <li>Cifrele nu pot fi mai multe decat literele</li>
+        </ul>
+        {fieldErrors.nickname && (
+          <p class="text-error text-xs mt-1">{fieldErrors.nickname.join(", ")}</p>
+        )}
+
+        <label class="label mt-4" for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          required
+          autocomplete="email"
+          placeholder="email@exemplu.ro"
+          class:list={["input input-bordered w-full", fieldErrors.email && "input-error"]}
+        />
+        {fieldErrors.email && (
+          <p class="text-error text-xs mt-1">{fieldErrors.email.join(", ")}</p>
+        )}
+
+        <label class="label mt-4" for="password">Parola</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          required
+          minlength="8"
+          autocomplete="new-password"
+          placeholder="••••••••"
+          class:list={["input input-bordered w-full", fieldErrors.password && "input-error"]}
+        />
+        <p class="text-base-content/50 text-xs mt-1">Minim 8 caractere, 2 litere mari, 2 cifre, 2 simboluri</p>
+        {fieldErrors.password && (
+          <p class="text-error text-xs mt-1">{fieldErrors.password.join(", ")}</p>
+        )}
+
+        <label class="label mt-4" for="confirm-password">Confirma parola</label>
+        <input
+          id="confirm-password"
+          type="password"
+          name="confirmPassword"
+          required
+          minlength="8"
+          autocomplete="new-password"
+          placeholder="••••••••"
+          class:list={["input input-bordered w-full", fieldErrors.confirmPassword && "input-error"]}
+        />
+        {fieldErrors.confirmPassword && (
+          <p class="text-error text-xs mt-1">{fieldErrors.confirmPassword.join(", ")}</p>
+        )}
+
+        <button type="submit" class="btn btn-primary w-full mt-6">Creeaza cont</button>
+      </form>
+
+      <p class="text-center text-sm mt-6">
+        Ai deja cont?
+        <a href="/sign-in" class="link link-primary font-semibold">Conecteaza-te</a>
+      </p>
+    </div>
+  </main>
+</Layout>

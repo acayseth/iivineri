@@ -1,0 +1,49 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { actions, isInputError } from "astro:actions";
+
+const result = Astro.getActionResult(actions.forgotPassword);
+const fieldErrors = isInputError(result?.error) ? result.error.fields : {};
+const serverError = result?.error && !isInputError(result.error) ? result.error.message : null;
+const success = result?.data?.success;
+---
+
+<Layout title="Am uitat parola">
+  <main class="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4">
+    <div class="card bg-base-200 w-full max-w-sm p-8 shadow-lg">
+      <h1 class="text-2xl font-bold text-center mb-6">Reseteaza parola</h1>
+
+      {serverError && (
+        <div class="alert alert-error mb-4 text-sm">{serverError}</div>
+      )}
+
+      {success ? (
+        <div class="alert alert-success mb-4 text-sm">
+          Daca exista un cont cu acest email, vei primi un link de resetare.
+        </div>
+      ) : (
+        <form method="POST" action={actions.forgotPassword}>
+          <label class="label" for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            required
+            autocomplete="email"
+            placeholder="email@exemplu.ro"
+            class:list={["input input-bordered w-full", fieldErrors.email && "input-error"]}
+          />
+          {fieldErrors.email && (
+            <p class="text-error text-xs mt-1">{fieldErrors.email.join(", ")}</p>
+          )}
+
+          <button type="submit" class="btn btn-primary w-full mt-6">Trimite link de resetare</button>
+        </form>
+      )}
+
+      <p class="text-center text-sm mt-6">
+        <a href="/sign-in" class="link link-primary font-semibold">Inapoi la conectare</a>
+      </p>
+    </div>
+  </main>
+</Layout>

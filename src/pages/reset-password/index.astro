@@ -1,0 +1,102 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { actions, isInputError } from "astro:actions";
+
+import { db, ResetPassword, eq, and, gte } from "astro:db";
+
+const result = Astro.getActionResult(actions.resetPassword);
+const fieldErrors = isInputError(result?.error) ? result.error.fields : {};
+const serverError = result?.error && !isInputError(result.error) ? result.error.message : null;
+const success = result?.data?.success;
+
+const token = Astro.url.searchParams.get("token");
+
+if (!token && !result) {
+  return Astro.redirect("/forgot-password");
+}
+
+// Verificăm tokenul la load (nu doar la submit)
+let tokenExpired = false;
+if (token && !result) {
+  const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000);
+  const valid = await db
+    .select({ email: ResetPassword.email })
+    .from(ResetPassword)
+    .where(
+      and(
+        eq(ResetPassword.token, token),
+        gte(ResetPassword.createdAt, thirtyMinutesAgo)
+      )
+    )
+    .get();
+
+  if (!valid) {
+    tokenExpired = true;
+  }
+}
+---
+
+<Layout title="Reseteaza parola">
+  <main class="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4">
+    <div class="card bg-base-200 w-full max-w-sm p-8 shadow-lg">
+      <h1 class="text-2xl font-bold text-center mb-6">Parola noua</h1>
+
+      {serverError && (
+        <div class="alert alert-error mb-4 text-sm">{serverError}</div>
+      )}
+
+      {success ? (
+        <div>
+          <div class="alert alert-success mb-4 text-sm">
+            Parola a fost schimbata cu succes.
+          </div>
+          <a href="/sign-in" class="btn btn-primary w-full">Conecteaza-te</a>
+        </div>
+      ) : tokenExpired ? (
+        <div>
+          <div class="alert alert-error mb-4 text-sm">
+            Link-ul de resetare este invalid sau a expirat.
+          </div>
+          <a href="/forgot-password" class="btn btn-primary w-full">Cere un link nou</a>
+        </div>
+      ) : (
+        <form method="POST" action={actions.resetPassword}>
+          <input type="hidden" name="token" value={token} />
+
+          <label class="label" for="password">Parola noua</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            required
+            minlength="8"
+            autocomplete="new-password"
+            placeholder="••••••••"
+            class:list={["input input-bordered w-full", fieldErrors.password && "input-error"]}
+          />
+          <p class="text-base-content/50 text-xs mt-1">Minim 8 caractere, 2 litere mari, 2 cifre, 2 simboluri</p>
+          {fieldErrors.password && (
+            <p class="text-error text-xs mt-1">{fieldErrors.password.join(", ")}</p>
+          )}
+
+          <label class="label mt-4" for="confirm-password">Confirma parola</label>
+          <input
+            id="confirm-password"
+            type="password"
+            name="confirmPassword"
+            required
+            minlength="8"
+            autocomplete="new-password"
+            placeholder="••••••••"
+            class:list={["input input-bordered w-full", fieldErrors.confirmPassword && "input-error"]}
+          />
+          {fieldErrors.confirmPassword && (
+            <p class="text-error text-xs mt-1">{fieldErrors.confirmPassword.join(", ")}</p>
+          )}
+
+          <button type="submit" class="btn btn-primary w-full mt-6">Schimba parola</button>
+        </form>
+      )}
+    </div>
+  </main>
+</Layout>

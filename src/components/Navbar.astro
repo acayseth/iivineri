@@ -1,0 +1,75 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  theme?: string;
+  user?: { nickname: string } | null;
+}
+
+const { theme = "dark", user = null } = Astro.props;
+const initials = user ? user.nickname.slice(0, 2).toUpperCase() : null;
+---
+
+<div class="bg-base-100 shadow-sm m-0 p-0 mb-4">
+    <div class="max-w-7xl mx-auto navbar px-6">
+        <div class="navbar-start">
+            <button id="theme-toggle" class="btn btn-ghost btn-circle" aria-label="Schimba tema">
+                <Icon id="icon-sun" name="lucide:sun" class="h-5 w-5 hidden" />
+                <Icon id="icon-moon" name="lucide:moon" class="h-5 w-5 hidden" />
+            </button>
+        </div>
+        <div class="navbar-center">
+            <a href="/" class="font-bold text-4xl text-inherit font-lobster">iivineri</a>
+        </div>
+        <div class="navbar-end gap-1">
+            {user && initials ? (
+                <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
+                        <div class="bg-primary text-primary-content w-10 rounded-full flex items-center justify-center">
+                            <span class="text-sm font-bold">{initials}</span>
+                        </div>
+                    </div>
+                    <ul tabindex="0" class="dropdown-content menu bg-base-200 rounded-box z-10 w-52 p-2 shadow-lg mt-2">
+                        <li><a href="/gallery">Galerie</a></li>
+                        <li><a href="/upload">Incarca</a></li>
+                        <li class="border-t border-base-content/10 mt-1 pt-1"><a href="/profile">Profil</a></li>
+                        <li>
+                            <form method="POST" action="/api/logout" class="p-0">
+                                <button type="submit" class="w-full text-left px-4 py-2 text-error">Deconecteaza-te</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            ) : (
+                <a href="/sign-in" class="btn btn-ghost btn-circle" aria-label="Conecteaza-te">
+                    <Icon name="lucide:log-in" class="h-5 w-5" />
+                </a>
+            )}
+        </div>
+    </div>
+</div>
+
+<script is:inline>
+  (function() {
+    const html = document.documentElement;
+    const btn = document.getElementById("theme-toggle");
+    const iconSun = document.getElementById("icon-sun");
+    const iconMoon = document.getElementById("icon-moon");
+
+    function updateIcon() {
+      const current = html.getAttribute("data-theme");
+      iconSun.classList.toggle("hidden", current !== "dark");
+      iconMoon.classList.toggle("hidden", current === "dark");
+    }
+
+    updateIcon();
+
+    btn.addEventListener("click", function() {
+      const current = html.getAttribute("data-theme");
+      const next = current === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
+      document.cookie = "theme=" + next + ";path=/;max-age=31536000;samesite=lax";
+      updateIcon();
+    });
+  })();
+</script>
