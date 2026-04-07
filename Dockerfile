@@ -46,6 +46,5 @@ EXPOSE 4321
 
 VOLUME ["/app/.db"]
 
-# La startup: aplica schema (creeaza fisierul daca nu exista, aplica ALTER TABLE
-# pentru schimbari aditive, esueaza pe data-loss fara --force-reset), apoi server.
-CMD ["sh", "-c", "node_modules/.bin/astro db push --remote && exec node ./dist/server/entry.mjs"]
+ENTRYPOINT ["node_modules/.bin/astro", "db", "push"]
+CMD ["node", "./dist/server/entry.mjs"]
