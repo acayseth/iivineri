@@ -12,6 +12,9 @@ import preact from "@astrojs/preact";
 // https://astro.build/config
 export default defineConfig({
   site: "https://iivineri.org",
+  security: {
+    checkOrigin: false,
+  },
   output: "server",
   vite: {
     resolve: {
