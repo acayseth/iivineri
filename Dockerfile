@@ -30,7 +30,8 @@ RUN apk add --no-cache tzdata libc6-compat \
     && echo "Europe/Chisinau" > /etc/timezone \
     && apk del tzdata
 
-RUN addgroup -g 1001 -S nodejs && adduser -S astro -u 1001 -G nodejs
+RUN addgroup -g 1001 -S nodejs && adduser -S astro -u 1001 -G nodejs \
+    && chown astro:nodejs /app
 
 COPY --from=deps --chown=astro:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=astro:nodejs /app/dist ./dist
@@ -44,5 +45,5 @@ USER astro
 
 EXPOSE 4321
 
-ENTRYPOINT ["node_modules/.bin/astro", "db", "push"]
+ENTRYPOINT ["/bin/sh", "-c", "node_modules/.bin/astro db push --remote && exec \"$@\"", "--"]
 CMD ["node", "./dist/server/entry.mjs"]
