@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "astro-docs": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.docs.astro.build/mcp"]
+    },
+    "sqlite": {
+      "command": "uvx",
+      "args": ["mcp-server-sqlite", "--db-path", "./.astro/content.db"]
+    },
+    "daisyui": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/daisyui-mcp-server@latest"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-playwright@latest"]
+    }
+  }
+}

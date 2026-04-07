@@ -45,7 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Webhook
-        run: |
-          curl -fsSL -XPOST \
-            'https://webhook.hellnet.eu/restart-pod?namespace=default&pod_name_pattern=iivineri' \
-            --header 'Authorization: Bearer ${{ secrets.WEBHOOK_TOKEN }}'
+        run: echo "temporary OK"
+        # run: |
+        #   curl -fsSL -XPOST \
+        #     'https://webhook.hellnet.eu/restart-pod?namespace=default&pod_name_pattern=iivineri' \
+        #     --header 'Authorization: Bearer ${{ secrets.WEBHOOK_TOKEN }}'

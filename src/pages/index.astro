@@ -4,8 +4,33 @@ import DaysOfWeek from "@/components/DaysOfWeek.astro"
 import Countdown from "@/components/Countdown.astro"
 import Friland from "@/components/Friland.astro"
 import { getDayOfWeek, days } from "@/utils/fliland.util";
+import { db, Image, User, eq, and, isNull } from "astro:db";
+import { thumborBlurred, thumborClean } from "@/utils/thumbor.util";
 
 const { dayOfWeek, targetDate, isFriday } = getDayOfWeek();
+
+let requestedImageUrl: string | null = null;
+const q = Astro.url.searchParams.get("q");
+if (q) {
+  const row = await db
+    .select({
+      id: Image.id,
+      approvedId: Image.approvedId,
+      nickname: User.nickname,
+    })
+    .from(Image)
+    .innerJoin(User, eq(User.id, Image.ownerId))
+    .where(and(eq(Image.id, q), isNull(Image.deletedAt)))
+    .get();
+
+  if (!row) {
+    return Astro.rewrite("/404");
+  }
+
+  requestedImageUrl = row.approvedId
+    ? thumborClean(row.id, row.nickname)
+    : thumborBlurred(row.id, row.nickname);
+}
 ---
 
 <Layout title="Acasa" description="Pentru ca vinerea nu se deploy">
@@ -17,6 +42,6 @@ const { dayOfWeek, targetDate, isFriday } = getDayOfWeek();
         : `Nu, uai! Ii ${days[dayOfWeek].name.toLowerCase()}`}
     </h1>
     <Countdown />
-    <Friland />
+    <Friland initialImageUrl={requestedImageUrl} />
   </main>
 </Layout>
