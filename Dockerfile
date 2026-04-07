@@ -1,60 +1,51 @@
-# syntax=docker/dockerfile:1.7
-
-# ---------- Builder ----------
-FROM node:22-alpine AS builder
-
+FROM node:22-alpine AS base
 WORKDIR /app
 
-# Toolchain pentru compilarea binarelor native (better-sqlite3, @node-rs/argon2)
-RUN apk add --no-cache python3 make g++ libc6-compat
 
+FROM base AS deps
+RUN apk add --no-cache libc6-compat python3 make g++
 COPY package.json yarn.lock ./
 RUN corepack enable && yarn install --frozen-lockfile
 
+
+FROM base AS builder
+ENV ASTRO_DATABASE_FILE=file:///app/.db/content.db
+ENV ASTRO_DB_REMOTE_URL=file:///app/.db/content.db
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Build direct cu binarul astro (yarn build foloseste --env-file=.env, care nu exista in imagine)
-RUN node_modules/.bin/astro build
+RUN node_modules/.bin/astro build --remote
 
 
-# ---------- Runner ----------
-FROM node:22-alpine AS runner
-
-WORKDIR /app
+FROM base AS runner
 
 ENV NODE_ENV=production
 ENV TZ=Europe/Chisinau
 ENV HOST=0.0.0.0
 ENV PORT=4321
-ENV ASTRO_DATABASE_FILE=/app/.astro/content.db
+ENV ASTRO_DATABASE_FILE=file:///app/.db/content.db
+ENV ASTRO_DB_REMOTE_URL=file:///app/.db/content.db
 
-# Timezone Europe/Chisinau la nivel de OS si Node
 RUN apk add --no-cache tzdata libc6-compat \
     && cp /usr/share/zoneinfo/Europe/Chisinau /etc/localtime \
     && echo "Europe/Chisinau" > /etc/timezone \
     && apk del tzdata
 
-# Doar dependintele de productie (build deps adaugate temporar pentru native modules)
-COPY package.json yarn.lock ./
-RUN corepack enable \
-    && apk add --no-cache --virtual .build-deps python3 make g++ \
-    && yarn install --frozen-lockfile --production \
-    && apk del .build-deps \
-    && yarn cache clean \
-    && rm -rf /tmp/*
+RUN addgroup -g 1001 -S nodejs && adduser -S astro -u 1001 -G nodejs
 
-# Artefactele de build
-COPY --from=builder /app/dist ./dist
-# Baza de date SQLite generata de astro:db (schema fara seed)
-COPY --from=builder /app/.astro ./.astro
+COPY --from=deps --chown=astro:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=astro:nodejs /app/dist ./dist
+COPY --from=builder --chown=astro:nodejs /app/.astro ./.astro
+COPY --chown=astro:nodejs ./db ./db
+COPY --chown=astro:nodejs ./astro.config.mjs ./tsconfig.json ./package.json ./
 
-# Rulare ca user non-root
-RUN chown -R node:node /app
-USER node
+RUN mkdir -p /app/.db && chown astro:nodejs /app/.db
+
+USER astro
 
 EXPOSE 4321
 
-# Pentru persistenta intre deploy-uri monteaza un volum pe /app/.astro
-VOLUME ["/app/.astro"]
+VOLUME ["/app/.db"]
 
-CMD ["node", "./dist/server/entry.mjs"]
+# La startup: aplica schema (creeaza fisierul daca nu exista, aplica ALTER TABLE
+# pentru schimbari aditive, esueaza pe data-loss fara --force-reset), apoi server.
+CMD ["sh", "-c", "node_modules/.bin/astro db push --remote && exec node ./dist/server/entry.mjs"]
