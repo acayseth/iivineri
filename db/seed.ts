@@ -16,6 +16,7 @@ export default async function seed() {
     },
     {
       id: 2,
+      root: true,
       nickname: "tigina",
       email: "tighina@iivineri.org",
       password_hash:
