@@ -11,7 +11,7 @@ RUN corepack enable && yarn install --frozen-lockfile
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN node_modules/.bin/astro build
+RUN node_modules/.bin/astro build --remote
 
 
 FROM base AS runner
