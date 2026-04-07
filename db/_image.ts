@@ -16,6 +16,7 @@ export const Image = defineTable({
     height: column.number(),
     createdAt: column.date(),
     updatedAt: column.date(),
+    deletedAt: column.date({ optional: true }),
   },
   indexes: [
     {

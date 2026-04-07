@@ -14,10 +14,10 @@ const { title = "iivineri", description = "Pentru ca vinerea nu se deploy" } = A
 const theme = Astro.cookies.get("theme")?.value ?? "dark";
 
 const userId = await Astro.session?.get("userId");
-let currentUser: { nickname: string } | null = null;
+let currentUser: { nickname: string; root: boolean } | null = null;
 if (userId) {
   const found = await db
-    .select({ nickname: User.nickname })
+    .select({ nickname: User.nickname, root: User.root })
     .from(User)
     .where(and(eq(User.id, userId), isNull(User.deletedAt)))
     .get();

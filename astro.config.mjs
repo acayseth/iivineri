@@ -3,11 +3,8 @@ import { defineConfig } from "astro/config";
 import { fileURLToPath, URL } from "node:url";
 
 import tailwindcss from "@tailwindcss/vite";
-
 import astroMetaTags from "astro-meta-tags";
-
 import db from "@astrojs/db";
-
 import node from "@astrojs/node";
 import icon from "astro-icon";
 import preact from "@astrojs/preact";

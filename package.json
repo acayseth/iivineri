@@ -14,26 +14,25 @@
   "dependencies": {
     "@astrojs/db": "^0.20.1",
     "@astrojs/node": "^10.0.4",
-    "@astrojs/preact": "^5.1.1",
-    "@iconify-json/lucide": "^1.2.101",
-    "@iconify-json/simple-icons": "^1.2.76",
-    "@node-rs/argon2": "^2.0.2",
     "@tailwindcss/vite": "^4.2.2",
+    "@astrojs/preact": "^5.1.1",
+    "@node-rs/argon2": "^2.0.2",
     "astro": "^6.1.2",
     "astro-icon": "^1.1.5",
+    "better-sqlite3": "^12.8.0",
+    "drizzle-orm": "^0.45.2",
+    "preact": "^10.29.1"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.101",
+    "@iconify-json/simple-icons": "^1.2.76",
+    "@types/better-sqlite3": "^7.6.13",
     "astro-meta-tags": "^0.4.1",
     "astro-seo": "^1.1.0",
     "astro-thumbor-image": "^1.0.2",
-    "better-sqlite3": "^12.8.0",
     "clsx": "^2.1.1",
     "daisyui": "^5.5.19",
-    "drizzle-orm": "^0.45.2",
-    "preact": "^10.29.1",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.2",
-    "theme-change": "^2.5.0"
-  },
-  "devDependencies": {
-    "@types/better-sqlite3": "^7.6.13"
+    "tailwindcss": "^4.2.2"
   }
 }

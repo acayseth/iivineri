@@ -1,0 +1,19 @@
+---
+import { getDayOfWeek, days } from "@/utils/fliland.util";
+
+const { dayOfWeek} = getDayOfWeek()
+---
+
+<ul class="flex justify-center items-center gap-2 text-sm font-semibold">
+  {days.map((day, i) => (
+    <li
+      class:list={[
+        "px-2.5 py-2 rounded-full transition-colors",
+        i === dayOfWeek ? "bg-primary text-primary-content scale-110" : "bg-base-200 text-base-content opacity-60",
+        i === 4 && i !== dayOfWeek && "border border-primary/30",
+      ]}
+    >
+      {day.code}
+    </li>
+  ))}
+</ul>

@@ -37,14 +37,12 @@ if (token && !result) {
 ---
 
 <Layout title="Reseteaza parola">
-  <main class="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4">
+  <main class="flex items-center justify-center px-4">
     <div class="card bg-base-200 w-full max-w-sm p-8 shadow-lg">
       <h1 class="text-2xl font-bold text-center mb-6">Parola noua</h1>
-
       {serverError && (
         <div class="alert alert-error mb-4 text-sm">{serverError}</div>
       )}
-
       {success ? (
         <div>
           <div class="alert alert-success mb-4 text-sm">
@@ -62,7 +60,6 @@ if (token && !result) {
       ) : (
         <form method="POST" action={actions.resetPassword}>
           <input type="hidden" name="token" value={token} />
-
           <label class="label" for="password">Parola noua</label>
           <input
             id="password"
@@ -78,7 +75,6 @@ if (token && !result) {
           {fieldErrors.password && (
             <p class="text-error text-xs mt-1">{fieldErrors.password.join(", ")}</p>
           )}
-
           <label class="label mt-4" for="confirm-password">Confirma parola</label>
           <input
             id="confirm-password"
@@ -93,7 +89,6 @@ if (token && !result) {
           {fieldErrors.confirmPassword && (
             <p class="text-error text-xs mt-1">{fieldErrors.confirmPassword.join(", ")}</p>
           )}
-
           <button type="submit" class="btn btn-primary w-full mt-6">Schimba parola</button>
         </form>
       )}

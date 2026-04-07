@@ -5,6 +5,7 @@ import { resetPassword } from "./reset-password";
 import { changePassword } from "./change-password";
 import { deleteAccount } from "./delete-account";
 import { randomImage } from "./random-image";
+import { approveImage, rejectImage } from "./moderate";
 
 export const server = {
   signUp,
@@ -14,4 +15,6 @@ export const server = {
   changePassword,
   deleteAccount,
   randomImage,
+  approveImage,
+  rejectImage,
 };

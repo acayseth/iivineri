@@ -1,174 +1,22 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { getDayOfWeek } from "@/utils/fliland.util";
-import { db, Image, User, eq, ne, and, isNotNull } from "astro:db";
-import { thumborClean } from "@/utils/thumbor.util";
+import DaysOfWeek from "@/components/DaysOfWeek.astro"
+import Countdown from "@/components/Countdown.astro"
+import Friland from "@/components/Friland.astro"
+import { getDayOfWeek, days } from "@/utils/fliland.util";
 
-const days = ["Lu", "Ma", "Mi", "Jo", "Vi", "Sa", "Du"];
-const dayNames = ["Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"];
-
-const { dayOfWeek, targetDate } = getDayOfWeek();
-const isFriday = dayOfWeek === 4;
-
-const heading = isFriday
-  ? "Da, frate! Ii vineri!"
-  : `Nu, uai! Ii ${dayNames[dayOfWeek].toLowerCase()}`;
-
-// Friland: imagine random aprobată
-const jsDay = new Date().getDay(); // 0=Du, 1=Lu ... 6=Sa
-const fridayFilter = jsDay === 5
-  ? eq(Image.dayOfWeek, "5")
-  : ne(Image.dayOfWeek, "5");
-
-const approvedImages = await db
-  .select({ id: Image.id, ownerId: Image.ownerId })
-  .from(Image)
-  .where(and(isNotNull(Image.approvedId), fridayFilter))
-  .all();
-
-let initialImageUrl: string | null = null;
-if (approvedImages.length > 0) {
-  const img = approvedImages[Math.floor(Math.random() * approvedImages.length)];
-  const owner = await db
-    .select({ nickname: User.nickname })
-    .from(User)
-    .where(eq(User.id, img.ownerId))
-    .get();
-  initialImageUrl = thumborClean(img.id, owner?.nickname || "user");
-}
+const { dayOfWeek, targetDate, isFriday } = getDayOfWeek();
 ---
 
 <Layout title="Acasa" description="Pentru ca vinerea nu se deploy">
   <main class="flex flex-col items-center justify-center px-4 text-center gap-4">
-
-    <ul class="flex justify-center items-center gap-2 text-sm font-semibold">
-      {days.map((day, i) => (
-        <li
-          class:list={[
-            "px-2.5 py-2 rounded-full transition-colors",
-            i === dayOfWeek ? "bg-primary text-primary-content scale-110" : "bg-base-200 text-base-content opacity-60",
-            i === 4 && i !== dayOfWeek && "border border-primary/30",
-          ]}
-        >
-          {day}
-        </li>
-      ))}
-    </ul>
-
-    <h1 class="text-4xl sm:text-6xl font-bold font-lobster">
-      {heading}
+    <DaysOfWeek />
+    <h1 class="text-4xl sm:text-6xl font-bold">
+      {isFriday
+        ? "Da, frate! Îi vineri!"
+        : `Nu, uai! Ii ${days[dayOfWeek].name.toLowerCase()}`}
     </h1>
-
-    {isFriday ? (
-      <div class="text-2xl sm:text-3xl text-success font-bold">
-        Nu face deploy!
-      </div>
-    ) : (
-      <div id="countdown-wrapper">
-        <div class="grid auto-cols-max grid-flow-col gap-2 sm:gap-3 text-center">
-          <div class="bg-neutral rounded-box text-neutral-content flex flex-col items-center justify-center p-2 min-w-12">
-            <span class="countdown font-mono text-xl">
-              <span id="cd-days" style={`--value:0;`}>0</span>
-            </span>
-            <span class="text-xs mt-1">zile</span>
-          </div>
-          <div class="bg-neutral rounded-box text-neutral-content flex flex-col items-center justify-center p-2 min-w-12">
-            <span class="countdown font-mono text-xl">
-              <span id="cd-hours" style={`--value:0;`}>0</span>
-            </span>
-            <span class="text-xs mt-1">ore</span>
-          </div>
-          <div class="bg-neutral rounded-box text-neutral-content flex flex-col items-center justify-center p-2 min-w-12">
-            <span class="countdown font-mono text-xl">
-              <span id="cd-min" style={`--value:0;`}>0</span>
-            </span>
-            <span class="text-xs mt-1">min</span>
-          </div>
-          <div class="bg-neutral rounded-box text-neutral-content flex flex-col items-center justify-center p-2 min-w-12">
-            <span class="countdown font-mono text-xl">
-              <span id="cd-sec" style={`--value:0;`}>0</span>
-            </span>
-            <span class="text-xs mt-1">sec</span>
-          </div>
-        </div>
-      </div>
-    )}
-
-    <!-- Friland -->
-    {initialImageUrl && (
-      <div class="w-full max-w-lg mt-4">
-        <div class="card bg-base-200 shadow-lg overflow-hidden">
-          <figure class="relative">
-            <img
-              id="friland-img"
-              src={initialImageUrl}
-              alt="Friland"
-              class="w-full aspect-video object-cover transition-opacity duration-300"
-            />
-          </figure>
-          <div class="flex justify-between items-center p-3">
-            <button id="friland-copy" class="btn btn-ghost btn-sm">Copiaza</button>
-            <button id="friland-next" class="btn btn-primary btn-sm">Urmatoarea</button>
-          </div>
-        </div>
-      </div>
-    )}
-
-    <p class="text-base-content/50 text-lg mt-2">
-      Pentru ca vinerea nu se deploy
-    </p>
-
+    <Countdown />
+    <Friland />
   </main>
 </Layout>
-
-<script is:inline define:vars={{ targetDate, isFriday }}>
-  if (!isFriday) {
-    function updateCountdown() {
-      const now = new Date();
-      const target = new Date(targetDate);
-      const diff = Math.max(0, target.getTime() - now.getTime());
-
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-      const setVal = (id, val) => {
-        const el = document.getElementById(id);
-        if (el) el.style.setProperty("--value", val);
-      };
-
-      setVal("cd-days", d);
-      setVal("cd-hours", h);
-      setVal("cd-min", m);
-      setVal("cd-sec", s);
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-  }
-</script>
-
-<script>
-  import { actions } from "astro:actions";
-
-  const nextBtn = document.getElementById("friland-next");
-  const img = document.getElementById("friland-img") as HTMLImageElement | null;
-
-  if (nextBtn && img) {
-    nextBtn.addEventListener("click", async () => {
-      nextBtn.classList.add("loading");
-      const { data } = await actions.randomImage();
-      if (data?.url) {
-        img.style.opacity = "0";
-        const newImg = new Image();
-        newImg.onload = () => {
-          img.src = data.url;
-          img.style.opacity = "1";
-        };
-        newImg.src = data.url;
-      }
-      nextBtn.classList.remove("loading");
-    });
-  }
-</script>

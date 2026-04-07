@@ -1,0 +1,69 @@
+---
+import { db, Image, User, eq, ne, and, isNotNull, isNull } from "astro:db";
+import { thumborClean } from "@/utils/thumbor.util";
+
+const jsDay = new Date().getDay();
+const fridayFilter = jsDay === 5
+  ? eq(Image.dayOfWeek, "5")
+  : ne(Image.dayOfWeek, "5");
+
+const approvedImages = await db
+  .select({ id: Image.id, ownerId: Image.ownerId })
+  .from(Image)
+  .where(and(isNotNull(Image.approvedId), isNull(Image.deletedAt), fridayFilter))
+  .all();
+
+let initialImageUrl: string | null = null;
+if (approvedImages.length > 0) {
+  const img = approvedImages[Math.floor(Math.random() * approvedImages.length)];
+  const owner = await db
+    .select({ nickname: User.nickname })
+    .from(User)
+    .where(eq(User.id, img.ownerId))
+    .get();
+  initialImageUrl = thumborClean(img.id, owner?.nickname || "user");
+}
+---
+
+{initialImageUrl && (
+  <div class="w-full max-w-lg mt-4">
+    <div class="card bg-base-200 shadow-lg overflow-hidden">
+      <figure class="relative">
+        <img
+          id="friland-img"
+          src={initialImageUrl}
+          alt="Friland"
+          class="w-full aspect-video object-cover transition-opacity duration-300"
+        />
+      </figure>
+      <div class="flex justify-between items-center p-3">
+        <button id="friland-copy" class="btn btn-ghost btn-sm">Copiaza</button>
+        <button id="friland-next" class="btn btn-primary btn-sm">Urmatoarea</button>
+      </div>
+    </div>
+  </div>
+)}
+
+<script>
+  import { actions } from "astro:actions";
+
+  const nextBtn = document.getElementById("friland-next");
+  const img = document.getElementById("friland-img") as HTMLImageElement | null;
+
+  if (nextBtn && img) {
+    nextBtn.addEventListener("click", async () => {
+      nextBtn.classList.add("loading");
+      const { data } = await actions.randomImage();
+      if (data?.url) {
+        img.style.opacity = "0";
+        const newImg = new Image();
+        newImg.onload = () => {
+          img.src = data.url;
+          img.style.opacity = "1";
+        };
+        newImg.src = data.url;
+      }
+      nextBtn.classList.remove("loading");
+    });
+  }
+</script>

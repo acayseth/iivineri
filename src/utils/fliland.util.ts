@@ -1,3 +1,13 @@
+export const days = [
+  { code: "Lu", name: "Luni" },
+  { code: "Ma", name: "Marti" },
+  { code: "Mi", name: "Miercuri" },
+  { code: "Jo", name: "Joi" },
+  { code: "Vi", name: "Vineri" },
+  { code: "Sa", name: "Sâmbătp" },
+  { code: "Du", name: "Duminică" },
+];
+
 export const getDayOfWeek = () => {
   const now = new Date();
   const dayOfWeek = (now.getDay() + 6) % 7;
@@ -12,5 +22,5 @@ export const getDayOfWeek = () => {
   friday.setHours(0, 0, 0, 0);
   const targetDate = friday.toISOString();
 
-  return { dayOfWeek, targetDate };
+  return { dayOfWeek, targetDate, isFriday: dayOfWeek === 4 };
 };

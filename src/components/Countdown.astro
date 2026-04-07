@@ -1,0 +1,64 @@
+---
+import { getDayOfWeek, days } from "@/utils/fliland.util";
+
+const { dayOfWeek, targetDate, isFriday } = getDayOfWeek();
+---
+
+{!isFriday && (
+  <div id="countdown-wrapper">
+    <div class="grid auto-cols-max grid-flow-col gap-2 sm:gap-3 text-center">
+      <div class="bg-neutral rounded-box text-neutral-content flex flex-col items-center justify-center p-2 min-w-12">
+        <span class="countdown font-mono text-xl">
+          <span id="cd-days" style={`--value:0;`}>0</span>
+        </span>
+        <span class="text-xs mt-1">zile</span>
+      </div>
+      <div class="bg-neutral rounded-box text-neutral-content flex flex-col items-center justify-center p-2 min-w-12">
+        <span class="countdown font-mono text-xl">
+          <span id="cd-hours" style={`--value:0;`}>0</span>
+        </span>
+        <span class="text-xs mt-1">ore</span>
+      </div>
+      <div class="bg-neutral rounded-box text-neutral-content flex flex-col items-center justify-center p-2 min-w-12">
+        <span class="countdown font-mono text-xl">
+          <span id="cd-min" style={`--value:0;`}>0</span>
+        </span>
+        <span class="text-xs mt-1">min</span>
+      </div>
+      <div class="bg-neutral rounded-box text-neutral-content flex flex-col items-center justify-center p-2 min-w-12">
+        <span class="countdown font-mono text-xl">
+          <span id="cd-sec" style={`--value:0;`}>0</span>
+        </span>
+        <span class="text-xs mt-1">sec</span>
+      </div>
+    </div>
+  </div>
+)}
+
+<script is:inline define:vars={{ targetDate, isFriday }}>
+  if (!isFriday) {
+    function updateCountdown() {
+      const now = new Date();
+      const target = new Date(targetDate);
+      const diff = Math.max(0, target.getTime() - now.getTime());
+
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.style.setProperty("--value", val);
+      };
+
+      setVal("cd-days", d);
+      setVal("cd-hours", h);
+      setVal("cd-min", m);
+      setVal("cd-sec", s);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
+</script>
