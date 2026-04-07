@@ -38,7 +38,7 @@ jobs:
             ghcr.io/acayseth/iivineri:latest
             ghcr.io/acayseth/iivineri:${{ github.sha }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
 
   deploy:
     needs: build
