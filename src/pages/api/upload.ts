@@ -1,6 +1,7 @@
 import type { APIContext } from "astro";
 import { db, Image, User, eq, and, isNull } from "astro:db";
 import { createHash } from "node:crypto";
+import { THUMBOR_URL } from "astro:env/server";
 
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 const THUMBOR_TIMEOUT = 30_000; // 30s
@@ -31,10 +32,7 @@ export async function POST(ctx: APIContext) {
     return jsonError("Nu esti autentificat", 401);
   }
 
-  const thumborUrl = process.env.THUMBOR_URL;
-  if (!thumborUrl) {
-    return jsonError("Configurare server invalida", 500);
-  }
+  const thumborUrl = THUMBOR_URL;
 
   const formData = await ctx.request.formData();
   const file = formData.get("file") as File | null;

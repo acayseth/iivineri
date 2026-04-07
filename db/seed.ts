@@ -10,7 +10,7 @@ export default async function seed() {
       nickname: "hellnet",
       email: "hellnet@iivineri.org",
       password_hash:
-        "$argon2id$v=19$m=19456,t=2,p=1$3aO/RcXmFVCddx9tODE44w$YebjX3dgUcgWlRGT07sShsGMxJmb8IIWi4FT6BAXUIw",
+        "$argon2id$v=19$m=19456,t=2,p=1$0S31TyVmqky6i/YMVPEt4Q$P+mbnpAAs+4y5b3Rf/2f9rHByXJPQPjeLjDcV46NH+M",
       createdAt: new Date(),
       deletedAt: null,
     },
@@ -20,7 +20,7 @@ export default async function seed() {
       nickname: "tigina",
       email: "tighina@iivineri.org",
       password_hash:
-        "$argon2id$v=19$m=19456,t=2,p=1$vnZMarTCyli/theXmLyIhA$OpdFJqPZdsKC5bRnVs8hlBbXqb8qZ9yeibyfSQzPDrs",
+        "$argon2id$v=19$m=19456,t=2,p=1$0S31TyVmqky6i/YMVPEt4Q$P+mbnpAAs+4y5b3Rf/2f9rHByXJPQPjeLjDcV46NH+M",
       createdAt: new Date(),
       deletedAt: null,
     },

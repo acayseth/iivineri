@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, envField, sessionDrivers } from "astro/config";
 import { fileURLToPath, URL } from "node:url";
 
 import tailwindcss from "@tailwindcss/vite";
@@ -11,7 +11,23 @@ import preact from "@astrojs/preact";
 
 // https://astro.build/config
 export default defineConfig({
+  experimental: {
+    rustCompiler: true,
+  },
   site: "https://iivineri.org",
+  env: {
+    schema: {
+      APP_SECRET: envField.string({ context: "server", access: "secret" }),
+      THUMBOR_URL: envField.string({ context: "server", access: "secret" }),
+      THUMBOR_KEY: envField.string({ context: "server", access: "secret" }),
+      ASTRO_DATABASE_FILE: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+    },
+    validateSecrets: false,
+  },
+  trailingSlash: "never",
   security: {
     checkOrigin: false,
   },
@@ -22,7 +38,7 @@ export default defineConfig({
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
     },
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss({ optimize: true })],
   },
   integrations: [
     astroMetaTags(),
@@ -39,6 +55,12 @@ export default defineConfig({
     mode: "standalone",
   }),
   session: {
-    ttl: 60 * 60 * 24 * 30, // 30 zile
+    // driver: sessionDrivers.redis({
+    //   url: process.env.REDIS_URL,
+    // }),
+    cookie: {
+      name: "sid",
+    },
+    ttl: 60 * 60 * 24 * 365,
   },
 });
