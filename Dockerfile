@@ -9,8 +9,13 @@ RUN corepack enable && yarn install --frozen-lockfile
 
 
 FROM base AS builder
+
 ENV ASTRO_DATABASE_FILE=file:///app/.db/content.db
 ENV ASTRO_DB_REMOTE_URL=file:///app/.db/content.db
+ENV APP_SECRET=APP_SUPER_SECRET
+ENV THUMBOR_URL=http://10.10.20.10:8000
+ENV THUMBOR_KEY=THUMBOR_SECURE_KEY_4ERT
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN node_modules/.bin/astro build --remote
@@ -24,6 +29,9 @@ ENV HOST=0.0.0.0
 ENV PORT=4321
 ENV ASTRO_DATABASE_FILE=file:///app/.db/content.db
 ENV ASTRO_DB_REMOTE_URL=file:///app/.db/content.db
+ENV APP_SECRET=APP_SUPER_SECRET
+ENV THUMBOR_URL=http://10.10.20.10:8000
+ENV THUMBOR_KEY=THUMBOR_SECURE_KEY_4ERT
 
 RUN apk add --no-cache tzdata libc6-compat \
     && cp /usr/share/zoneinfo/Europe/Chisinau /etc/localtime \

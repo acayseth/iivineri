@@ -31,7 +31,7 @@ export async function POST(ctx: APIContext) {
     return jsonError("Nu esti autentificat", 401);
   }
 
-  const thumborUrl = import.meta.env.THUMBOR_URL;
+  const thumborUrl = process.env.THUMBOR_URL;
   if (!thumborUrl) {
     return jsonError("Configurare server invalida", 500);
   }

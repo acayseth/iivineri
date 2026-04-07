@@ -1,7 +1,7 @@
 import { createHmac } from "node:crypto";
 
-const thumborUrl = import.meta.env.THUMBOR_URL;
-const thumborKey = import.meta.env.THUMBOR_KEY;
+const thumborUrl = process.env.THUMBOR_URL;
+const thumborKey = process.env.THUMBOR_KEY;
 
 function sign(urlPart: string): string {
   return createHmac("sha1", thumborKey)

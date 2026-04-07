@@ -26,7 +26,7 @@ export const passwordSchema = z
 const ARGON_OPTS = { memoryCost: 19456, timeCost: 2, parallelism: 1 };
 
 function getAppSecret(): string {
-  const secret = import.meta.env.APP_SECRET;
+  const secret = process.env.APP_SECRET;
   if (!secret) {
     throw new ActionError({ code: "INTERNAL_SERVER_ERROR", message: "Configurare server invalida" });
   }
