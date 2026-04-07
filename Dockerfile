@@ -44,7 +44,5 @@ USER astro
 
 EXPOSE 4321
 
-VOLUME ["/app/.db"]
-
 ENTRYPOINT ["node_modules/.bin/astro", "db", "push"]
 CMD ["node", "./dist/server/entry.mjs"]
