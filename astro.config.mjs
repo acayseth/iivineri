@@ -1,6 +1,9 @@
 // @ts-check
 import { defineConfig, envField, sessionDrivers } from "astro/config";
 import { fileURLToPath, URL } from "node:url";
+import { loadEnv } from "vite";
+
+const { REDIS_URL } = loadEnv("", process.cwd(), "");
 
 import tailwindcss from "@tailwindcss/vite";
 import astroMetaTags from "astro-meta-tags";
@@ -20,10 +23,7 @@ export default defineConfig({
       APP_SECRET: envField.string({ context: "server", access: "secret" }),
       THUMBOR_URL: envField.string({ context: "server", access: "secret" }),
       THUMBOR_KEY: envField.string({ context: "server", access: "secret" }),
-      ASTRO_DATABASE_FILE: envField.string({
-        context: "server",
-        access: "secret",
-      }),
+      REDIS_URL: envField.string({ context: "server", access: "secret" }),
     },
     validateSecrets: false,
   },
@@ -46,7 +46,18 @@ export default defineConfig({
     preact(),
     icon({
       include: {
-        lucide: ["sun", "moon", "log-in"],
+        lucide: [
+          "sun",
+          "moon",
+          "log-in",
+          "upload",
+          "circle-check",
+          "trash-2",
+          "lock",
+          "lock-open",
+          "shield",
+          "shield-off",
+        ],
         "simple-icons": ["github"],
       },
     }),
@@ -55,11 +66,11 @@ export default defineConfig({
     mode: "standalone",
   }),
   session: {
-    // driver: sessionDrivers.redis({
-    //   url: process.env.REDIS_URL,
-    // }),
+    driver: sessionDrivers.redis({
+      url: REDIS_URL,
+    }),
     cookie: {
-      name: "sid",
+      name: "_sid",
     },
     ttl: 60 * 60 * 24 * 365,
   },

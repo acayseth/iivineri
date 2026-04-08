@@ -33,6 +33,13 @@ export const signIn = defineAction({
       throw new ActionError(INVALID_CREDENTIALS);
     }
 
+    if (user.jailAt && new Date(user.jailAt) > new Date()) {
+      throw new ActionError({
+        code: "FORBIDDEN",
+        message: user.jailMsg || "Contul tau este suspendat temporar",
+      });
+    }
+
     ctx.session?.set("userId", user.id);
 
     return { success: true };

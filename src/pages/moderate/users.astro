@@ -1,0 +1,257 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { actions } from "astro:actions";
+import { db, User, Image, eq, and, isNull, isNotNull, count, desc } from "astro:db";
+import { Icon } from "astro-icon/components";
+
+const userId = await Astro.session?.get("userId");
+if (!userId) {
+  return Astro.redirect("/sign-in");
+}
+
+const user = await db
+  .select({ id: User.id, root: User.root, nickname: User.nickname })
+  .from(User)
+  .where(and(eq(User.id, userId), isNull(User.deletedAt)))
+  .get();
+
+if (!user || !user.root) {
+  return Astro.redirect("/");
+}
+
+const actionResult = Astro.getActionResult(actions.moderateUser);
+
+const filter = ["all", "active", "deleted"].includes(Astro.url.searchParams.get("filter") || "")
+  ? Astro.url.searchParams.get("filter")!
+  : "active";
+
+const PER_PAGE = 20;
+const page = Math.max(1, Math.min(1000, Number(Astro.url.searchParams.get("page")) || 1));
+const offset = (page - 1) * PER_PAGE;
+
+const [totalActive, totalDeleted] = await Promise.all([
+  db.select({ n: count() }).from(User).where(isNull(User.deletedAt)).get(),
+  db.select({ n: count() }).from(User).where(isNotNull(User.deletedAt)).get(),
+]);
+
+const filterWhere = filter === "deleted"
+  ? isNotNull(User.deletedAt)
+  : filter === "active"
+    ? isNull(User.deletedAt)
+    : undefined;
+
+const total = filter === "deleted" ? totalDeleted!.n : filter === "active" ? totalActive!.n : totalActive!.n + totalDeleted!.n;
+const totalPages = Math.ceil(total / PER_PAGE) || 1;
+
+const BASE = "/moderate/users";
+
+if (page > totalPages) {
+  const params = new URLSearchParams();
+  if (filter !== "active") params.set("filter", filter);
+  if (totalPages > 1) params.set("page", String(totalPages));
+  const qs = params.toString();
+  return Astro.redirect(qs ? `${BASE}?${qs}` : BASE);
+}
+
+const query = db
+  .select({
+    id: User.id,
+    nickname: User.nickname,
+    email: User.email,
+    root: User.root,
+    createdAt: User.createdAt,
+    deletedAt: User.deletedAt,
+    jailAt: User.jailAt,
+    jailMsg: User.jailMsg,
+  })
+  .from(User)
+  .orderBy(desc(User.createdAt))
+  .limit(PER_PAGE)
+  .offset(offset);
+
+const users = filterWhere
+  ? await query.where(filterWhere).all()
+  : await query.all();
+
+// Count images per user: total, approved, deleted
+const userIds = users.map((u) => u.id);
+const imageStats = await Promise.all(
+  userIds.map(async (id) => {
+    const ownerFilter = eq(Image.ownerId, id);
+    const [total, approved, deleted] = await Promise.all([
+      db.select({ n: count() }).from(Image).where(and(ownerFilter, isNull(Image.deletedAt))).get(),
+      db.select({ n: count() }).from(Image).where(and(ownerFilter, isNull(Image.deletedAt), isNotNull(Image.approvedId))).get(),
+      db.select({ n: count() }).from(Image).where(and(ownerFilter, isNotNull(Image.deletedAt))).get(),
+    ]);
+    return { total: total?.n ?? 0, approved: approved?.n ?? 0, deleted: deleted?.n ?? 0 };
+  })
+);
+const imageStatsMap = new Map(userIds.map((id, i) => [id, imageStats[i]]));
+
+function tabUrl(f: string) {
+  return f === "active" ? BASE : `${BASE}?filter=${f}`;
+}
+
+function pageUrl(p: number) {
+  const params = new URLSearchParams();
+  if (filter !== "active") params.set("filter", filter);
+  if (p > 1) params.set("page", String(p));
+  const qs = params.toString();
+  return qs ? `${BASE}?${qs}` : BASE;
+}
+---
+
+<Layout title="Moderare utilizatori">
+  <main class="min-h-[calc(100vh-8rem)] px-4 py-8">
+    <div class="max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-4">
+          <a href="/moderate/images" class="btn btn-ghost btn-sm">Imagini</a>
+          <h1 class="text-2xl font-bold">Utilizatori</h1>
+        </div>
+        <span class="badge badge-primary">{user.nickname} (admin)</span>
+      </div>
+
+      {actionResult?.data?.success && (
+        <div class="alert alert-success mb-4 text-sm">Actiunea a fost efectuata.</div>
+      )}
+      {actionResult?.error && (
+        <div class="alert alert-error mb-4 text-sm">{actionResult.error.message}</div>
+      )}
+
+      <div role="tablist" class="tabs tabs-bordered mb-6">
+        <a role="tab" href={tabUrl("active")} class:list={["tab", filter === "active" && "tab-active"]}>
+          Activi <span class="badge badge-success badge-sm ml-1">{totalActive!.n}</span>
+        </a>
+        <a role="tab" href={tabUrl("deleted")} class:list={["tab", filter === "deleted" && "tab-active"]}>
+          Stersi <span class="badge badge-error badge-sm ml-1">{totalDeleted!.n}</span>
+        </a>
+        <a role="tab" href={tabUrl("all")} class:list={["tab", filter === "all" && "tab-active"]}>
+          Toti <span class="badge badge-sm ml-1">{totalActive!.n + totalDeleted!.n}</span>
+        </a>
+      </div>
+
+      {users.length === 0 ? (
+        <div class="card bg-base-200 p-12 text-center">
+          <p class="text-base-content/60">Niciun utilizator.</p>
+        </div>
+      ) : (
+        <div class="overflow-x-auto">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Utilizator</th>
+                <th>
+                  <div class="flex items-center gap-2">
+                    <Icon name="lucide:upload" class="size-4" title="Upload" />
+                    <span>/</span>
+                    <Icon name="lucide:circle-check" class="size-4 text-success" title="Aprobate" />
+                    <span>/</span>
+                    <Icon name="lucide:trash-2" class="size-4 text-error" title="Sterse" />
+                  </div>
+                </th>
+                <th>Inregistrat</th>
+                <th>Actiuni</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((u) => {
+                const isJailed = u.jailAt && new Date(u.jailAt) > new Date();
+                return (
+                <tr class:list={[u.deletedAt && "opacity-50"]}>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      {u.root && <span class="badge badge-primary badge-xs">admin</span>}
+                      {isJailed && <span class="badge badge-error badge-xs">jail</span>}
+                      <span class="font-medium">@{u.nickname}</span>
+                      <span class="text-base-content/40 text-sm">{u.email}</span>
+                    </div>
+                    {isJailed && (
+                      <div class="text-xs text-error mt-1">
+                        pana la {new Date(u.jailAt!).toLocaleString("ro-RO", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        {u.jailMsg && <span> — {u.jailMsg}</span>}
+                      </div>
+                    )}
+                  </td>
+                  <td>{imageStatsMap.get(u.id)?.total ?? 0} / {imageStatsMap.get(u.id)?.approved ?? 0} / {imageStatsMap.get(u.id)?.deleted ?? 0}</td>
+                  <td class="text-base-content/60 text-sm">
+                    {new Date(u.createdAt).toLocaleDateString("ro-RO", { day: "2-digit", month: "2-digit", year: "numeric" })}
+                  </td>
+                  <td>
+                    {u.id !== user.id && (
+                      <div class="flex gap-1">
+                        {isJailed ? (
+                          <form method="POST" action={actions.moderateUser}>
+                            <input type="hidden" name="targetUserId" value={u.id} />
+                            <input type="hidden" name="action" value="unjail" />
+                            <button type="submit" class="btn btn-success btn-outline btn-xs btn-square tooltip" data-tip="Unjail">
+                              <Icon name="lucide:lock-open" class="size-3.5" />
+                            </button>
+                          </form>
+                        ) : !u.deletedAt && (
+                          <>
+                            <button class="btn btn-error btn-outline btn-xs btn-square tooltip" data-tip="Jail" onclick={`document.getElementById('jail-${u.id}').showModal()`}>
+                              <Icon name="lucide:lock" class="size-3.5" />
+                            </button>
+                            <dialog id={`jail-${u.id}`} class="modal">
+                              <div class="modal-box w-80">
+                                <h3 class="font-bold text-lg mb-4">Jail @{u.nickname}</h3>
+                                <form method="POST" action={actions.moderateUser} class="space-y-3">
+                                  <input type="hidden" name="targetUserId" value={u.id} />
+                                  <input type="hidden" name="action" value="jail" />
+                                  <label class="label text-sm">Pana la</label>
+                                  <input type="datetime-local" name="jailAt" required class="input input-bordered w-full" />
+                                  <label class="label text-sm">Motiv (optional)</label>
+                                  <input type="text" name="jailMsg" maxlength="200" placeholder="Motiv..." class="input input-bordered w-full" />
+                                  <div class="modal-action">
+                                    <button type="button" class="btn btn-ghost" onclick={`document.getElementById('jail-${u.id}').close()`}>Anuleaza</button>
+                                    <button type="submit" class="btn btn-error">Confirma</button>
+                                  </div>
+                                </form>
+                              </div>
+                              <form method="dialog" class="modal-backdrop"><button>close</button></form>
+                            </dialog>
+                          </>
+                        )}
+                        {!u.deletedAt && (
+                          <form method="POST" action={actions.moderateUser}>
+                            <input type="hidden" name="targetUserId" value={u.id} />
+                            <input type="hidden" name="action" value={u.root ? "demote" : "promote"} />
+                            <button type="submit" class:list={["btn btn-outline btn-xs btn-square tooltip", u.root ? "btn-warning" : "btn-info"]} data-tip={u.root ? "Retrage admin" : "Fa admin"}>
+                              <Icon name={u.root ? "lucide:shield-off" : "lucide:shield"} class="size-3.5" />
+                            </button>
+                          </form>
+                        )}
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              );})}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div class="flex justify-center mt-8">
+          <div class="join">
+            {page > 1 && (
+              <a href={pageUrl(page - 1)} class="join-item btn btn-sm">&laquo;</a>
+            )}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <a
+                href={pageUrl(p)}
+                class:list={["join-item btn btn-sm", p === page && "btn-active"]}
+              >
+                {p}
+              </a>
+            ))}
+            {page < totalPages && (
+              <a href={pageUrl(page + 1)} class="join-item btn btn-sm">&raquo;</a>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  </main>
+</Layout>

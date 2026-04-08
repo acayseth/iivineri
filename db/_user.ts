@@ -9,6 +9,8 @@ export const User = defineTable({
     password_hash: column.text(),
     createdAt: column.date(),
     deletedAt: column.date({ optional: true }),
+    jailAt: column.date({ optional: true }),
+    jailMsg: column.text({ optional: true }),
   },
   indexes: [
     {

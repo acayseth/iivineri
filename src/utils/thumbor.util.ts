@@ -26,3 +26,7 @@ export function thumborBlurred(imageId: string, nickname: string): string {
 export function thumborClean(imageId: string, nickname: string): string {
   return thumborImageUrl("600x600", `${imageId}/${nickname}.webp`, true);
 }
+
+export function thumborOg(imageId: string, nickname: string): string {
+  return thumborImageUrl("1200x630", `${imageId}/${nickname}.webp`, true);
+}
