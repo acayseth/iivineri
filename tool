@@ -36,4 +36,4 @@ case "$1" in
 
 esac
 
-docker compose --file $CONFIG $opts $@ $args
+docker compose --env-file .env --file $CONFIG $opts $@ $args

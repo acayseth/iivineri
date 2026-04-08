@@ -8,9 +8,10 @@ import { db, User, eq, and, isNull } from "astro:db";
 interface Props {
   title?: string;
   description?: string;
+  image?: string | null;
 }
 
-const { title = "iivineri", description = "Pentru ca vinerea nu se deploy" } = Astro.props;
+const { title = "iivineri", description = "Pentru ca vinerea nu se face deploy", image = null } = Astro.props;
 const theme = Astro.cookies.get("theme")?.value ?? "dark";
 
 const userId = await Astro.session?.get("userId");
@@ -23,7 +24,7 @@ if (userId) {
     .get();
   currentUser = found ?? null;
 }
-const fullTitle = title === "iivineri" ? title : `${title} | iivineri`;
+const fullTitle = title === "iivineri" ? title : `${title}`;
 ---
 
 <!doctype html>
@@ -39,8 +40,12 @@ const fullTitle = title === "iivineri" ? title : `${title} | iivineri`;
                 basic: {
                   title: fullTitle,
                   type: "website",
-                  image: "/favicon.svg",
-                }
+                  image: image || "/favicon.svg",
+                },
+                image: image ? { alt: fullTitle } : undefined,
+            }}
+            twitter={{
+                card: image ? "summary_large_image" : "summary",
             }}
             extend={{
                 link: [{ rel: "icon", href: "/favicon.svg" }],

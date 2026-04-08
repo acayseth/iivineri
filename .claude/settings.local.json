@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_fill_form",
+      "mcp__playwright__browser_click"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "astro-docs",
+    "sqlite",
+    "daisyui",
+    "playwright"
+  ],
+  "disabledMcpjsonServers": [
+    "context7"
+  ]
+}

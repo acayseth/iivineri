@@ -5,11 +5,15 @@ import Countdown from "@/components/Countdown.astro"
 import Friland from "@/components/Friland.astro"
 import { getDayOfWeek, days } from "@/utils/fliland.util";
 import { db, Image, User, eq, and, isNull } from "astro:db";
-import { thumborBlurred, thumborClean } from "@/utils/thumbor.util";
+import { thumborClean, thumborOg } from "@/utils/thumbor.util";
 
 const { dayOfWeek, targetDate, isFriday } = getDayOfWeek();
+const headline = isFriday
+  ? "Da, frate! Îi vineri!"
+  : `Nu, uai! Ii ${days[dayOfWeek].name.toLowerCase()}`;
 
 let requestedImageUrl: string | null = null;
+let ogImageUrl: string | null = null;
 const q = Astro.url.searchParams.get("q");
 if (q) {
   const row = await db
@@ -23,25 +27,20 @@ if (q) {
     .where(and(eq(Image.id, q), isNull(Image.deletedAt)))
     .get();
 
-  if (!row) {
+  if (!row || !row.approvedId) {
     return Astro.rewrite("/404");
   }
 
-  requestedImageUrl = row.approvedId
-    ? thumborClean(row.id, row.nickname)
-    : thumborBlurred(row.id, row.nickname);
+  requestedImageUrl = thumborClean(row.id, row.nickname);
+  ogImageUrl = thumborOg(row.id, row.nickname);
 }
 ---
 
-<Layout title="Acasa" description="Pentru ca vinerea nu se deploy">
+<Layout title={headline} description="Pentru ca vinerea nu se deploy" image={ogImageUrl}>
   <main class="flex flex-col items-center justify-center px-4 text-center gap-4">
     <DaysOfWeek />
-    <h1 class="text-4xl sm:text-6xl font-bold">
-      {isFriday
-        ? "Da, frate! Îi vineri!"
-        : `Nu, uai! Ii ${days[dayOfWeek].name.toLowerCase()}`}
-    </h1>
+    <h1 class="text-4xl sm:text-6xl font-bold">{headline}</h1>
     <Countdown />
-    <Friland initialImageUrl={requestedImageUrl} />
+    <Friland initialImageUrl={requestedImageUrl} initialImageId={q || null} />
   </main>
 </Layout>

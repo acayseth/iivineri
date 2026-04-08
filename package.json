@@ -21,6 +21,7 @@
     "astro-icon": "^1.1.5",
     "better-sqlite3": "^12.8.0",
     "drizzle-orm": "^0.45.2",
+    "ioredis": "^5.10.1",
     "preact": "^10.29.1"
   },
   "devDependencies": {

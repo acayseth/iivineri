@@ -4,9 +4,10 @@ import { thumborClean } from "@/utils/thumbor.util";
 
 interface Props {
   initialImageUrl?: string | null;
+  initialImageId?: string | null;
 }
 
-let { initialImageUrl = null } = Astro.props;
+let { initialImageUrl = null, initialImageId = null } = Astro.props;
 
 if (!initialImageUrl) {
   const jsDay = new Date().getDay();
@@ -28,12 +29,13 @@ if (!initialImageUrl) {
       .where(eq(User.id, img.ownerId))
       .get();
     initialImageUrl = thumborClean(img.id, owner?.nickname || "user");
+    initialImageId = img.id;
   }
 }
 ---
 
 {initialImageUrl && (
-  <div class="w-full max-w-lg mt-4">
+  <div class="w-full max-w-lg mt-4" id="friland-container" data-image-id={initialImageId}>
     <div class="card bg-base-200 shadow-lg overflow-hidden">
       <figure class="relative">
         <img
@@ -54,14 +56,17 @@ if (!initialImageUrl) {
 <script>
   import { actions } from "astro:actions";
 
+  const container = document.getElementById("friland-container");
   const nextBtn = document.getElementById("friland-next");
+  const copyBtn = document.getElementById("friland-copy");
   const img = document.getElementById("friland-img") as HTMLImageElement | null;
 
-  if (nextBtn && img) {
+  if (nextBtn && img && container) {
     nextBtn.addEventListener("click", async () => {
       nextBtn.classList.add("loading");
       const { data } = await actions.randomImage();
-      if (data?.url) {
+      if (data?.url && data?.id) {
+        container.dataset.imageId = data.id;
         img.style.opacity = "0";
         const newImg = new Image();
         newImg.onload = () => {
@@ -71,6 +76,18 @@ if (!initialImageUrl) {
         newImg.src = data.url;
       }
       nextBtn.classList.remove("loading");
+    });
+  }
+
+  if (copyBtn && container) {
+    copyBtn.addEventListener("click", async () => {
+      const imageId = container.dataset.imageId;
+      if (!imageId) return;
+      const url = `${window.location.origin}?q=${imageId}`;
+      await navigator.clipboard.writeText(url);
+      const original = copyBtn.textContent;
+      copyBtn.textContent = "Copiat!";
+      setTimeout(() => { copyBtn.textContent = original; }, 1500);
     });
   }
 </script>

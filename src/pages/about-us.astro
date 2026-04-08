@@ -1,0 +1,152 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { actions, isInputError } from "astro:actions";
+
+const result = Astro.getActionResult(actions.contactUs);
+const fieldErrors = isInputError(result?.error) ? result.error.fields : {};
+const serverError = result?.error && !isInputError(result.error) ? result.error.message : null;
+const success = result?.data?.success;
+---
+
+<Layout title="Despre noi" description="Istoria proiectului iivineri">
+  <main class="min-h-[calc(100vh-8rem)] px-4 py-8">
+    <div class="max-w-3xl mx-auto">
+
+      <h1 class="text-3xl font-bold mb-6">Despre iivineri</h1>
+
+      <div class="prose prose-lg max-w-none mb-12">
+        <p>
+          <strong>iivineri</strong> este un proiect nascut din umorul de birou si o regula nescisa:
+          <em>vinerea nu se face deploy</em>. Ce a inceput ca o gluma intre colegi a devenit o aplicatie
+          care numara zilele pana la urmatoarea vineri si lasa utilizatorii sa-si impartaseasca cele mai
+          bune meme-uri de vineri.
+        </p>
+        <p>
+          Proiectul a fost creat in <strong>noiembrie 2019</strong> si a trecut prin mai multe
+          reincarnari tehnologice — de la Angular cu Material Design, la Next.js, si in final la
+          <strong> Astro</strong> cu DaisyUI. Spiritul a ramas acelasi: sa ne amintim ca vinerea
+          e sfanta.
+        </p>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-6">Timeline</h2>
+
+      <ul class="timeline timeline-vertical timeline-snap-icon mb-12">
+        <li>
+          <div class="timeline-middle">
+            <span class="badge badge-primary badge-sm">2019</span>
+          </div>
+          <div class="timeline-end timeline-box">
+            <div class="font-bold">Nasterea proiectului</div>
+            <p class="text-sm text-base-content/60">
+              Prima versiune in Angular + Material Design. Countdown pana vineri,
+              GIF-uri de pe Giphy. 44 de commit-uri pline de entuziasm.
+            </p>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-middle">
+            <span class="badge badge-secondary badge-sm">2021</span>
+          </div>
+          <div class="timeline-start timeline-box">
+            <div class="font-bold">Rescriere in Next.js</div>
+            <p class="text-sm text-base-content/60">
+              Migrare la Next.js cu React si Tailwind CSS.
+              Interfata mai moderna, dar aceeasi idee.
+            </p>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-middle">
+            <span class="badge badge-accent badge-sm">2023</span>
+          </div>
+          <div class="timeline-end timeline-box">
+            <div class="font-bold">Explozie de features</div>
+            <p class="text-sm text-base-content/60">
+              Anul cel mai activ — 122 de commit-uri. Upload de imagini, Thumbor pentru
+              procesare, sistem de moderare, autentificare custom cu Argon2.
+            </p>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-middle">
+            <span class="badge badge-sm">2024</span>
+          </div>
+          <div class="timeline-start timeline-box">
+            <div class="font-bold">Pauza creativa</div>
+            <p class="text-sm text-base-content/60">
+              Un an linistit — doar 4 commit-uri. Proiectul a stat cuminte si a asteptat vinerea.
+            </p>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-middle">
+            <span class="badge badge-success badge-sm">2026</span>
+          </div>
+          <div class="timeline-end timeline-box">
+            <div class="font-bold">Reboot pe Astro 6</div>
+            <p class="text-sm text-base-content/60">
+              Migrare completa la Astro 6 cu Preact, DaisyUI 5, sesiuni Redis,
+              Docker CI/CD, sistem de jail pentru moderare, galerie de imagini.
+            </p>
+          </div>
+        </li>
+      </ul>
+
+      <h2 class="text-2xl font-bold mb-6">Contacteaza-ne</h2>
+
+      {success ? (
+        <div class="alert alert-success">Mesajul a fost trimis. Multumim!</div>
+      ) : (
+        <div class="card bg-base-200 p-6">
+          {serverError && (
+            <div class="alert alert-error mb-4 text-sm">{serverError}</div>
+          )}
+
+          <form method="POST" action={actions.contactUs} class="space-y-4">
+            <div>
+              <label class="label" for="name">Nume</label>
+              <input
+                id="name" type="text" name="name" required
+                placeholder="Numele tau"
+                class:list={["input input-bordered w-full", fieldErrors.name && "input-error"]}
+              />
+              {fieldErrors.name && <p class="text-error text-xs mt-1">{fieldErrors.name.join(", ")}</p>}
+            </div>
+
+            <div>
+              <label class="label" for="email">Email</label>
+              <input
+                id="email" type="email" name="email" required
+                placeholder="email@exemplu.ro"
+                class:list={["input input-bordered w-full", fieldErrors.email && "input-error"]}
+              />
+              {fieldErrors.email && <p class="text-error text-xs mt-1">{fieldErrors.email.join(", ")}</p>}
+            </div>
+
+            <div>
+              <label class="label" for="message">Mesaj</label>
+              <textarea
+                id="message" name="message" required rows="4"
+                placeholder="Scrie-ne ceva..."
+                class:list={["textarea textarea-bordered w-full", fieldErrors.message && "textarea-error"]}
+              ></textarea>
+              {fieldErrors.message && <p class="text-error text-xs mt-1">{fieldErrors.message.join(", ")}</p>}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Trimite</button>
+          </form>
+        </div>
+      )}
+
+    </div>
+  </main>
+</Layout>

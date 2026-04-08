@@ -16,7 +16,7 @@ export const randomImage = defineAction({
       .all();
 
     if (images.length === 0) {
-      return { url: null };
+      return { id: null, url: null };
     }
 
     const img = images[Math.floor(Math.random() * images.length)];
@@ -27,6 +27,6 @@ export const randomImage = defineAction({
       .where(eq(User.id, img.ownerId))
       .get();
 
-    return { url: thumborClean(img.id, owner?.nickname || "user") };
+    return { id: img.id, url: thumborClean(img.id, owner?.nickname || "user") };
   },
 });

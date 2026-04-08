@@ -1,0 +1,217 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { actions, isInputError } from "astro:actions";
+import { db, Image, User, eq, and, isNull, isNotNull, count, desc } from "astro:db";
+import { thumborClean } from "@/utils/thumbor.util";
+
+const userId = await Astro.session?.get("userId");
+if (!userId) {
+  return Astro.redirect("/sign-in");
+}
+
+const user = await db
+  .select({ id: User.id, root: User.root, nickname: User.nickname })
+  .from(User)
+  .where(and(eq(User.id, userId), isNull(User.deletedAt)))
+  .get();
+
+if (!user || !user.root) {
+  return Astro.redirect("/");
+}
+
+const approveResult = Astro.getActionResult(actions.approveImage);
+const rejectResult = Astro.getActionResult(actions.rejectImage);
+
+const DAYS_FULL = ["Duminica", "Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata"];
+const PER_PAGE = 12;
+
+const filter = ["all", "pending", "approved", "deleted"].includes(Astro.url.searchParams.get("filter") || "")
+  ? Astro.url.searchParams.get("filter")!
+  : "pending";
+const page = Math.max(1, Math.min(1000, Number(Astro.url.searchParams.get("page")) || 1));
+const offset = (page - 1) * PER_PAGE;
+
+const notDeleted = isNull(Image.deletedAt);
+const deleted = isNotNull(Image.deletedAt);
+
+const [totalAll, totalApproved, totalPending, totalDeleted] = await Promise.all([
+  db.select({ n: count() }).from(Image).where(notDeleted).get(),
+  db.select({ n: count() }).from(Image).where(and(notDeleted, isNotNull(Image.approvedId))).get(),
+  db.select({ n: count() }).from(Image).where(and(notDeleted, isNull(Image.approvedId))).get(),
+  db.select({ n: count() }).from(Image).where(deleted).get(),
+]);
+
+const filterWhere = filter === "approved"
+  ? and(notDeleted, isNotNull(Image.approvedId))
+  : filter === "pending"
+    ? and(notDeleted, isNull(Image.approvedId))
+    : filter === "deleted"
+      ? deleted
+      : notDeleted;
+
+const total = filter === "approved"
+  ? totalApproved!.n
+  : filter === "pending"
+    ? totalPending!.n
+    : filter === "deleted"
+      ? totalDeleted!.n
+      : totalAll!.n;
+const totalPages = Math.ceil(total / PER_PAGE) || 1;
+
+if (page > totalPages) {
+  const params = new URLSearchParams();
+  if (filter !== "pending") params.set("filter", filter);
+  if (totalPages > 1) params.set("page", String(totalPages));
+  const qs = params.toString();
+  return Astro.redirect(qs ? `/moderate/images?${qs}` : "/moderate/images");
+}
+
+const images = await db
+  .select({
+    id: Image.id,
+    ownerId: Image.ownerId,
+    dayOfWeek: Image.dayOfWeek,
+    createdAt: Image.createdAt,
+    approvedId: Image.approvedId,
+    deletedAt: Image.deletedAt,
+  })
+  .from(Image)
+  .where(filterWhere)
+  .orderBy(desc(Image.createdAt))
+  .limit(PER_PAGE)
+  .offset(offset)
+  .all();
+
+const ownerIds = [...new Set(images.map((i) => i.ownerId))];
+const owners = await Promise.all(
+  ownerIds.map((id) =>
+    db.select({ id: User.id, nickname: User.nickname }).from(User).where(eq(User.id, id)).get()
+  )
+);
+const ownerMap = new Map(owners.filter(Boolean).map((o) => [o!.id, o!.nickname]));
+
+const BASE = "/moderate/images";
+
+function tabUrl(f: string) {
+  return f === "pending" ? BASE : `${BASE}?filter=${f}`;
+}
+
+function pageUrl(p: number) {
+  const params = new URLSearchParams();
+  if (filter !== "pending") params.set("filter", filter);
+  if (p > 1) params.set("page", String(p));
+  const qs = params.toString();
+  return qs ? `${BASE}?${qs}` : BASE;
+}
+---
+
+<Layout title="Moderare imagini">
+  <main class="min-h-[calc(100vh-8rem)] px-4 py-8">
+    <div class="max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-4">
+          <h1 class="text-2xl font-bold">Imagini</h1>
+          <a href="/moderate/users" class="btn btn-ghost btn-sm">Utilizatori</a>
+        </div>
+        <span class="badge badge-primary">{user.nickname} (admin)</span>
+      </div>
+
+      {(approveResult?.data?.success || rejectResult?.data?.success) && (
+        <div class="alert alert-success mb-4 text-sm">
+          {approveResult?.data?.success ? "Imaginea a fost aprobata." : "Imaginea a fost stearsa."}
+        </div>
+      )}
+
+      <div role="tablist" class="tabs tabs-bordered mb-6">
+        <a role="tab" href={tabUrl("pending")} class:list={["tab", filter === "pending" && "tab-active"]}>
+          In asteptare <span class="badge badge-warning badge-sm ml-1">{totalPending!.n}</span>
+        </a>
+        <a role="tab" href={tabUrl("approved")} class:list={["tab", filter === "approved" && "tab-active"]}>
+          Aprobate <span class="badge badge-success badge-sm ml-1">{totalApproved!.n}</span>
+        </a>
+        <a role="tab" href={tabUrl("all")} class:list={["tab", filter === "all" && "tab-active"]}>
+          Toate <span class="badge badge-sm ml-1">{totalAll!.n}</span>
+        </a>
+        <a role="tab" href={tabUrl("deleted")} class:list={["tab", filter === "deleted" && "tab-active"]}>
+          Sterse <span class="badge badge-error badge-sm ml-1">{totalDeleted!.n}</span>
+        </a>
+      </div>
+
+      {images.length === 0 ? (
+        <div class="card bg-base-200 p-12 text-center">
+          <p class="text-base-content/60">
+            {filter === "pending" ? "Nicio imagine de aprobat." : "Nicio imagine."}
+          </p>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {images.map((img) => {
+            const nickname = ownerMap.get(img.ownerId) || "user";
+            const imgUrl = thumborClean(img.id, nickname);
+
+            return (
+              <div class="card bg-base-200 shadow-sm overflow-hidden">
+                <figure>
+                  <img
+                    src={imgUrl}
+                    alt={`Imagine ${DAYS_FULL[Number(img.dayOfWeek)]}`}
+                    class="w-full aspect-video object-cover"
+                    loading="lazy"
+                  />
+                </figure>
+                <div class="p-3 space-y-2">
+                  <div class="flex items-center justify-between">
+                    <span class="badge badge-outline badge-sm">{DAYS_FULL[Number(img.dayOfWeek)]}</span>
+                    <span class="text-xs text-base-content/40">@{nickname}</span>
+                  </div>
+                  <p class="text-base-content/40 text-xs">
+                    {new Date(img.createdAt).toLocaleDateString("ro-RO", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                  </p>
+                  <div class="flex gap-2">
+                    {img.deletedAt ? (
+                      <span class="badge badge-error w-full justify-center">Sters</span>
+                    ) : !img.approvedId ? (
+                      <>
+                        <form method="POST" action={actions.approveImage} class="flex-1">
+                          <input type="hidden" name="imageId" value={img.id} />
+                          <button type="submit" class="btn btn-success btn-sm w-full">Aproba</button>
+                        </form>
+                        <form method="POST" action={actions.rejectImage} class="flex-1">
+                          <input type="hidden" name="imageId" value={img.id} />
+                          <button type="submit" class="btn btn-error btn-outline btn-sm w-full">Sterge</button>
+                        </form>
+                      </>
+                    ) : (
+                      <span class="badge badge-success w-full justify-center">Aprobat</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div class="flex justify-center mt-8">
+          <div class="join">
+            {page > 1 && (
+              <a href={pageUrl(page - 1)} class="join-item btn btn-sm">&laquo;</a>
+            )}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <a
+                href={pageUrl(p)}
+                class:list={["join-item btn btn-sm", p === page && "btn-active"]}
+              >
+                {p}
+              </a>
+            ))}
+            {page < totalPages && (
+              <a href={pageUrl(page + 1)} class="join-item btn btn-sm">&raquo;</a>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  </main>
+</Layout>
