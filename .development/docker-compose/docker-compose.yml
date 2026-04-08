@@ -2,7 +2,6 @@ volumes:
   volume_pgsql: {}
   volume_redis: {}
   volume_thumbor: {}
-  volume_astro_data: {}
 
 networks:
   iivineri_network:
@@ -31,7 +30,7 @@ services:
       MAX_WIDTH: 0
       MAX_HEIGHT: 0
       UPLOAD_MAX_SIZE: 0
-      SECURITY_KEY: "THUMBOR_SECURE_KEY_4ERT"
+      SECURITY_KEY: "${THUMBOR_KEY}"
       UPLOAD_ENABLED: "True"
       ALLOW_UNSAFE_URL: "False"
       LOADER: "thumbor.loaders.file_loader"
