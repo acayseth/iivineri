@@ -1,7 +1,7 @@
 volumes:
-  volume_pgsql: {}
   volume_redis: {}
   volume_thumbor: {}
+  volume_sqld: {}
 
 networks:
   iivineri_network:
@@ -42,3 +42,20 @@ services:
     volumes:
       - volume_thumbor:/app/thumbor:/data
     command: ["thumbor"]
+
+  sqld:
+    image: ghcr.io/tursodatabase/libsql-server:latest
+    networks:
+      - iivineri_network
+    ports:
+      - ${VIRTUAL_IP}:8080:8080
+    volumes:
+      - "volume_sqld:/var/lib/sqld"
+    environment:
+      SQLD_NODE: "primary"
+      SQLD_AUTH_JWT_KEY: "${SQLD_AUTH_JWT_KEY}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"

@@ -2,6 +2,7 @@ FROM node:22-alpine AS base
 WORKDIR /app
 
 FROM base AS deps
+ENV NODE_ENV=production
 ENV ASTRO_TELEMETRY_DISABLED=1
 WORKDIR /app
 RUN apk add --no-cache libc6-compat python3 make g++
@@ -10,6 +11,7 @@ RUN corepack enable && yarn install --frozen-lockfile
 
 
 FROM base AS builder
+ENV NODE_ENV=production
 ENV ASTRO_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
