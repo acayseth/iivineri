@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PLATFORM=$(uname)
-CONFIG=$(dirname $0)/.development/docker-compose/docker-compose.yml
+CONFIG=$(dirname $0)/.development/docker-compose.yml
 
 export VIRTUAL_IP=10.10.20.10
 export COMPOSE_PROJECT_NAME=iivineri

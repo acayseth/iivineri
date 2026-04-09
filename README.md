@@ -79,22 +79,51 @@ astrofront/
 ## Configurare
 
 ```bash
-# .env
-ASTRO_DATABASE_FILE=.astro/content.db
-APP_SECRET=<cheie secreta pentru hash parole>
-THUMBOR_URL=http://10.10.20.10:8000
-THUMBOR_KEY=<cheie HMAC pentru Thumbor>
+cp .env.example .env
 ```
+
+### Generare secrete
+
+**APP_SECRET** si **THUMBOR_KEY**:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+### Generare token-uri pentru sqld (libsql-server)
+
+Baza de date foloseste [sqld](https://github.com/tursodatabase/libsql) (`ghcr.io/tursodatabase/libsql-server`) cu autentificare JWT Ed25519.
+
+Scriptul genereaza o pereche de chei Ed25519 si produce doua valori:
+
+```bash
+node scripts/generate-sqld-token.cjs
+```
+
+Output:
+
+```
+SQLD_AUTH_JWT_KEY=<cheie publica Ed25519 in base64url>
+ASTRO_DB_APP_TOKEN=<JWT semnat cu cheia privata Ed25519>
+```
+
+| Variabila | Folosita de | Rol |
+|---|---|---|
+| `SQLD_AUTH_JWT_KEY` | sqld (docker-compose) | Cheie publica cu care sqld verifica token-urile |
+| `ASTRO_DB_APP_TOKEN` | Astro (aplicatie) | Token JWT trimis de Astro la fiecare request |
+| `ASTRO_DB_REMOTE_URL` | Astro (aplicatie) | Adresa sqld (`http://10.10.20.10:8080`) |
+
+Ambele valori trebuie generate impreuna (din acelasi run) - cheia privata nu este salvata.
 
 ## Comenzi
 
 | Comanda | Descriere |
 |---|---|
 | `yarn install` | Instaleaza dependentele |
-| `yarn dev` | Porneste serverul de dezvoltare (`localhost:4321`) |
-| `yarn build` | Build pentru productie (`./dist/`) |
-| `yarn preview` | Preview build local |
-| `./tool up -d` | Porneste containerele Docker (Thumbor, Redis) |
+| `./tool up -d` | Porneste containerele Docker (sqld, Thumbor, Redis) |
+| `yarn astro db push --remote` | Ruleaza migratiile bazei de date |
+| `yarn dev --remote` | Porneste serverul de dezvoltare (`localhost:4321`) |
+| `yarn build --remote` | Build pentru productie (`./dist/`) |
 | `./tool down` | Opreste containerele Docker |
 
 ## Contribuie

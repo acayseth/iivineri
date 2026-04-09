@@ -24,6 +24,14 @@ export default defineConfig({
       THUMBOR_URL: envField.string({ context: "server", access: "secret" }),
       THUMBOR_KEY: envField.string({ context: "server", access: "secret" }),
       REDIS_URL: envField.string({ context: "server", access: "secret" }),
+      ASTRO_DB_REMOTE_URL: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+      ASTRO_DB_APP_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+      }),
     },
     validateSecrets: false,
   },
