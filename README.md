@@ -44,8 +44,12 @@ Ai o idee? Te provocam la un PR.
 
 ### Planuri de viitor
 
-- [ ] Suport pentru incarcarea fisierelor video (MP4).
 - [x] Moderare si filtrare de continut pentru a mentine calitatea si siguranta resursei.
+- [ ] Suport pentru incarcarea fisierelor video (MP4).
+- [ ] Statistici/Rating (per săptămână / per lună) utilizatorilor.
+- [ ] Top cei mai activi utilizatorilor (per săptămână / per lună).
+- [ ] Posibilitatea de a adauga reactii la imaginile afișate pe pagin acasă
+
 - [ ] **Pen Testing** — audit de securitate pentru identificarea vulnerabilitatilor (autentificare, upload, API endpoints, etc).
 - [ ] **E2E Testing** — teste end-to-end cu Playwright pentru a valida fluxurile principale (sign-up, sign-in, upload, galerie, etc).
 - [ ] **Unit Testing** — teste unitare pentru actiuni, utilitare si logica de business (ex: generare token, hash parole, etc).
