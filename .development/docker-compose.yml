@@ -44,7 +44,7 @@ services:
     command: ["thumbor"]
 
   sqld:
-    image: ghcr.io/tursodatabase/libsql-server:latest
+    image: ghcr.io/tursodatabase/libsql-server:e4beaca
     networks:
       - iivineri_network
     ports:
@@ -59,3 +59,12 @@ services:
       options:
         max-size: "10m"
         max-file: "1"
+
+  dbadmin:
+    image: coleifer/sqlite-web:latest
+    ports:
+      - ${VIRTUAL_IP}:8081:8080
+    volumes:
+      - "volume_sqld:/data:ro"
+    entrypoint: sqlite_web
+    command: ["/data/iku.db/dbs/default/data", "--host", "0.0.0.0"]

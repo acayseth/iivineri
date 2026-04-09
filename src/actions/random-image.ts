@@ -1,5 +1,5 @@
 import { defineAction } from "astro:actions";
-import { db, Image, User, eq, ne, and, isNotNull, isNull } from "astro:db";
+import { db, Image, User, eq, ne, and, isNotNull, isNull, sql } from "astro:db";
 import { thumborClean } from "@/utils/thumbor.util";
 
 export const randomImage = defineAction({
@@ -9,17 +9,17 @@ export const randomImage = defineAction({
       ? eq(Image.dayOfWeek, "5")
       : ne(Image.dayOfWeek, "5");
 
-    const images = await db
+    const img = await db
       .select({ id: Image.id, ownerId: Image.ownerId })
       .from(Image)
       .where(and(isNotNull(Image.approvedId), isNull(Image.deletedAt), fridayFilter))
-      .all();
+      .orderBy(sql`random()`)
+      .limit(1)
+      .get();
 
-    if (images.length === 0) {
+    if (!img) {
       return { id: null, url: null };
     }
-
-    const img = images[Math.floor(Math.random() * images.length)];
 
     const owner = await db
       .select({ nickname: User.nickname })

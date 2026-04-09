@@ -10,15 +10,17 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=plastic&logo=tailwind-css" alt="tailwindcss">
   <img src="https://img.shields.io/badge/DaisyUI-5-1AD1A5?style=plastic&logo=daisyui" alt="daisyui">
   <img src="https://img.shields.io/badge/Drizzle_ORM-0.45-C5F74F?style=plastic&logo=drizzle" alt="drizzle">
-  <img src="https://img.shields.io/badge/libSQL-latest-4FF8D2?style=plastic&logo=turso" alt="libsql">
+  <img src="https://img.shields.io/badge/libSQL-0.24-4FF8D2?style=plastic&logo=turso" alt="libsql">
   <img src="https://img.shields.io/badge/Redis-8-DC382D?style=plastic&logo=redis" alt="redis">
   <img src="https://img.shields.io/badge/Thumbor-7.7-000000?style=plastic" alt="thumbor">
   <img src="https://img.shields.io/badge/Docker-27-2496ED?style=plastic&logo=docker" alt="docker">
   <img src="https://img.shields.io/badge/Argon2-2-6C3483?style=plastic" alt="argon2">
   <img src="https://img.shields.io/badge/Vitest-4-6E9F18?style=plastic&logo=vitest" alt="vitest">
   <img src="https://img.shields.io/badge/Lucide_Icons-1.2-F56565?style=plastic" alt="lucide">
+  <img src="https://img.shields.io/badge/Onest_Font-1-000000?style=plastic&logo=googlefonts" alt="onest">
   <img src="https://img.shields.io/badge/Simple_Icons-14-111111?style=plastic&logo=simpleicons" alt="simple-icons">
   <img src="https://img.shields.io/badge/GitHub_Actions-CI/CD-2088FF?style=plastic&logo=githubactions" alt="github-actions">
+  <img src="https://img.shields.io/badge/Kubernetes-1.35-326CE5?style=plastic&logo=kubernetes" alt="kubernetes">
   <img src="https://img.shields.io/badge/License-%20GNU--3.0-blue" alt="license">
 </p>
 
