@@ -8,6 +8,13 @@ export const days = [
   { code: "Du", name: "Duminică" },
 ];
 
+const isFraiday = (dayOfWeek: number) => dayOfWeek === 4;
+
+const generateHeadline = (dayOfWeek: number) =>
+  isFraiday(dayOfWeek)
+    ? "Da, wăi! Îi vineri!"
+    : `Nu, wăi! Îi ${days[dayOfWeek].name.toLowerCase()}`;
+
 export const getDayOfWeek = () => {
   const now = new Date();
   const dayOfWeek = (now.getDay() + 6) % 7;
@@ -22,5 +29,10 @@ export const getDayOfWeek = () => {
   friday.setHours(0, 0, 0, 0);
   const targetDate = friday.toISOString();
 
-  return { dayOfWeek, targetDate, isFriday: dayOfWeek === 4 };
+  return {
+    dayOfWeek,
+    targetDate,
+    isFriday: isFraiday,
+    headline: generateHeadline(dayOfWeek),
+  };
 };

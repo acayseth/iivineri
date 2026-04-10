@@ -15,7 +15,7 @@ ENV NODE_ENV=production
 ENV ASTRO_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN node_modules/.bin/astro build --remote
+RUN npx astro build --remote
 
 
 FROM base AS runner
