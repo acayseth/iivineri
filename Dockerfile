@@ -29,6 +29,7 @@ RUN addgroup -g 1001 -S nodejs && \
     adduser -S astro -u 1001 -G nodejs && \
     chown astro:nodejs /app
 COPY --from=builder --chown=astro:nodejs /app/dist ./dist
+COPY --from=builder --chown=astro:nodejs /app/astro.config.mjs ./astro.config.mjs
 COPY --chown=astro:nodejs ./db ./db
 COPY --chown=astro:nodejs ./docker-entrypoint.sh ./
 RUN mkdir -p /app/.db && chown astro:nodejs /app/.db
