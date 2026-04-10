@@ -2,7 +2,7 @@
 set -e
 
 echo "[entrypoint] Running database migrations/seeds"
-node_modules/.bin/astro db push --remote
+npx astro db push --remote
 
 echo "[entrypoint] starting astro server"
 exec "$@"
