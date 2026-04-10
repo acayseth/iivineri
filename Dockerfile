@@ -28,6 +28,7 @@ RUN apk add --no-cache tzdata libc6-compat
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S astro -u 1001 -G nodejs && \
     chown astro:nodejs /app
+COPY --from=deps --chown=astro:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=astro:nodejs /app/dist ./dist
 COPY --from=builder --chown=astro:nodejs /app/astro.config.mjs ./astro.config.mjs
 COPY --chown=astro:nodejs ./db ./db
