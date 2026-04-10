@@ -35,6 +35,10 @@ const fullTitle = title === "iivineri" ? title : `${title}`;
 	    <meta name="theme-color" content={theme === "dark" ? "#1D232A" : "#ffffff"} />
 		<SEO
             title={fullTitle}
+            noindex={true}
+            noarchive={true}
+            nofollow={true}
+            nocache={true}
             description={description}
             openGraph={{
                 basic: {
