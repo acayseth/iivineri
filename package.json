@@ -23,13 +23,13 @@
     "better-sqlite3": "^12.8.0",
     "drizzle-orm": "^0.45.2",
     "ioredis": "^5.10.1",
+    "astro-meta-tags": "^0.4.1",
     "preact": "^10.29.1"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.101",
     "@iconify-json/simple-icons": "^1.2.76",
     "@types/better-sqlite3": "^7.6.13",
-    "astro-meta-tags": "^0.4.1",
     "astro-seo": "^1.1.0",
     "astro-thumbor-image": "^1.0.2",
     "clsx": "^2.1.1",
