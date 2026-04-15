@@ -41,6 +41,10 @@ export default defineConfig({
   },
   output: "server",
   vite: {
+    define: {
+      "import.meta.env.ASTRO_DB_REMOTE_URL":
+        "process.env.ASTRO_DB_REMOTE_URL",
+    },
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
