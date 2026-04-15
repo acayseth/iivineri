@@ -1,9 +1,6 @@
 // @ts-check
 import { defineConfig, envField, sessionDrivers } from "astro/config";
 import { fileURLToPath, URL } from "node:url";
-import { loadEnv } from "vite";
-
-const { REDIS_URL } = loadEnv("", process.cwd(), "");
 
 import tailwindcss from "@tailwindcss/vite";
 import astroMetaTags from "astro-meta-tags";
@@ -42,8 +39,7 @@ export default defineConfig({
   output: "server",
   vite: {
     define: {
-      "import.meta.env.ASTRO_DB_REMOTE_URL":
-        "process.env.ASTRO_DB_REMOTE_URL",
+      "import.meta.env.ASTRO_DB_REMOTE_URL": "process.env.ASTRO_DB_REMOTE_URL",
     },
     resolve: {
       alias: {
@@ -78,9 +74,9 @@ export default defineConfig({
     mode: "standalone",
   }),
   session: {
-    driver: sessionDrivers.redis({
-      url: REDIS_URL,
-    }),
+    driver: {
+      entrypoint: new URL("./src/session-driver.js", import.meta.url),
+    },
     cookie: {
       name: "_sid",
     },
