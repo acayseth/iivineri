@@ -8,7 +8,15 @@ interface FileItem {
   error?: string;
 }
 
-const DAYS = ["Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"];
+const DAYS = [
+  "Luni",
+  "Marti",
+  "Miercuri",
+  "Joi",
+  "Vineri",
+  "Sambata",
+  "Duminica",
+];
 const DAY_VALUES = ["1", "2", "3", "4", "5", "6", "0"]; // Lu=1 ... Du=0
 const MAX_FILES = 10;
 
@@ -24,7 +32,11 @@ export default function ImageUploader() {
     const MAX_SIZE = 10 * 1024 * 1024; // 10MB
     const toAdd = Array.from(newFiles).slice(0, remaining);
     const items: FileItem[] = toAdd
-      .filter((f) => ["image/png", "image/jpeg", "image/gif"].includes(f.type) && f.size <= MAX_SIZE)
+      .filter(
+        (f) =>
+          ["image/png", "image/jpeg", "image/gif"].includes(f.type) &&
+          f.size <= MAX_SIZE,
+      )
       .map((file) => ({
         file,
         preview: URL.createObjectURL(file),
@@ -54,7 +66,9 @@ export default function ImageUploader() {
         if (e.lengthComputable) {
           const progress = Math.round((e.loaded / e.total) * 100);
           setFiles((prev) =>
-            prev.map((f, i) => (i === index ? { ...f, progress, status: "uploading" } : f))
+            prev.map((f, i) =>
+              i === index ? { ...f, progress, status: "uploading" } : f,
+            ),
           );
         }
       };
@@ -62,13 +76,19 @@ export default function ImageUploader() {
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           setFiles((prev) =>
-            prev.map((f, i) => (i === index ? { ...f, progress: 100, status: "done" } : f))
+            prev.map((f, i) =>
+              i === index ? { ...f, progress: 100, status: "done" } : f,
+            ),
           );
         } else {
           let err = "Eroare upload";
-          try { err = JSON.parse(xhr.responseText)?.error || err; } catch {};
+          try {
+            err = JSON.parse(xhr.responseText)?.error || err;
+          } catch {}
           setFiles((prev) =>
-            prev.map((f, i) => (i === index ? { ...f, status: "error", error: err } : f))
+            prev.map((f, i) =>
+              i === index ? { ...f, status: "error", error: err } : f,
+            ),
           );
         }
         resolve();
@@ -76,7 +96,9 @@ export default function ImageUploader() {
 
       xhr.onerror = () => {
         setFiles((prev) =>
-          prev.map((f, i) => (i === index ? { ...f, status: "error", error: "Eroare retea" } : f))
+          prev.map((f, i) =>
+            i === index ? { ...f, status: "error", error: "Eroare retea" } : f,
+          ),
         );
         resolve();
       };
@@ -121,7 +143,9 @@ export default function ImageUploader() {
       {/* Drop zone */}
       <label
         class={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors block ${
-          dragOver ? "border-primary bg-primary/10" : "border-base-content/20 hover:border-primary/50"
+          dragOver
+            ? "border-primary bg-primary/10"
+            : "border-base-content/20 hover:border-primary/50"
         } ${files.length >= MAX_FILES ? "opacity-50 pointer-events-none" : ""}`}
         onDragOver={(e) => {
           e.preventDefault();
@@ -157,9 +181,12 @@ export default function ImageUploader() {
 
       {/* Preview grid */}
       {files.length > 0 && (
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
           {files.map((item, index) => (
-            <div key={index} class="relative group rounded-lg overflow-hidden bg-base-300">
+            <div
+              key={index}
+              class="relative group rounded-lg overflow-hidden bg-base-300"
+            >
               <img
                 src={item.preview}
                 alt={item.file.name}
@@ -176,7 +203,9 @@ export default function ImageUploader() {
                         style={{ width: `${item.progress}%` }}
                       />
                     </div>
-                    <p class="text-white text-xs text-center mt-1">{item.progress}%</p>
+                    <p class="text-white text-xs text-center mt-1">
+                      {item.progress}%
+                    </p>
                   </div>
                 </div>
               )}
