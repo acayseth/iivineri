@@ -8,6 +8,9 @@ import db from "@astrojs/db";
 import node from "@astrojs/node";
 import icon from "astro-icon";
 import preact from "@astrojs/preact";
+import { loadEnv } from "vite";
+
+const env = loadEnv("", process.cwd(), "");
 
 // https://astro.build/config
 export default defineConfig({
@@ -40,6 +43,7 @@ export default defineConfig({
   vite: {
     define: {
       "import.meta.env.ASTRO_DB_REMOTE_URL": "process.env.ASTRO_DB_REMOTE_URL",
+      "process.env.REDIS_URL": JSON.stringify(env.REDIS_URL),
     },
     resolve: {
       alias: {
