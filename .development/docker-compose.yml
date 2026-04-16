@@ -40,7 +40,7 @@ services:
     networks:
       - iivineri_network
     volumes:
-      - volume_thumbor:/app/thumbor:/data
+      - volume_thumbor:/data
     command: ["thumbor"]
 
   sqld:
