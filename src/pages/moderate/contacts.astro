@@ -1,0 +1,121 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { db, User, Contact, eq, and, isNull, count, desc } from "astro:db";
+
+const userId = await Astro.session?.get("userId");
+if (!userId) {
+  return Astro.redirect("/sign-in");
+}
+
+const user = await db
+  .select({ id: User.id, root: User.root, nickname: User.nickname })
+  .from(User)
+  .where(and(eq(User.id, userId), isNull(User.deletedAt)))
+  .get();
+
+if (!user || !user.root) {
+  return Astro.redirect("/");
+}
+
+const PER_PAGE = 20;
+const page = Math.max(1, Math.min(1000, Number(Astro.url.searchParams.get("page")) || 1));
+const offset = (page - 1) * PER_PAGE;
+
+const totalResult = await db.select({ n: count() }).from(Contact).get();
+const total = totalResult?.n ?? 0;
+const totalPages = Math.ceil(total / PER_PAGE) || 1;
+
+const BASE = "/moderate/contacts";
+
+if (page > totalPages) {
+  const params = new URLSearchParams();
+  if (totalPages > 1) params.set("page", String(totalPages));
+  const qs = params.toString();
+  return Astro.redirect(qs ? `${BASE}?${qs}` : BASE);
+}
+
+const contacts = await db
+  .select()
+  .from(Contact)
+  .orderBy(desc(Contact.createdAt))
+  .limit(PER_PAGE)
+  .offset(offset)
+  .all();
+
+function pageUrl(p: number) {
+  if (p > 1) return `${BASE}?page=${p}`;
+  return BASE;
+}
+---
+
+<Layout title="Contacte">
+  <main class="px-4 py-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-4">
+          <a href="/moderate/images" class="btn btn-ghost btn-sm">Imagini</a>
+          <a href="/moderate/users" class="btn btn-ghost btn-sm">Utilizatori</a>
+          <h1 class="text-2xl font-bold">Contacte</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="badge badge-sm">{total}</span>
+          <span class="badge badge-primary">{user.nickname} (admin)</span>
+        </div>
+      </div>
+
+      {contacts.length === 0 ? (
+        <div class="card bg-base-200 p-12 text-center">
+          <p class="text-base-content/60">Niciun mesaj de contact.</p>
+        </div>
+      ) : (
+        <div class="overflow-x-auto">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Nume</th>
+                <th>Email</th>
+                <th>Mesaj</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              {contacts.map((c) => (
+                <tr>
+                  <td class="font-medium whitespace-nowrap">{c.name}</td>
+                  <td class="text-base-content/60 text-sm whitespace-nowrap">{c.email}</td>
+                  <td class="max-w-md">
+                    <p class="line-clamp-2">{c.message}</p>
+                  </td>
+                  <td class="text-base-content/60 text-sm whitespace-nowrap">
+                    {new Date(c.createdAt).toLocaleDateString("ro-RO", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div class="flex justify-center mt-8">
+          <div class="join">
+            {page > 1 && (
+              <a href={pageUrl(page - 1)} class="join-item btn btn-sm">&laquo;</a>
+            )}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <a
+                href={pageUrl(p)}
+                class:list={["join-item btn btn-sm", p === page && "btn-active"]}
+              >
+                {p}
+              </a>
+            ))}
+            {page < totalPages && (
+              <a href={pageUrl(page + 1)} class="join-item btn btn-sm">&raquo;</a>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  </main>
+</Layout>
