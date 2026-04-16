@@ -27,6 +27,7 @@ services:
     ports:
       - ${VIRTUAL_IP}:8000:80
     environment:
+      LOG_LEVEL: "DEBUG"
       MAX_WIDTH: 0
       MAX_HEIGHT: 0
       UPLOAD_MAX_SIZE: 0

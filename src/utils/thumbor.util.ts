@@ -1,5 +1,6 @@
 import { createHmac } from "node:crypto";
-import { THUMBOR_URL, THUMBOR_KEY } from "astro:env/server";
+const THUMBOR_URL = process.env.THUMBOR_URL!;
+const THUMBOR_KEY = process.env.THUMBOR_KEY!;
 
 function sign(urlPart: string): string {
   return createHmac("sha1", THUMBOR_KEY)
