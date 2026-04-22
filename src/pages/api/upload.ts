@@ -1,6 +1,7 @@
 import type { APIContext } from "astro";
 import { db, Image, User, eq, and, isNull } from "astro:db";
 import { createHash } from "node:crypto";
+import { imageSize } from "image-size";
 
 
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
@@ -10,12 +11,14 @@ const IMAGE_MAGIC = new Map([
   ["ffd8ff", "image/jpeg"],
   ["89504e47", "image/png"],
   ["47494638", "image/gif"],
-  ["52494646", "image/webp"],
 ]);
 
-function isValidImage(buffer: Buffer): boolean {
+function detectMimeType(buffer: Buffer): string | null {
   const hex = buffer.subarray(0, 4).toString("hex");
-  return Array.from(IMAGE_MAGIC.keys()).some((magic) => hex.startsWith(magic));
+  for (const [magic, mime] of IMAGE_MAGIC) {
+    if (hex.startsWith(magic)) return mime;
+  }
+  return null;
 }
 
 function isValidUUID(id: string): boolean {
@@ -46,19 +49,15 @@ export async function POST(ctx: APIContext) {
     return jsonError("Zi invalida", 400);
   }
 
-  const allowedTypes = ["image/png", "image/jpeg", "image/gif"];
-  if (!allowedTypes.includes(file.type)) {
-    return jsonError("Doar PNG, JPEG si GIF sunt permise", 400);
-  }
-
   if (file.size > MAX_SIZE) {
     return jsonError("Fisierul depaseste 10MB", 400);
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  // Validare magic bytes
-  if (!isValidImage(buffer)) {
+  // Validare magic bytes si detectie Content-Type
+  const mimeType = detectMimeType(buffer);
+  if (!mimeType) {
     return jsonError("Fisierul nu este o imagine valida", 400);
   }
 
@@ -94,7 +93,7 @@ export async function POST(ctx: APIContext) {
     thumborResponse = await fetch(`${thumborUrl}/image`, {
       method: "POST",
       headers: {
-        "Content-Type": file.type,
+        "Content-Type": mimeType,
         Slug: `${user.nickname}.webp`,
       },
       body: buffer,
@@ -130,6 +129,11 @@ export async function POST(ctx: APIContext) {
     resolvedDay = dayOfWeek;
   }
 
+  // Extragem dimensiunile reale din buffer
+  const dimensions = imageSize(buffer);
+  const width = dimensions.width ?? 0;
+  const height = dimensions.height ?? 0;
+
   // Salvăm în DB cu error handling
   try {
     await db.insert(Image).values({
@@ -138,8 +142,8 @@ export async function POST(ctx: APIContext) {
       md5sum: hash,
       dayOfWeek: resolvedDay as "0" | "1" | "2" | "3" | "4" | "5" | "6",
       size: buffer.length,
-      width: 0,
-      height: 0,
+      width,
+      height,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
