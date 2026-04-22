@@ -1,7 +1,5 @@
 import { z } from "astro/zod";
 import { hash, verify } from "@node-rs/argon2";
-import { APP_SECRET } from "astro:env/server";
-
 export const nicknameSchema = z
   .string()
   .min(4, "Minim 4 caractere")
@@ -27,7 +25,7 @@ export const passwordSchema = z
   );
 
 const ARGON_OPTS = { memoryCost: 19456, timeCost: 2, parallelism: 1 };
-const SECRET_BUF = Buffer.from(APP_SECRET);
+const SECRET_BUF = Buffer.from(process.env.APP_SECRET!);
 
 export async function hashPassword(password: string): Promise<string> {
   return hash(password, { ...ARGON_OPTS, secret: SECRET_BUF });
