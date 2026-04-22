@@ -2,6 +2,7 @@ import { defineAction, ActionError } from "astro:actions";
 import { z } from "astro/zod";
 import { db, User, eq, and, isNull } from "astro:db";
 import { hashPassword, verifyPassword } from "./_shared";
+import { rateLimit, getClientIp } from "@/utils/rate-limit.util";
 
 const INVALID_CREDENTIALS = {
   code: "UNAUTHORIZED" as const,
@@ -15,6 +16,8 @@ export const signIn = defineAction({
     password: z.string().min(1, "Parola este obligatorie"),
   }),
   handler: async ({ email, password }, ctx) => {
+    await rateLimit(getClientIp(ctx), "signIn", 5, 15 * 60 * 1000);
+
     const user = await db
       .select()
       .from(User)
