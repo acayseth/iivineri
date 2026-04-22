@@ -2,6 +2,7 @@ import { defineAction, ActionError } from "astro:actions";
 import { z } from "astro/zod";
 import { db, User, ResetPassword, eq, and, gte } from "astro:db";
 import { passwordSchema, hashPassword } from "./_shared";
+import { rateLimit, getClientIp } from "@/utils/rate-limit.util";
 
 export const resetPassword = defineAction({
   accept: "form",
@@ -15,7 +16,9 @@ export const resetPassword = defineAction({
       message: "Parolele nu coincid",
       path: ["confirmPassword"],
     }),
-  handler: async ({ token, password }) => {
+  handler: async ({ token, password }, ctx) => {
+    await rateLimit(getClientIp(ctx), "resetPassword", 5, 15 * 60 * 1000);
+
     const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000);
     const resetRequest = await db
       .select()

@@ -1,6 +1,7 @@
 import { defineAction, ActionError } from "astro:actions";
 import { z } from "astro/zod";
 import { db, Contact } from "astro:db";
+import { rateLimit, getClientIp } from "@/utils/rate-limit.util";
 
 export const contactUs = defineAction({
   accept: "form",
@@ -9,7 +10,9 @@ export const contactUs = defineAction({
     email: z.string().email("Email invalid"),
     message: z.string().min(10, "Minim 10 caractere").max(2000),
   }),
-  handler: async ({ name, email, message }) => {
+  handler: async ({ name, email, message }, ctx) => {
+    await rateLimit(getClientIp(ctx), "contactUs", 3, 60 * 60 * 1000);
+
     await db.insert(Contact).values({
       name,
       email,

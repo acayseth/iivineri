@@ -2,6 +2,7 @@ import { defineAction, ActionError } from "astro:actions";
 import { z } from "astro/zod";
 import { db, User, eq, or, and, isNull } from "astro:db";
 import { nicknameSchema, passwordSchema, hashPassword } from "./_shared";
+import { rateLimit, getClientIp } from "@/utils/rate-limit.util";
 
 export const signUp = defineAction({
   accept: "form",
@@ -17,6 +18,8 @@ export const signUp = defineAction({
       path: ["confirmPassword"],
     }),
   handler: async ({ nickname, email, password }, ctx) => {
+    await rateLimit(getClientIp(ctx), "signUp", 3, 60 * 60 * 1000);
+
     const existing = await db
       .select({ id: User.id })
       .from(User)
