@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, envField, sessionDrivers } from "astro/config";
+import { defineConfig } from "astro/config";
 import { fileURLToPath, URL } from "node:url";
 
 import tailwindcss from "@tailwindcss/vite";
@@ -10,31 +10,12 @@ import icon from "astro-icon";
 import preact from "@astrojs/preact";
 import { loadEnv } from "vite";
 
-const env = loadEnv("", process.cwd(), "");
-
 // https://astro.build/config
 export default defineConfig({
   experimental: {
     rustCompiler: true,
   },
   site: "https://iivineri.org",
-  env: {
-    schema: {
-      APP_SECRET: envField.string({ context: "server", access: "secret" }),
-      THUMBOR_URL: envField.string({ context: "server", access: "secret" }),
-      THUMBOR_KEY: envField.string({ context: "server", access: "secret" }),
-      REDIS_URL: envField.string({ context: "server", access: "secret" }),
-      ASTRO_DB_REMOTE_URL: envField.string({
-        context: "server",
-        access: "secret",
-      }),
-      ASTRO_DB_APP_TOKEN: envField.string({
-        context: "server",
-        access: "secret",
-      }),
-    },
-    validateSecrets: false,
-  },
   trailingSlash: "never",
   security: {
     checkOrigin: false,
@@ -43,7 +24,7 @@ export default defineConfig({
   vite: {
     define: {
       "import.meta.env.ASTRO_DB_REMOTE_URL": "process.env.ASTRO_DB_REMOTE_URL",
-      "process.env.REDIS_URL": JSON.stringify(env.REDIS_URL),
+      "import.meta.env.REDIS_URL": "process.env.REDIS_URL",
     },
     resolve: {
       alias: {
