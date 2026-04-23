@@ -13,6 +13,7 @@
   <img src="https://img.shields.io/badge/libSQL-0.24-4FF8D2?style=plastic&logo=turso" alt="libsql">
   <img src="https://img.shields.io/badge/Redis-8-DC382D?style=plastic&logo=redis" alt="redis">
   <img src="https://img.shields.io/badge/Thumbor-7.7-000000?style=plastic" alt="thumbor">
+  <img src="https://img.shields.io/badge/RustFS-latest-CE422B?style=plastic&logo=rust" alt="rustfs">
   <img src="https://img.shields.io/badge/Docker-27-2496ED?style=plastic&logo=docker" alt="docker">
   <img src="https://img.shields.io/badge/Argon2-2-6C3483?style=plastic" alt="argon2">
   <img src="https://img.shields.io/badge/Vitest-4-6E9F18?style=plastic&logo=vitest" alt="vitest">
@@ -59,7 +60,7 @@ Ai o idee? Te provocam la un PR.
 | Comanda | Descriere |
 |---|---|
 | `yarn install` | Instaleaza dependentele |
-| `./tool up -d` | Porneste containerele Docker (sqld, Thumbor, Redis) |
+| `./tool up -d` | Porneste containerele Docker (sqld, Thumbor, RustFS, Redis) |
 | `yarn astro db push --remote` | Ruleaza migratiile bazei de date |
 | `yarn dev --remote` | Porneste serverul de dezvoltare (`localhost:4321`) |
 | `yarn build --remote` | Build pentru productie (`./dist/`) |
@@ -100,6 +101,17 @@ astrofront/
     seed.ts           # Date initiale
 ```
 
+## Stocare imagini
+
+Originalele sunt pastrate in RustFS (S3-compatible) sub cheia `<imageId>/<nickname>.webp`. Thumbor nu mai primeste upload-uri (`UPLOAD_ENABLED=False`) si foloseste `tc_aws.loaders.s3_loader` ca sa citeasca originalele direct din RustFS prin reteaua Docker interna.
+
+```
+client ──POST /api/upload──> Astro ──S3 PutObject──> RustFS
+client ──GET signed URL────> Thumbor ──S3 GetObject──> RustFS
+```
+
+Consola RustFS este expusa la `http://10.10.20.10:9001` (credentiale `RUSTFS_ACCESS_KEY` / `RUSTFS_SECRET_KEY`). Bucket-ul `RUSTFS_BUCKET` este creat automat la primul upload.
+
 ## Configurare
 
 ### 1. Copiaza fisierul de environment
@@ -117,15 +129,25 @@ cp .env.example .env
 | `ASTRO_DB_APP_TOKEN` | Astro | Token JWT Ed25519 pentru autentificare sqld | `node scripts/generate-sqld-token.cjs` |
 | `THUMBOR_URL` | Astro | Adresa serverului Thumbor | Default: `http://10.10.20.10:8000` |
 | `THUMBOR_KEY` | Astro | Cheie HMAC pentru URL-uri Thumbor semnate | `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
+| `RUSTFS_URL` | Astro | Endpoint S3 RustFS (upload) | Default: `http://10.10.20.10:9000` |
+| `RUSTFS_ACCESS_KEY` | Astro, Thumbor, RustFS | Access key S3 | `node -e "console.log(require('crypto').randomBytes(16).toString('hex'))"` |
+| `RUSTFS_SECRET_KEY` | Astro, Thumbor, RustFS | Secret key S3 | `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
+| `RUSTFS_BUCKET` | Astro, Thumbor | Numele bucket-ului pentru imagini | Default: `images` |
 | `REDIS_URL` | Astro | Adresa serverului Redis (sesiuni) | Default: `redis://10.10.20.10:6379` |
 | `SQLD_AUTH_JWT_KEY` | sqld (Docker) | Cheie publica Ed25519 cu care sqld verifica token-urile | `node scripts/generate-sqld-token.cjs` |
 
 ### 3. Generare secrete
 
-**APP_SECRET** si **THUMBOR_KEY** — chei random de 32 bytes:
+**APP_SECRET**, **THUMBOR_KEY** si **RUSTFS_SECRET_KEY** — chei random de 32 bytes:
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+**RUSTFS_ACCESS_KEY** — 16 bytes hex:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(16).toString('hex'))"
 ```
 
 **SQLD_AUTH_JWT_KEY** si **ASTRO_DB_APP_TOKEN** — pereche de chei Ed25519 + JWT:
@@ -153,6 +175,10 @@ docker run -d -p 4321:4321 \
   -e ASTRO_DB_APP_TOKEN="..." \
   -e THUMBOR_URL="..." \
   -e THUMBOR_KEY="..." \
+  -e RUSTFS_URL="..." \
+  -e RUSTFS_ACCESS_KEY="..." \
+  -e RUSTFS_SECRET_KEY="..." \
+  -e RUSTFS_BUCKET="images" \
   -e REDIS_URL="..." \
   -e SQLD_AUTH_JWT_KEY="..." \
   ghcr.io/acayseth/iivineri:latest

@@ -1,11 +1,11 @@
 import type { APIContext } from "astro";
 import { db, Image, User, eq, and, isNull } from "astro:db";
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { imageSize } from "image-size";
+import { putImage } from "@/utils/rustfs.util";
 
 
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-const THUMBOR_TIMEOUT = 30_000; // 30s
 const VALID_DAYS = ["0", "1", "2", "3", "4", "5", "6", "random_no_friday"];
 const IMAGE_MAGIC = new Map([
   ["ffd8ff", "image/jpeg"],
@@ -21,10 +21,6 @@ function detectMimeType(buffer: Buffer): string | null {
   return null;
 }
 
-function isValidUUID(id: string): boolean {
-  return /^[a-f0-9]{32}$/.test(id);
-}
-
 function jsonError(error: string, status: number) {
   return new Response(JSON.stringify({ error }), { status });
 }
@@ -34,8 +30,6 @@ export async function POST(ctx: APIContext) {
   if (!userId) {
     return jsonError("Nu esti autentificat", 401);
   }
-
-  const thumborUrl = process.env.THUMBOR_URL!;
 
   const formData = await ctx.request.formData();
   const file = formData.get("file") as File | null;
@@ -84,40 +78,13 @@ export async function POST(ctx: APIContext) {
     return jsonError("Imaginea exista deja", 409);
   }
 
-  // Upload la Thumbor cu timeout
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), THUMBOR_TIMEOUT);
+  const imageId = randomUUID().replaceAll("-", "");
+  const key = `${imageId}/${user.nickname}.webp`;
 
-  let thumborResponse: Response;
   try {
-    thumborResponse = await fetch(`${thumborUrl}/image`, {
-      method: "POST",
-      headers: {
-        "Content-Type": mimeType,
-        Slug: `${user.nickname}.webp`,
-      },
-      body: buffer,
-      signal: controller.signal,
-    });
-  } catch (err) {
+    await putImage(key, buffer, mimeType);
+  } catch {
     return jsonError("Serverul de imagini nu raspunde", 502);
-  } finally {
-    clearTimeout(timeout);
-  }
-
-  if (!thumborResponse.ok) {
-    return jsonError("Eroare la incarcarea imaginii", 502);
-  }
-
-  const thumborLocation = thumborResponse.headers.get("location");
-  if (!thumborLocation) {
-    return jsonError("Eroare la procesarea imaginii", 502);
-  }
-
-  // Extragem și validăm UUID-ul
-  const imageId = thumborLocation.replace("/image/", "").split("/")[0];
-  if (!isValidUUID(imageId)) {
-    return jsonError("Eroare la procesarea imaginii", 502);
   }
 
   // Determinăm ziua efectivă

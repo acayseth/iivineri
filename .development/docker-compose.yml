@@ -1,6 +1,6 @@
 volumes:
   volume_redis: {}
-  volume_thumbor: {}
+  volume_rustfs: {}
   volume_sqld: {}
 
 networks:
@@ -22,26 +22,51 @@ services:
         max-size: "10m"
         max-file: "1"
 
+  rustfs:
+    image: rustfs/rustfs:latest
+    networks:
+      - iivineri_network
+    ports:
+      - ${VIRTUAL_IP}:9000:9000
+      - ${VIRTUAL_IP}:9001:9001
+    volumes:
+      - "volume_rustfs:/data"
+    environment:
+      RUSTFS_VOLUMES: "/data/rustfs0"
+      RUSTFS_ADDRESS: "0.0.0.0:9000"
+      RUSTFS_CONSOLE_ENABLE: "true"
+      RUSTFS_CONSOLE_ADDRESS: "0.0.0.0:9001"
+      RUSTFS_ACCESS_KEY: "${RUSTFS_ACCESS_KEY}"
+      RUSTFS_SECRET_KEY: "${RUSTFS_SECRET_KEY}"
+      RUSTFS_CORS_ALLOWED_ORIGINS: "*"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
+
   thumbor:
     image: ghcr.io/minimalcompact/thumbor:7.7.4
     ports:
       - ${VIRTUAL_IP}:8000:80
+    depends_on:
+      - rustfs
     environment:
       LOG_LEVEL: "DEBUG"
       MAX_WIDTH: 0
       MAX_HEIGHT: 0
-      UPLOAD_MAX_SIZE: 0
       SECURITY_KEY: "${THUMBOR_KEY}"
-      UPLOAD_ENABLED: "True"
+      UPLOAD_ENABLED: "False"
       ALLOW_UNSAFE_URL: "False"
-      LOADER: "thumbor.loaders.file_loader"
-      FILE_LOADER_ROOT_PATH: "/data/storage"
+      LOADER: "tc_aws.loaders.s3_loader"
+      TC_AWS_REGION: "us-east-1"
+      TC_AWS_ENDPOINT: "http://rustfs:9000"
+      TC_AWS_LOADER_BUCKET: "${RUSTFS_BUCKET}"
+      AWS_ACCESS_KEY_ID: "${RUSTFS_ACCESS_KEY}"
+      AWS_SECRET_ACCESS_KEY: "${RUSTFS_SECRET_KEY}"
       STORAGE_EXPIRATION_SECONDS: 3155760000
-      UPLOAD_DEFAULT_FILENAME: "image"
     networks:
       - iivineri_network
-    volumes:
-      - volume_thumbor:/data
     command: ["thumbor"]
 
   sqld:
