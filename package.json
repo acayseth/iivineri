@@ -6,9 +6,9 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev --remote",
-    "build": "astro build --remote",
-    "preview": "astro preview --remote",
+    "dev": "export $(grep -v '^#' .env | xargs) && astro dev --remote",
+    "build": "export $(grep -v '^#' .env | xargs) && astro build --remote",
+    "preview": "export $(grep -v '^#' .env | xargs) && astro preview --remote",
     "db:seed": "export $(grep -v '^#' .env | xargs) && npx astro db execute db/seed.ts --remote"
   },
   "dependencies": {
