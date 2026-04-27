@@ -21,7 +21,11 @@ export function thumborImageUrl(
 }
 
 export function thumborBlurred(imageId: string, nickname: string): string {
-  return thumborImageUrl("300x300", `${imageId}/${nickname}.webp`, false);
+  // Resize la 1x1 ocoleste limitarea gifsicle (filtrele blur sunt ignorate
+  // pe GIF-uri animate). Browser-ul scaleaza la dimensiunea finala via CSS.
+  const path = `${imageId}/${nickname}.webp`;
+  const part = `1x1/filters:format(webp)/${path}`;
+  return `${THUMBOR_URL}/${sign(part)}/${part}`;
 }
 
 export function thumborClean(imageId: string, nickname: string): string {
